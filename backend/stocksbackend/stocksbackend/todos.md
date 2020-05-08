@@ -1,5 +1,6 @@
 Current task:
 	> Compile task(-__headlines__) for each category
+		> due: 05/11/2020
 
 @Tobias
 #data:
