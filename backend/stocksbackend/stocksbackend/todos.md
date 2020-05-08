@@ -1,5 +1,5 @@
 Current task:
-	> Compile task(-headlines) for each category
+	> Compile task(-__headlines__) for each category
 
 @Tobias
 #data:
