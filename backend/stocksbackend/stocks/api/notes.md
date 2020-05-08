@@ -1,16 +1,20 @@
-Column 1: Symbol
+TODO:
+	stock > purchase at xyz > lookup(most recent trade price) > write to DB
 
-Column 2: Date
+	Transaction model:
+		timestamp
+		symbol
+		amount
+		transaction_type
+		price_at
 
-Column 3: Open
 
-Column 4: High
+	Recommendation algorithm:
+		- model: Company (**metadata > sector, date_founded)
+			> what additional data can we get?
+				> e.g. news articles etc.
+					> NLP
+			> separate app
 
-Column 5: Low
 
-Column 6: Close
-
-Column 7: Volume
-
-Trade Volume := 0?
-	> might be public holiday (e.g. MLK day)
+	/api/prices?symbol=AAPL&datefrom=2020-01-01&dateto=now

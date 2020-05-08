@@ -21,10 +21,10 @@ class Price(models.Model):
 	exchange_time	= models.TimeField(null=True, blank=True)
 	# Highest stock price ever traded is BRK.A at $305,085 (six digits)
 	# source: https://www.investopedia.com/ask/answers/081314/whats-most-expensive-stock-all-time.asp
-	p_low			= models.DecimalField(max_digits=8, decimal_places=2)
-	p_open			= models.DecimalField(max_digits=8, decimal_places=2)
-	p_high			= models.DecimalField(max_digits=8, decimal_places=2)
-	p_close			= models.DecimalField(max_digits=8, decimal_places=2)
+	p_low			= models.DecimalField(max_digits=8, decimal_places=3)
+	p_open			= models.DecimalField(max_digits=8, decimal_places=3)
+	p_high			= models.DecimalField(max_digits=8, decimal_places=3)
+	p_close			= models.DecimalField(max_digits=8, decimal_places=3)
 	volume 			= models.BigIntegerField(null=True, blank=True)
 
 	def __str__(self):
