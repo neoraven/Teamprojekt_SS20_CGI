@@ -12,8 +12,6 @@ from stocks.models import Stock
 # 25x$122
 # 25xAAPL $100
 
-
-
 class Portfolio(models.Model):
 	user			= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	symbol			= models.ForeignKey(Stock, on_delete=models.CASCADE)

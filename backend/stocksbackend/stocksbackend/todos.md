@@ -1,3 +1,7 @@
+Current task:
+	> Compile task(-headlines) for each category
+
+@Tobias
 #data:
 	> subset of stocks?
 		> S&P 500 index (?)
@@ -7,7 +11,10 @@
 		> every x interval: execute code
 		> data source?
 			> choice of API
+				> __alphavantage__ (_daily_ for last ~20y in 1 call)
+				> 5 calls / 1 min
 
+@Jonas
 #backend:
 	> switch DB architecture
 		> to what? (__PostgreSQL__)
@@ -15,7 +22,9 @@
 	> finalize data model
 		> Transaction model
 			> does this implementation make sense?
+	> groundwork for company metadata model
 
+@Emre
 #frontend:
 	> routing
 	> user can interact w/ his own portfolio

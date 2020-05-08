@@ -9,6 +9,14 @@ TODO:
 		price_at
 
 
+
+
+
+
+
+
+
+
 	Recommendation algorithm:
 		- model: Company (**metadata > sector, date_founded)
 			> what additional data can we get?
@@ -17,4 +25,6 @@ TODO:
 			> separate app
 
 
+
+Filters:
 	/api/prices?symbol=AAPL&datefrom=2020-01-01&dateto=now
