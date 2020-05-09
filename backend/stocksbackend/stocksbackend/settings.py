@@ -25,7 +25,7 @@ SECRET_KEY = '4&5w%aqsjc4jt$d9vsf*q&3mkq(n3uld_*c06f$_!2kz1r3$hr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['172.104.234.63']
 
 
 # Application definition
@@ -87,10 +87,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'stockmarketapp',
-        'USER': 'postgres',
+        'USER': 'jonas',
         'PASSWORD': 'stonks123',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -132,6 +132,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
