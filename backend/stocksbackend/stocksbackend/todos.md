@@ -17,8 +17,6 @@ Current task:
 
 @Jonas
 #backend:
-	> switch DB architecture
-		> to what? (__PostgreSQL__)
 	~~(> user authentication model)~~ user login / creation
 	> finalize data model
 		> Transaction model
@@ -36,3 +34,19 @@ Current task:
 		> cash value
 			> for stock in portfolio: cash_value += stock.value * amount
 				> stock.value := most_recent_value < lookup
+
+
+#Goal for next sprint:
+	1. User can interact w/ a portfolio (view / buy / sell)
+		- User authentication (signup / login)
+			> Frontend component: signup page (> django native)
+		- App needs to pull appropriate prices of the right symbol & timestamp
+		- Frontend interface to visualize the portfolio
+			> Grab and print user's portfolio
+			> Buttons to view / buy / sell
+			> Component to visualize a symbol's history?
+	2. Application has data for all S&P 500 stocks
+		- Choose approach:
+			> Django app does fetching & writing itself?
+			> Separate agent sending data via .json to an API of the django app?
+	3. Data model needs to support meta data models that can link back to the stocks module
