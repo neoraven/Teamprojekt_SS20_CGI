@@ -1,15 +1,19 @@
 server {
+	# nginx listens on port 80 > standard TCP/IP port (no port specification in URL needed)
 	listen 80;
+	# DNS resolver for linode cluster
 	resolver 139.162.130.5;
 	server_name 172.104.234.63;
 	access_log off;
 
 	location /static/ {
                 autoindex on;
-                alias /home/jonas/stockmarket-app/Teamprojekt_SS20_CGI/backend/stocksbackend/static/;
+                # point requests for $server_name$/static/... to /static/ directory on node
+		alias /home/jonas/stockmarket-app/Teamprojekt_SS20_CGI/backend/stocksbackend/static/;
         }
 
 	location / {
+		# request is made to anything other than ../static/.. ? > forward to django port
 		proxy_pass http://172.104.234.63:8000/;
 		proxy_set_header X-Forwarded-Host $server_name;
 		proxy_set_header X-Real-IP $remote_addr;
