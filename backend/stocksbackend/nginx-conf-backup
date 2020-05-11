@@ -1,0 +1,19 @@
+server {
+	listen 80;
+	resolver 139.162.130.5;
+	server_name 172.104.234.63;
+	access_log off;
+
+	location /static/ {
+                autoindex on;
+                alias /home/jonas/stockmarket-app/Teamprojekt_SS20_CGI/backend/stocksbackend/static/;
+        }
+
+	location / {
+		proxy_pass http://172.104.234.63:8000/;
+		proxy_set_header X-Forwarded-Host $server_name;
+		proxy_set_header X-Real-IP $remote_addr;
+		add_header P3P 'CP="ALL DSP COR PSAa PSDa OUR NOR ONL UNI COM NAV"';
+	}
+}
+
