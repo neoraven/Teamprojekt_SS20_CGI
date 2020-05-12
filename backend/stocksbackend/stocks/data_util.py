@@ -9,6 +9,7 @@ from pytickersymbols import PyTickerSymbols
 
 from .models import Price, Stock
 
+
 KEY = '1077F37TLBGNSVY2'
 OUTPUT_FORMAT = 'pandas'
 
