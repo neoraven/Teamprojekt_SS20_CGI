@@ -5,8 +5,7 @@ Current task:
 @Tobias
 #data:
 	> subset of stocks?
-		> S&P 500 index (?)
-			> alternatives: NASDAQ{100|500}
+		> S&P 500 index
 	> initial load
 	> microservice
 		> every x interval: execute code
