@@ -16,9 +16,11 @@ class Stock(models.Model):
 
 class Price(models.Model):
 	symbol 			= models.ForeignKey(Stock, on_delete=models.CASCADE)
+	# max_length case: '180m' (180 minutes)
+	interval		= models.CharField(max_length=4)
 	date 			= models.DateField()
 	# leave blank / null if data is daily
-	exchange_time	= models.TimeField(null=True, blank=True)
+	exchange_time	=  models.TimeField(null=True, blank=True)
 	# Highest stock price ever traded is BRK.A at $305,085 (six digits)
 	# source: https://www.investopedia.com/ask/answers/081314/whats-most-expensive-stock-all-time.asp
 	p_low			= models.DecimalField(max_digits=8, decimal_places=3)

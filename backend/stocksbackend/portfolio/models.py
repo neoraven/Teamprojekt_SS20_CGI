@@ -1,25 +1,25 @@
 from django.conf import settings
 from django.db import models
 from stocks.models import Stock
-
-# 10xAAPL @$150 01/01/2020
-# 20xAAPL @$100 02/01/2020
-# 30xAAPL (02/01/2020): $3,000
-# (10 x $150) + (20 x $100) / 30
-# weighted avg. $122
+from django.core.validators import ValidationError
 
 
-# 25x$122
-# 25xAAPL $100
-
-#TODO: add verification of amount > 0!
 class Portfolio(models.Model):
 	user			= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	symbol			= models.ForeignKey(Stock, on_delete=models.CASCADE)
-	amount			= models.PositiveIntegerField(default=0)
+	amount			= models.PositiveIntegerField()
 
 	def __str__(self):
 		return f'{self.user} > {self.amount} of {self.symbol.symbol}'
+
+	def clean(self, *args, **kwargs):
+		if self.amount <= 0:
+			raise ValidationError('Amount in portfolio needs to be >0!')
+		super(Portfolio, self).clean(*args, **kwargs)
+
+	def save(self, *args, **kwargs):
+		self.full_clean()
+		super(Portfolio, self).save(*args, **kwargs)
 
 	class Meta:
 		unique_together = (('user', 'symbol'),)

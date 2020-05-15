@@ -49,3 +49,13 @@ Current task:
 			> Django app does fetching & writing itself?
 			> Separate agent sending data via .json to an API of the django app?
 	3. Data model needs to support meta data models that can link back to the stocks module
+
+#Calculation of portfolio purchase costs (moving average):
+10xAAPL @$150 01/01/2020
+20xAAPL @$100 02/01/2020
+30xAAPL (02/01/2020): $3,000
+(10 x $150) + (20 x $100) / 30
+weighted avg. $122
+
+25x$122
+25xAAPL $100
