@@ -25,7 +25,7 @@ SECRET_KEY = '4&5w%aqsjc4jt$d9vsf*q&3mkq(n3uld_*c06f$_!2kz1r3$hr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False 
 
-ALLOWED_HOSTS = ['172.104.234.63']
+ALLOWED_HOSTS = ['172.104.234.63', 'localhost']
 
 
 # Application definition
@@ -141,3 +141,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+
+
+try:
+    from .local_settings import *
+except ImportError as e:
+    print('No ``local_settings`` module found. Using default settings.')
+    pass
