@@ -1,12 +1,16 @@
 from rest_framework import generics
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticatedOrReadOnly,
+    IsAuthenticated,
+)
 from stocks.models import Stock
 from .serializers import StocksSerializer
 
 
 class StockRudView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    lookup_field = 'symbol'
+    lookup_field = "symbol"
     serializer_class = StocksSerializer
 
     def get_queryset(self):

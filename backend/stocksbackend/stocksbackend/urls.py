@@ -18,8 +18,9 @@ from django.urls import path, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/stocks/', include('stocks.api.urls', namespace='api-stocks')),
+    path("admin/", admin.site.urls),
+    path("api/stocks/", include("stocks.api.urls", namespace="api-stocks")),
+    path("api/portfolio/", include("portfolio.api.urls", namespace="api-portfolios")),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
