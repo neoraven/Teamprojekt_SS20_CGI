@@ -146,5 +146,5 @@ REST_FRAMEWORK = {
 try:
     from .local_settings import *
 except ImportError as e:
-    print('No ``local_settings`` module found. Using default settings.')
+    print('No ``local_settings`` module found.\nUsing default settings.')
     pass
