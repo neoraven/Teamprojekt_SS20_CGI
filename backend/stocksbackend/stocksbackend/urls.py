@@ -21,6 +21,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/stocks/", include("stocks.api.urls", namespace="api-stocks")),
     path("api/portfolio/", include("portfolio.api.urls", namespace="api-portfolios")),
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
