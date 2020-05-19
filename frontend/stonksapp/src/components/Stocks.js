@@ -1,6 +1,7 @@
 import React from 'react';
 import { List, Avatar, Space } from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
+import dummychart from '../dummychart.png';
 
 
 
@@ -41,8 +42,9 @@ const Stocks = (props) => {
             extra={
               <img
                 width={272}
+                height={150}
                 alt="logo"
-                src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                src={dummychart}
               />
             }
           >
