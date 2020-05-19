@@ -32,7 +32,7 @@ const Stocks = (props) => {
         }
         renderItem={item => (
           <List.Item
-            key={props.data}
+            key={item.symbol}
             actions={[
               <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
               <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
@@ -48,10 +48,10 @@ const Stocks = (props) => {
           >
             <List.Item.Meta
               avatar={<Avatar src={item.avatar} />}
-              title={<a href={item.href}>{props.data}</a>}
+              title={<a href={item.href}>{item.company_name}</a>}
               description={item.description}
             />
-            {props.data}
+            {item.symbol}
           </List.Item>
         )}
       />
