@@ -37,7 +37,7 @@ def get_companies(start_from=None):
     return zip(symbols, names)
 
 
-def initial_load(**kwargs):
+def load(**kwargs):
     # companies = get_companies(**kwargs)
     companies = [
         ("BFB", "Brown-Forman Corp."),
