@@ -26,7 +26,7 @@ schema_view = get_schema_view(
         default_version="v1",
         description="Documentation for all endpoints within the app",
     ),
-    public=True,
+    public=False,
     permission_classes=[permissions.AllowAny,],
 )
 
