@@ -16,10 +16,14 @@ class StockRudView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StocksSerializer
 
     def get_queryset(self):
-        queryset = Stock.objects.filter(
-            symbol__iexact=self.kwargs.get("symbol").upper()
-        )
+        queryset = Stock.objects.filter(symbol__iexact=self.kwargs.get("symbol"))
         return queryset
+
+
+class StockCreateView(generics.CreateAPIView):
+    queryset = Stock.objects.all()
+    permission_classes = [IsAdminUser]
+    serializer_class = StocksSerializer
 
 
 class StockAllView(generics.ListAPIView):
