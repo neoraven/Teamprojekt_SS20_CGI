@@ -1,9 +1,15 @@
 # New API Views:
 	> Stock details (meta_data model)
 		> /api/stocks/<symbol>/details
-	> Fix /stocks/<symbol> endpoint (create)
-		> /api/stocks/add/ endpoint for CreateAPIView (rest_framework.generics)
+			> framework / API?
 
-# Swagger UI:
+# React:
+	> relative api endpoint paths
 
-# React: relative api endpoint paths
+# Celery integration
+	> async requests for on-demand price data during day
+	> nightly load of new data
+
+# Server integration
+	> django / react
+	> migrate "initial loaded" database over
