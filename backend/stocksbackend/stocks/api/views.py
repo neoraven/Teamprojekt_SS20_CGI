@@ -101,3 +101,18 @@ class PriceListView(generics.ListAPIView):
             queryset = queryset.filter(date__lte=date_to)
 
         return queryset.order_by("date", "exchange_time")
+
+
+class MostRecentPriceView(generics.RetrieveAPIView):
+    permission_classes = [AllowAny]
+    lookup_field = "symbol"
+    serializer_class = PricesSerializer
+
+    def get_object(self):
+        queryset = Price.objects.filter(
+            symbol__symbol__iexact=self.kwargs.get("symbol")
+        ).order_by("-date", "-exchange_time")
+        interval = self.kwargs.get("interval")
+        if interval is not None:
+            queryset = queryset.filter(interval__iexact=interval)
+        return queryset.first()
