@@ -15,3 +15,8 @@
 # Server integration
 	> django / react
 	> migrate "initial loaded" database over
+
+
+# NewsApi: google-news-api
+	> by keyword (company name / industry), by domain, by popularity etc.
+	> visualize alongside financials
