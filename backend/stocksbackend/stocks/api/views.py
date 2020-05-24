@@ -1,4 +1,5 @@
 import dateutil.parser
+from django.http import Http404
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import (
@@ -112,7 +113,10 @@ class MostRecentPriceView(generics.RetrieveAPIView):
         queryset = Price.objects.filter(
             symbol__symbol__iexact=self.kwargs.get("symbol")
         ).order_by("-date", "-exchange_time")
-        interval = self.kwargs.get("interval")
+        interval = self.request.query_params.get("interval")
         if interval is not None:
             queryset = queryset.filter(interval__iexact=interval)
-        return queryset.first()
+        if queryset:
+            return queryset.first()
+        else:
+            raise Http404
