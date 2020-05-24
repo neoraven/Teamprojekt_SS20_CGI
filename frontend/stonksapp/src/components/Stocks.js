@@ -2,6 +2,7 @@ import React from 'react';
 import { List, Avatar, Space } from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import dummychart from '../dummychart.png';
+import { Link } from 'react-router-dom';
 
 
 
@@ -50,7 +51,7 @@ const Stocks = (props) => {
           >
             <List.Item.Meta
               avatar={<Avatar src={item.avatar} />}
-              title={<a href={item.href}>{item.company_name}</a>}
+              title={ <a href={`/${item.symbol}`}>{item.company_name}</a>}
               description={item.description}
             />
             {item.symbol}

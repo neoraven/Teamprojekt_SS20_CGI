@@ -8,6 +8,11 @@ import * as actions from '../store/actions/auth'
 const { Header, Content, Footer } = Layout;
 
 class SecondLayout extends React.Component {
+  componentDidMount(){
+    if (this.props.failedAuthentication === true){
+      console.log("FAME")
+    }
+  }
   render() {
     return (
       <Layout className="layout">
@@ -22,6 +27,7 @@ class SecondLayout extends React.Component {
             <Menu.Item key="1" >
               <Link to='/'>Stocks</Link>
             </Menu.Item>
+
 
             {
 
