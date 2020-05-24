@@ -1,3 +1,4 @@
+import dateutil.parser
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import (
@@ -6,8 +7,9 @@ from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser,
 )
-from stocks.models import Stock
-from .serializers import StocksSerializer
+from rest_framework.pagination import PageNumberPagination
+from stocks.models import Stock, Price
+from .serializers import StocksSerializer, PricesSerializer
 
 
 class StockRudView(generics.RetrieveUpdateDestroyAPIView):
@@ -67,3 +69,35 @@ class StockAllView(generics.ListAPIView):
 
     def get_queryset(self):
         return Stock.objects.all()
+
+
+class PriceResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = "page_size"
+    max_page_size = 1000
+
+
+class PriceListView(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    pagination_class = PriceResultsSetPagination
+    lookup_field = "symbol"
+    serializer_class = PricesSerializer
+
+    def get_queryset(self):
+        interval, date_from, date_to = (
+            self.request.query_params.get("interval", "1d"),
+            self.request.query_params.get("from"),
+            self.request.query_params.get("to"),
+        )
+        queryset = Price.objects.filter(
+            symbol__symbol__iexact=self.kwargs.get("symbol"), interval=interval,
+        )
+        if date_from:
+            date_from = dateutil.parser.parse(date_from)
+            print(date_from)
+            queryset = queryset.filter(date__gte=date_from)
+        if date_to:
+            date_to = dateutil.parser.parse(date_to, ignoretz=False)
+            queryset = queryset.filter(date__lte=date_to)
+
+        return queryset.order_by("date", "exchange_time")
