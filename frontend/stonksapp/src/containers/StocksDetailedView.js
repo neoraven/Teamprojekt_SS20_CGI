@@ -65,9 +65,9 @@ class StocksDetail extends React.Component {
             this.onTabChange(key, 'key');
           }}
         >
-          This is the overview over the company {this.state.stock.company_name}. 
+          This is the overview of the company {this.state.stock.company_name}.
           It is trading under the symbol {this.state.stock.symbol} in the S&P 500.
-          It is currently trading at a price of {this.state.prices.p_close}$ per share.
+          It is currently trading at a price of ${this.state.prices.p_close} per share.
           {contentList[this.state.key]}
         </Card>
       </div>
