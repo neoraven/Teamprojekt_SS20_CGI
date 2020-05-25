@@ -29,7 +29,7 @@ const Stocks = (props) => {
         dataSource={props.data}
         footer={
           <div>
-            <b>ant design</b> footer part
+            <b></b> 
           </div>
         }
         renderItem={item => (
@@ -51,7 +51,7 @@ const Stocks = (props) => {
           >
             <List.Item.Meta
               avatar={<Avatar src={item.avatar} />}
-              title={ <a href={`/${item.symbol}`}>{item.company_name}</a>}
+              title={ <a href={`/company/${item.symbol}`}>{item.company_name}</a>}
               description={item.description}
             />
             {item.symbol}

@@ -22,7 +22,7 @@ export const authFail = error => {
 }
 
 export const logout = () => {
-  localStorage.removeItem('user')
+  localStorage.removeItem('token')
   localStorage.removeItem('expirationDate')
   return {
     type: actionTypes.AUTH_LOGOUT
@@ -87,7 +87,6 @@ export const authCheckState = () => {
   return dispatch => {
     const token = localStorage.getItem('token');
     if(token === undefined){
-      console.log("HERE")
       dispatch(logout());
     }else {
 

@@ -46,14 +46,17 @@ class SecondLayout extends React.Component {
             }
 
 
+            <Menu.Item key="3" >
+              <Link to='/portfolio/'>Portfolio</Link>
+            </Menu.Item>
+
 
           </Menu>
         </Header>
         <Content style={{ padding: '0 50px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
+            <Breadcrumb.Item><Link to='/'>Home</Link></Breadcrumb.Item>
+            <Breadcrumb.Item><Link to='/'>List</Link></Breadcrumb.Item>
           </Breadcrumb>
           <div className="site-layout-content">{this.props.children}</div>
         </Content>
