@@ -102,7 +102,10 @@ class PriceListView(generics.ListAPIView):
             date_to = dateutil.parser.parse(date_to, ignoretz=False)
             queryset = queryset.filter(date__lte=date_to)
 
-        return queryset.order_by("date", "exchange_time")
+        if queryset:
+            return queryset.order_by("date", "exchange_time")
+        else:
+            raise Http404
 
 
 class MostRecentPriceView(generics.RetrieveAPIView):
