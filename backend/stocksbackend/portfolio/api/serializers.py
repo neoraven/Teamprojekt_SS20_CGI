@@ -16,7 +16,7 @@ class PortfolioSerializer(serializers.ModelSerializer):
 
 class TransactionSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    date_posted = serializers.HiddenField(default=timezone.now())
+    date_posted = serializers.DateTimeField(default=timezone.now(), read_only=True)
 
     class Meta:
         model = Transaction
@@ -46,4 +46,5 @@ class TransactionSerializer(serializers.ModelSerializer):
             )
             return portfolio
         except Portfolio.DoesNotExist:
+            #
             return Portfolio(symbol=validated_data["symbol"], amount=0)
