@@ -21,11 +21,6 @@ class PortfolioListView(generics.ListAPIView):
         else:
             return queryset
 
-    def list(self, *args, **kwargs):
-        print(dir(self.request))
-        print(f"\n\n{self.request._authenticator}")
-        return super(PortfolioListView, self).list(*args, **kwargs)
-
 
 class AllPortfoliosAdminListView(generics.ListAPIView):
     permission_classes = [IsAdminUser]
