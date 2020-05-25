@@ -5,6 +5,7 @@ from .views import (
     StockCreateView,
     PriceListView,
     MostRecentPriceView,
+    PriceListNoPaginationView,
 )
 
 app_name = "stocks"
@@ -16,6 +17,11 @@ urlpatterns = [
         name="most-recent-price-for-stock",
     ),
     path("<symbol>/prices/", PriceListView.as_view(), name="prices-for-stock"),
+    path(
+        "<symbol>/prices/all/",
+        PriceListNoPaginationView.as_view(),
+        name="all-prices-for-stock",
+    ),
     path("list/", StockAllView.as_view(), name="all-stocks"),
     path("", StockAllView.as_view(), name="all-stocks"),
     path("<symbol>", StockRudView.as_view(), name="stock-rud"),

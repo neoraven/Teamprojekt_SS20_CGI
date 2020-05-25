@@ -112,6 +112,37 @@ class PriceListView(generics.ListAPIView):
             raise Http404
 
 
+class PriceListNoPaginationView(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    lookup_field = "symbol"
+    serializer_class = PricesSerializer
+
+    def get_queryset(self):
+        symbol = self.kwargs.get("symbol")
+        interval, date_from, date_to = (
+            self.request.query_params.get("interval", "1d"),
+            self.request.query_params.get("from"),
+            self.request.query_params.get("to"),
+        )
+        queryset = Price.objects.filter(symbol__symbol__iexact=symbol)
+        if not queryset:
+            raise ValidationError(f"Stock `{symbol}` does not exist!")
+        queryset = queryset.filter(interval=interval)
+        if not queryset:
+            raise ValidationError(f"Interval `{interval}` does not exist!")
+        if date_from:
+            date_from = dateutil.parser.parse(date_from)
+            queryset = queryset.filter(date__gte=date_from)
+        if date_to:
+            date_to = dateutil.parser.parse(date_to, ignoretz=False)
+            queryset = queryset.filter(date__lte=date_to)
+
+        if queryset:
+            return queryset.order_by("date", "exchange_time")
+        else:
+            raise Http404
+
+
 class MostRecentPriceView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     lookup_field = "symbol"
