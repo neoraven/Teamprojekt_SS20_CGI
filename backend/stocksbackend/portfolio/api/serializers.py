@@ -29,11 +29,6 @@ class TransactionSerializer(serializers.ModelSerializer):
             "date_posted",
         ]
 
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        ret["user"] = instance.user.username
-        return ret
-
     def create(self, validated_data):
         """
         Overwrites the create() method to return a ``Portfolio`` object 
