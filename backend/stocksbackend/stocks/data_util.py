@@ -38,13 +38,7 @@ def get_companies(start_from=None):
 
 
 def initial_load(**kwargs):
-    # companies = get_companies(**kwargs)
-    companies = [
-        ("BFB", "Brown-Forman Corp."),
-        ("CARR", "Carrier Global"),
-        ("OTIS", "Otis Worldwide"),
-        ("GOOGL", "Alphabet Inc. (Class A)"),
-    ]
+    companies = get_companies(**kwargs)
 
     print("Symbols and names loaded")
     print("-------------------------------------")

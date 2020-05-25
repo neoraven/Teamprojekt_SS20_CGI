@@ -1,5 +1,6 @@
 import dateutil.parser
 
+from django.core.exceptions import ValidationError
 from django.http import Http404
 from rest_framework import generics
 from rest_framework.response import Response
@@ -86,17 +87,20 @@ class PriceListView(generics.ListAPIView):
     serializer_class = PricesSerializer
 
     def get_queryset(self):
+        symbol = self.kwargs.get("symbol")
         interval, date_from, date_to = (
             self.request.query_params.get("interval", "1d"),
             self.request.query_params.get("from"),
             self.request.query_params.get("to"),
         )
-        queryset = Price.objects.filter(
-            symbol__symbol__iexact=self.kwargs.get("symbol"), interval=interval,
-        )
+        queryset = Price.objects.filter(symbol__symbol__iexact=symbol)
+        if not queryset:
+            raise ValidationError(f"Stock `{symbol}` does not exist!")
+        queryset = queryset.filter(interval=interval)
+        if not queryset:
+            raise ValidationError(f"Interval `{interval}` does not exist!")
         if date_from:
             date_from = dateutil.parser.parse(date_from)
-            print(date_from)
             queryset = queryset.filter(date__gte=date_from)
         if date_to:
             date_to = dateutil.parser.parse(date_to, ignoretz=False)
