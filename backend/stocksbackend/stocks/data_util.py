@@ -1,69 +1,104 @@
-import re
 import time
+import re
 from itertools import cycle
 
+from datetime import datetime
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 from django.contrib.auth.models import User
 
 from .models import Price, Stock
 
-# SPECIFY THE KEYS
-# Two api keys because of the limited amount of API Calls per day (500). Stocks# in S&P 500: 505
+_AV_API_KEY = "6CYJ430CSUYT2B19"
+_AV_API_KEY_LIST = ["1077F37TLBGNSVY2", "H73WEF95O0IAME5U", "6CYJ430CSUYT2B19"]
+_AV_OUTPUT_FORMAT = "pandas"
+_AV_OUTPUT_SIZE = "full"
+_AV_TIME_PER_CALL = 60 / 5  # 5 calls per minute
 
-KEY_LIST = cycle(['1077F37TLBGNSVY2', 'H73WEF95O0IAME5U'])
+SP_500_STOCKLIST_URL = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
 
-OUTPUT_FORMAT = 'pandas'
-OUTPUT_SIZE = 'full'
-
-USERNAME = 'emre'
-user = User.objects.filter(username=USERNAME).first()
+STOCK_ALIAS_DICT = {
+    "BF.B": "BFB",
+}
 
 
-# TODO: Check wikipedia list for updates automatically, eventually: ask before adding symbol (manual check)
-def load():
-    payload = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
-    df = payload[0]
+def get_companies(start_from=None):
+    print(start_from)
+    payload = pd.read_html(SP_500_STOCKLIST_URL)
+    df = payload[0]  # there are 2 tables on this site
+    df["Symbol"].replace(STOCK_ALIAS_DICT, inplace=True)
 
-    company_symbols = df['Symbol'].values.tolist()
+    symbols, names = df["Symbol"].tolist(), df["Security"].tolist()
+    # check if custom symbol start location is set > slice symbol list
+    if start_from is not None:
+        assert start_from in symbols, f"Invalid start_from symbol `{start_from}`."
+        start_from_idx = symbols.index(start_from)
+        symbols, names = symbols[start_from_idx:], names[start_from_idx:]
+    return zip(symbols, names)
 
-    for symbol in company_symbols:
-        pattern = re.compile('[\W_]+')
-        company_symbols[company_symbols.index(symbol)] = pattern.sub('', symbol)
 
-    company_names = df['Security'].values.tolist()
+def initial_load(**kwargs):
+    # companies = get_companies(**kwargs)
+    companies = [
+        ("BFB", "Brown-Forman Corp."),
+        ("CARR", "Carrier Global"),
+        ("OTIS", "Otis Worldwide"),
+        ("GOOGL", "Alphabet Inc. (Class A)"),
+    ]
 
     print("Symbols and names loaded")
     print("-------------------------------------")
 
-    ts = TimeSeries(key=next(KEY_LIST), output_format=OUTPUT_FORMAT)
+    av_api_key_timers = {key: 0 for key in _AV_API_KEY_LIST}
+    av_api_key_cycler = cycle(av_api_key_timers.keys())
 
-    for i in range(2):
-        print(f'save {company_symbols[i]} instances...')
-        data, meta_data = ts.get_daily(symbol=company_symbols[i], outputsize='full')
-        date = data.index.tolist()
-        Stock(symbol=company_symbols[i],
-              company_name=company_names[i],
-              ).save()
-        for j in range(len(date)):
-            if Price.objects.filter(
-                    symbol=Stock.objects.get(symbol=company_symbols[i]),
-                    date=date[j].date()
-            ).exists():
-                continue
-            else:
-                Price(symbol=Stock.objects.get(symbol=company_symbols[i]),
-                      interval="1d",
-                      date=date[j].date(),
-                      p_low=data['3. low'][j],
-                      p_open=data['1. open'][j],
-                      p_high=data['2. high'][j],
-                      p_close=data['4. close'][j],
-                      volume=data['5. volume'][j]
-                      ).save()
-        print(f"{company_symbols[i]} instances saved")
-        print(f"-------------------")
-        time.sleep(2)
+    ts = TimeSeries(key="demo", output_format=_AV_OUTPUT_FORMAT)
 
-        ts = TimeSeries(key=next(KEY_LIST), output_format=OUTPUT_FORMAT)
+    for company_symbol, company_name in companies:
+        stock, stock_created = Stock.objects.get_or_create(
+            symbol=company_symbol, defaults={"company_name": company_name}
+        )
+        append_str = "created." if stock_created else "already exists."
+        print(f"Stock symbol {company_symbol} {append_str}.")
+        print("> Working on prices...")
 
+        av_curr_key = next(av_api_key_cycler)
+        av_curr_key_time_elapsed = time.time() - av_api_key_timers[av_curr_key]
+        av_time_to_wait = _AV_TIME_PER_CALL - av_curr_key_time_elapsed
+        if av_time_to_wait > 0:
+            print(
+                f"Not enough time has passed since last Alphavantage API call.\n"
+                f"Waiting an additional {av_time_to_wait} seconds..."
+            )
+            time.sleep(av_time_to_wait)
+
+        ts.key = av_curr_key
+        pull_write_prices_for_symbol(ts=ts, symbol=company_symbol)
+        av_api_key_timers[av_curr_key] = time.time()
+
+
+def pull_write_prices_for_symbol(ts: TimeSeries, symbol: str, interval: str = "1d"):
+    try:
+        price_data, _ = ts.get_daily(symbol=symbol, outputsize=_AV_OUTPUT_SIZE)
+    except ValueError:
+        print("Daily limit of number API calls exceeded (500).\nAborting...")
+        return
+
+    for idx, price in enumerate(price_data.itertuples()):
+        django_price, price_created = Price.objects.get_or_create(
+            symbol=Stock.objects.get(symbol=symbol),
+            interval=interval,
+            date=price.Index.date(),
+            defaults={
+                "p_low": price._3,
+                "p_open": price._1,
+                "p_high": price._2,
+                "p_close": price._4,
+                "volume": price._5,
+            },
+        )
+        if not price_created:
+            print(f"Encountered duplicate price object on {price.Index.date()}.")
+            break
+
+    print(f"Finished writing {idx} new prices of {symbol}.")
