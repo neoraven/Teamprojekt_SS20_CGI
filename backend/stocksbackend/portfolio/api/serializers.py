@@ -16,7 +16,7 @@ class PortfolioSerializer(serializers.ModelSerializer):
 
 class TransactionSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    date_posted = serializers.DateTimeField(default=timezone.now(), read_only=True)
+    date_posted = serializers.DateTimeField(default=timezone.now())
 
     class Meta:
         model = Transaction
