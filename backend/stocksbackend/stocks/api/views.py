@@ -117,9 +117,9 @@ class MostRecentPriceView(generics.RetrieveAPIView):
         queryset = Price.objects.filter(
             symbol__symbol__iexact=self.kwargs.get("symbol")
         ).order_by("-date", "-exchange_time")
-        interval = self.request.query_params.get("interval")
-        if interval is not None:
-            queryset = queryset.filter(interval__iexact=interval)
+        interval = self.request.query_params.get("interval", "1d")
+        queryset = queryset.filter(interval__iexact=interval)
+
         if queryset:
             return queryset.first()
         else:
