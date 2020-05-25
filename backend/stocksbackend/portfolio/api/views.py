@@ -59,7 +59,6 @@ class TransactionsListView(generics.ListAPIView):
     serializer_class = TransactionSerializer
 
     def get_queryset(self):
-        print(self.request.query_params)
         current_user = self.request.user
         queryset = Transaction.objects.filter(user=current_user)
 
@@ -68,7 +67,6 @@ class TransactionsListView(generics.ListAPIView):
             self.request.query_params.get("from"),
             self.request.query_params.get("to"),
         )
-        print(symbol, date_from, date_to)
         if symbol is not None:
             queryset = queryset.filter(symbol=symbol)
         if date_from is not None:
@@ -77,5 +75,7 @@ class TransactionsListView(generics.ListAPIView):
         if date_to is not None:
             date_to = dateutil.parser.parse(date_to, ignoretz=False)
             queryset = queryset.filter(date_posted__lte=date_to)
+        if queryset:
+            queryset = queryset.order_by("symbol", "-date_posted")
 
         return queryset
