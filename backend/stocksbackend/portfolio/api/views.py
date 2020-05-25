@@ -1,7 +1,8 @@
 import dateutil.parser
 from rest_framework import generics
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework import serializers
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from .serializers import PortfolioSerializer, TransactionSerializer
 from portfolio.models import Portfolio, Transaction
 
@@ -19,6 +20,11 @@ class PortfolioListView(generics.ListAPIView):
             return queryset.filter(symbol=symbol)
         else:
             return queryset
+
+    def list(self, *args, **kwargs):
+        print(dir(self.request))
+        print(f"\n\n{self.request._authenticator}")
+        return super(PortfolioListView, self).list(*args, **kwargs)
 
 
 class AllPortfoliosAdminListView(generics.ListAPIView):

@@ -1,14 +1,14 @@
 import React from 'react';
 import axios from 'axios';
 
-const AuthStr = 'Bearer '.concat(localStorage.getItem('token')); //unsave, needs to be changed when authtoken works
+const AuthStr = 'Token '.concat(localStorage.getItem('token')); //unsave, needs to be changed when authtoken works
 
 const config = {
-    headers: { 'Authorization': 'Bearer 4dfc7044f1c1e1c5b51922b8e46b68c83953539f'} //'4dfc7044f1c1e1c5b51922b8e46b68c83953539f' 
+  headers: { 'Authorization': AuthStr } //'4dfc7044f1c1e1c5b51922b8e46b68c83953539f' 
 };
 
 const bodyParameters = {
-   key: "value"
+  key: "value"
 };
 
 
@@ -17,9 +17,9 @@ class Portfolio extends React.Component {
   state = {
     portfolio: []
   }
-  
-  
-  componentDidMount() { 
+
+
+  componentDidMount() {
     console.log(AuthStr);
     axios.get('http://127.0.0.1:8000/api/portfolio/list/', config)
       .then(res => {
