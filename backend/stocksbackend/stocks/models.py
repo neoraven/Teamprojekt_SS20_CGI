@@ -10,6 +10,23 @@ class Stock(models.Model):
         return self.symbol
 
 
+class Company(models.Model):
+    symbol = models.OneToOneField(Stock, on_delete=models.CASCADE, primary_key=True)
+    company_name = models.TextField(max_length=50)
+    market_cap = models.BigIntegerField(null=True, blank=True)
+    industry = models.TextField(max_length=50, null=True, blank=True)
+    sector = models.TextField(max_length=50, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    website_url = models.URLField(blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True)
+    ceo = models.TextField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return (
+            f"{self.company_name} ({self.symbol}) does {self.industry} in {self.sector}"
+        )
+
+
 class Price(models.Model):
     class Interval(models.TextChoices):
         ONE_MIN_INTERVAL = ("1min", "1min")
