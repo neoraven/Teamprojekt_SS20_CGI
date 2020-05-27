@@ -20,12 +20,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = [
-            "user",
-            "symbol",
-            "amount",
-            "date_posted",
-        ]
+        fields = ["user", "symbol", "amount", "date_posted", "price_at"]
 
     def create(self, validated_data):
         """

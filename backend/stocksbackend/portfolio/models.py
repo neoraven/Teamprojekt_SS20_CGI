@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from stocks.models import Stock
+from stocks.models import Stock, Price
 from django.core.validators import ValidationError
 
 
@@ -21,6 +21,7 @@ class Transaction(models.Model):
     symbol = models.ForeignKey(Stock, on_delete=models.CASCADE)
     amount = models.IntegerField()
     date_posted = models.DateTimeField(auto_now=True)
+    price_at = models.DecimalField(max_digits=8, decimal_places=3)
 
     def __str__(self):
         purchase_type = "sold" if self.amount < 0 else "bought"
@@ -41,6 +42,15 @@ class Transaction(models.Model):
             )
 
     def save(self, *args, **kwargs):
+        most_recent_price = (
+            Price.objects.filter(symbol=self.symbol)
+            .order_by("-date", "-exchange_time", "-interval")
+            .first()
+        )
+        if most_recent_price is None:
+            raise ValidationError("No valid price found for this transaction!")
+        self.price_at = most_recent_price.p_close
+
         super(Transaction, self).save(*args, **kwargs)
         try:
             portfolio = Portfolio.objects.get(user=self.user, symbol=self.symbol)

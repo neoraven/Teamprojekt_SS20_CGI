@@ -11,9 +11,17 @@ class Stock(models.Model):
 
 
 class Price(models.Model):
+    class Interval(models.TextChoices):
+        ONE_MIN_INTERVAL = ("1min", "1min")
+        QUARTER_HOUR_INTERVAL = ("15min", "15min")
+        HALF_HOUR_INTERVAL = ("30min", "30min")
+        HOUR_INTERVAL = ("60min", "60min")
+        DAILY_INTERVAL = ("1d", "1d")
+        QUOTE = ("quote", "quote")
+
     symbol = models.ForeignKey(Stock, on_delete=models.CASCADE)
-    # max_length case: '180m' (180 minutes)
-    interval = models.CharField(max_length=4)
+    # max_length case: '60min' ()
+    interval = models.CharField(max_length=5, choices=Interval.choices)
     date = models.DateField()
     # leave blank / null if data is daily
     exchange_time = models.TimeField(null=True, blank=True)
