@@ -3,6 +3,7 @@ from .views import (
     StockRudView,
     StockAllView,
     StockCreateView,
+    StockDetailView,
     PriceListView,
     MostRecentPriceView,
     PriceListNoPaginationView,
@@ -25,5 +26,6 @@ urlpatterns = [
     path("list/", StockAllView.as_view(), name="all-stocks"),
     path("", StockAllView.as_view(), name="all-stocks"),
     path("<symbol>", StockRudView.as_view(), name="stock-rud"),
+    path("<symbol>/details/", StockDetailView.as_view(), name="stock-company-details"),
     path("new/", StockCreateView.as_view(), name="create-new-stock"),
 ]

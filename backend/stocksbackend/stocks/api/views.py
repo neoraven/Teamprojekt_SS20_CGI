@@ -11,8 +11,8 @@ from rest_framework.permissions import (
     IsAdminUser,
 )
 from rest_framework.pagination import PageNumberPagination
-from stocks.models import Stock, Price
-from .serializers import StocksSerializer, PricesSerializer
+from stocks.models import Stock, Company, Price
+from .serializers import StocksSerializer, CompanySerializer, PricesSerializer
 
 
 class StockRudView(generics.RetrieveUpdateDestroyAPIView):
@@ -72,6 +72,13 @@ class StockAllView(generics.ListAPIView):
 
     def get_queryset(self):
         return Stock.objects.all()
+
+
+class StockDetailView(generics.RetrieveAPIView):
+    queryset = Company.objects.all()
+    permission_classes = [AllowAny]
+    lookup_field = "symbol"
+    serializer_class = CompanySerializer
 
 
 class PriceResultsSetPagination(PageNumberPagination):

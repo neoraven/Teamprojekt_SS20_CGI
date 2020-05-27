@@ -1,6 +1,6 @@
 from django.utils import timezone
 from rest_framework import serializers
-from stocks.models import Stock, Price
+from stocks.models import Stock, Company, Price
 
 
 class StocksSerializer(serializers.ModelSerializer):
@@ -9,6 +9,22 @@ class StocksSerializer(serializers.ModelSerializer):
         fields = [
             "symbol",
             "company_name",
+        ]
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = [
+            "symbol",
+            "company_name",
+            "market_cap",
+            "industry",
+            "sector",
+            "description",
+            "website_url",
+            "image_url",
+            "ceo",
         ]
 
 
