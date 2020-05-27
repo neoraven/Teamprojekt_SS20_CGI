@@ -28,7 +28,6 @@ class SecondLayout extends React.Component {
               <Link to='/'>Stocks</Link>
             </Menu.Item>
 
-
             {
 
               this.props.isAuthenticated ?

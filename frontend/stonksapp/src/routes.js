@@ -5,6 +5,7 @@ import Login from './containers/Login';
 import Signup from './containers/Signup';
 import Details from './containers/StocksDetailedView';
 import PortfolioList from './containers/PortfolioListView';
+import SelectStocks from './components/SelectStock';
 
 const BaseRouter =() =>(
   <div>
