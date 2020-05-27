@@ -3,7 +3,11 @@ from rest_framework import generics
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-from .serializers import PortfolioSerializer, TransactionSerializer
+from .serializers import (
+    PortfolioSerializer,
+    TransactionPutSerializer,
+    TransactionGetSerializer,
+)
 from portfolio.models import Portfolio, Transaction
 
 
@@ -38,12 +42,12 @@ class AllPortfoliosAdminListView(generics.ListAPIView):
 
 class TransactionPutView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = TransactionSerializer
+    serializer_class = TransactionPutSerializer
 
 
 class AllTransactionsAdminListView(generics.ListAPIView):
     permission_classes = [IsAdminUser]
-    serializer_class = TransactionSerializer
+    serializer_class = TransactionGetSerializer
 
     def get_queryset(self):
         queryset = Transaction.objects.all()
@@ -57,7 +61,7 @@ class AllTransactionsAdminListView(generics.ListAPIView):
 
 class TransactionsListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = TransactionSerializer
+    serializer_class = TransactionGetSerializer
 
     def get_queryset(self):
         current_user = self.request.user

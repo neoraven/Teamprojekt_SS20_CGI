@@ -14,12 +14,22 @@ class PortfolioSerializer(serializers.ModelSerializer):
         return ret
 
 
-class TransactionSerializer(serializers.ModelSerializer):
+class TransactionGetSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    date_posted = serializers.DateTimeField(default=timezone.now())
+    date_posted = serializers.DateTimeField()
     price_at = serializers.DecimalField(
-        max_digits=8, decimal_places=3, coerce_to_string=False, required=False
+        max_digits=8, decimal_places=3, coerce_to_string=False
     )
+
+    class Meta:
+        model = Transaction
+        fields = ["user", "symbol", "amount", "date_posted", "price_at"]
+
+
+class TransactionPutSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    date_posted = serializers.HiddenField(default=timezone.now())
+    price_at = serializers.HiddenField(default=0.0)
 
     class Meta:
         model = Transaction
