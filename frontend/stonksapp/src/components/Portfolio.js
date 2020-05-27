@@ -30,22 +30,14 @@ const menu = (
 );
 
 function Portfolio(props) {
-  const expandedRowRender = () => {
+  const expandedRowRender = () => { //this probably needs to be moved to its own component to match the transaction symbols with the portfolio symbols
     const columns = [
-      { title: 'Date', dataIndex: 'date', key: 'date' },
-      { title: 'Name', dataIndex: 'name', key: 'name' },
-      {
-        title: 'Status',
-        key: 'state',
-        render: () => (
-          <span>
-            <Badge status="success" />
-            Finished
-          </span>
-        ),
-      },
-      { title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-      {
+      { title: 'Symbol', dataIndex: 'symbol', key: 'symbol' },
+      { title: 'Amount', dataIndex: 'amount', key: 'amount' },
+      { title: 'Action', dataIndex: 'action', key: 'action' },
+      { title: 'Price', dataIndex: 'price', key: 'price'},
+      { title: 'Date', dataIndex: 'date_posted', key: 'date_posted' },
+     /* {
         title: 'Action',
         dataIndex: 'operation',
         key: 'operation',
@@ -60,28 +52,46 @@ function Portfolio(props) {
             </Dropdown>
           </span>
         ),
-      },
+      },*/
     ];
+
 
     const data = [];
     for (let i = 0; i < 3; ++i) {
       data.push({
         key: i,
-        date: '2014-12-24 23:12:00',
-        name: 'This is production name',
-        upgradeNum: 'Upgraded: 56',
+        symbol: 'TSLA',
+        action: 'Buy/Sell',
+        amount: '99',
+        price: '13,37$',
+        date_posted: '01.01.1970'
       });
     }
+    const modifiedtransactions = []; //Not useful atm
+    for(let portfolio of props.portfolio){
+      for(let transaction of props.transactions){
+        if(portfolio.symbol === transaction.symbol){
+          modifiedtransactions.push({
+            symbol: transaction.symbol,
+            action: 'buy',
+            amount: transaction.amount,
+            price: '',
+            date: transaction.date_posted,
+          });
+        }
+      }
+    }
+
     return <Table columns={columns} dataSource={data} pagination={false} />;
   };
 
-  const columns = [
+  const columns = [ // Some warning about symbols/primary key; needs to be fixed
     { title: 'Symbol', dataIndex: 'symbol', key: 'symbol' },
     { title: 'Price', dataIndex: 'version', key: 'version' },
     { title: 'Amount', dataIndex: 'amount', key: 'amount' },
     { title: 'Owner', dataIndex: 'user', key: 'user' },
-    { title: 'Date of last pruchase', dataIndex: 'createdAt', key: 'createdAt' },
-    { title: 'Action', key: 'operation', render: () => <a>Publish</a> },
+    { title: 'Date of last pruchase', dataIndex: 'date_posted', key: 'date_posted' },
+    { title: 'Action', key: 'operation', render: () => <a>i will do somethin with this link i swear</a> },
   ];
 
   /*      //All fields are being expanded because the portfolios in props.data are missing a key property 
@@ -98,12 +108,31 @@ function Portfolio(props) {
     });
   }
   */
+  const fullportfolio = [];
+  for(let portfolio of props.portfolio){
+    var d1 = 1;
+    for(let transactions of props.transactions){
+      if(portfolio.symbol == transactions.symbol){
+        if(d1 === 1 | d1 < transactions.date_posted){
+          d1 = transactions.date_posted;
+        }
+      }
+    }
+
+    fullportfolio.push({
+      symbol: portfolio.symbol,
+      amount: portfolio.amount,
+      user: portfolio.user,
+      date_posted: d1,
+    });
+  }
+
   return (
     <Table
       className="components-table-demo-nested"
       columns={columns}
       expandable={{ expandedRowRender }}
-      dataSource={props.transactions, props.portfolio}
+      dataSource={fullportfolio}
     />
   );
 }
