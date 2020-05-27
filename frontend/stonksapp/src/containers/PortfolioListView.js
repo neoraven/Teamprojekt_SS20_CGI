@@ -26,6 +26,7 @@ class PortfolioList extends React.Component {
   }
 
 
+
   componentDidMount() {
     var AuthStr = 'Token '.concat(localStorage.getItem('token'));
 
