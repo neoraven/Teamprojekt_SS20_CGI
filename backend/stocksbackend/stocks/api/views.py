@@ -149,12 +149,10 @@ class MostRecentPriceView(generics.RetrieveAPIView):
     serializer_class = PricesSerializer
 
     def get_object(self):
-        queryset = Price.objects.filter(
-            symbol__symbol__iexact=self.kwargs.get("symbol")
-        ).order_by("-date", "-exchange_time")
         interval = self.request.query_params.get("interval", "1d")
-        queryset = queryset.filter(interval__iexact=interval)
-
+        queryset = Price.objects.filter(
+            symbol__symbol__iexact=self.kwargs.get("symbol"), interval__iexact=interval
+        ).order_by("-date", "-exchange_time", "-interval")
         if queryset:
             return queryset.first()
         else:
