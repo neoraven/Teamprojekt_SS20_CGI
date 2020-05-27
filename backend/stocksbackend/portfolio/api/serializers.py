@@ -18,7 +18,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     date_posted = serializers.DateTimeField(default=timezone.now())
     price_at = serializers.DecimalField(
-        max_digits=8, decimal_places=3, coerce_to_string=False
+        max_digits=8, decimal_places=3, coerce_to_string=False, required=False
     )
 
     class Meta:
