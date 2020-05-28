@@ -108,7 +108,7 @@ function Portfolio(props) {
     });
   }
   */
-  const fullportfolio = []; //////PRICE BUUGY
+  const fullportfolio = [];
   for(let portfolio of props.portfolio){
     var latestdate = 1;
     var priceavg = 0;
