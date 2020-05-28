@@ -2,8 +2,8 @@ import React from 'react'
 
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import {NavLink} from 'react-router-dom';
-import {connect} from 'react-redux'
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux'
 import * as actions from '../store/actions/auth'
 //import { Router, Route, Link, BrowserRouter} from 'react-router-dom';
 
@@ -13,7 +13,7 @@ import * as actions from '../store/actions/auth'
 
 
 
-class NormalLoginForm extends React.Component{
+class NormalLoginForm extends React.Component {
 
   onFinish = values => {
     console.log(values.username, values.password)
@@ -23,10 +23,10 @@ class NormalLoginForm extends React.Component{
 
 
 
-render(){
-  console.log(this.props);
-  return(
-<div>
+  render() {
+    console.log(this.props);
+    return (
+      <div>
 
         <Form
           name="normal_login"
@@ -74,22 +74,22 @@ render(){
           </Form.Item>
         </Form>
 
-        </div>
+      </div>
 
-)
-}
+    )
+  }
 };
 
 
 
-const mapDispatchToProps = (dispatch) =>{
-  return{
-    onAuth: (username, password) => {dispatch(actions.authLogin(username, password))}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAuth: (username, password) => { dispatch(actions.authLogin(username, password)) }
   }
 };
 
 const mapStateToProps = (state) => {
-  return{
+  return {
     loading: state.loading,
     error: state.error
   }
