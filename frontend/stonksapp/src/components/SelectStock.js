@@ -1,4 +1,4 @@
-import { Select, InputNumber, Button } from 'antd';
+import { Select, InputNumber, Button, Form } from 'antd';
 import React from 'react';
 
 const { Option } = Select;
@@ -32,22 +32,9 @@ const companys = [];
 const symbol = [];
 
 class SelectStocks extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { value: '' };
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleChange(event) {
-        this.setState({ value: event.target.value });
-    }
-
-    handleSubmit(event) {
-        alert('A name was submitted: ' + this.state.value);
-        event.preventDefault();
-    }
+    onFinish = values => {
+       console.log(values.stock, values.amount)
+    };
 
     render() {
 
@@ -59,9 +46,25 @@ class SelectStocks extends React.Component {
 
         return (
 
-            <form onSubmit={this.handleSubmit}>
+            <Form
+                name="input_order"
+                className="order-form"
+                layout="inline"
+                initialValues={{
+                    remember: true,
+                }}
+                onFinish={this.onFinish}
+            >   
+            <Form.Item
+                name="stock"
+                rules={[
+                {
+                    required: true,
+                    message: 'Please select a Stock to trade!',
+                },
+                ]}
+            >
                 <Select
-                    id="stock"
                     showSearch
                     style={{ width: 300 }}
                     placeholder="Select a Stock"
@@ -80,24 +83,34 @@ class SelectStocks extends React.Component {
                         </Option>
                     ))}
                 </Select>
-
-
+             </Form.Item>           
+             <Form.Item
+                name="amount"
+                rules={[
+                {
+                    required: true,
+                    message: 'Please enter an Amount!',
+                },
+                ]}
+            >
                 <InputNumber
-                    id="amount"
                     style={{ width: 200 }}
                     placeholder="Enter Amount to Buy/Sell"
                     min={1}
                     max={9999}
                 />
-
-                <Button type="primary" onClick={() => buy(1, 2)}>
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit" >
                     Buy
-                    </Button>
-
-                <Button type="primary" danger onClick={() => sell(1, 2)}>
+                </Button>
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" danger htmlType="submit">
                     Sell
-                    </Button>
-            </form>
+                </Button>
+            </Form.Item>
+            </Form>
 
         );
     }
