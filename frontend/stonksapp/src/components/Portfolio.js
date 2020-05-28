@@ -87,7 +87,7 @@ function Portfolio(props) {
 
   const columns = [ // Some warning about symbols/primary key; needs to be fixed
     { title: 'Symbol', dataIndex: 'symbol', key: 'symbol' },
-    { title: 'Price', dataIndex: 'version', key: 'version' },
+    { title: 'Price', dataIndex: 'price', key: 'price' },
     { title: 'Amount', dataIndex: 'amount', key: 'amount' },
     { title: 'Owner', dataIndex: 'user', key: 'user' },
     { title: 'Date of last pruchase', dataIndex: 'date_posted', key: 'date_posted' },
@@ -108,22 +108,26 @@ function Portfolio(props) {
     });
   }
   */
-  const fullportfolio = [];
+  const fullportfolio = []; //////PRICE BUUGY
   for(let portfolio of props.portfolio){
-    var d1 = 1;
+    var latestdate = 1;
+    var priceavg = 0;
     for(let transactions of props.transactions){
       if(portfolio.symbol == transactions.symbol){
-        if(d1 === 1 | d1 < transactions.date_posted){
-          d1 = transactions.date_posted;
+        priceavg += (transactions.price_at*transactions.amount);
+        if(latestdate === 1 | latestdate < transactions.date_posted){
+          latestdate = transactions.date_posted;
+
         }
       }
     }
-
+    priceavg = priceavg/portfolio.amount;
     fullportfolio.push({
       symbol: portfolio.symbol,
       amount: portfolio.amount,
       user: portfolio.user,
-      date_posted: d1,
+      price: priceavg,
+      date_posted: latestdate,
     });
   }
 
