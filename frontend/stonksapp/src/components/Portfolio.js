@@ -91,7 +91,7 @@ function Portfolio(props) {
     { title: 'Amount', dataIndex: 'amount', key: 'amount' },
     { title: 'Owner', dataIndex: 'user', key: 'user' },
     { title: 'Date of last pruchase', dataIndex: 'date_posted', key: 'date_posted' },
-    { title: 'Action', key: 'operation', render: () => <a>i will do somethin with this link i swear</a> },
+    { title: 'Action', key: 'operation', render: () => <a>Action!</a> },
   ];
 
   /*      //All fields are being expanded because the portfolios in props.data are missing a key property 

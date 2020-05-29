@@ -26,20 +26,22 @@ const comp = [{
     displayname: "",
 }]
 
-var AuthStr = 'Token '.concat(localStorage.getItem('token'));
 
-var config = {
-    headers: { 'Authorization': AuthStr }
-};
 // to identify buttons: https://stackoverflow.com/questions/3577469/form-onsubmit-determine-which-submit-button-was-pressed
 class SelectStocks extends React.Component {
+
     onFinish = values => {
-        console.log(values.stock, values.amount, values.buy, values.sell)
-        console.log(config)
-        axios.post('http://127.0.0.1:8000/api/portfolio/transaction/new/', config, { //Authfail, why?
+        var AuthStr = 'Token '.concat(localStorage.getItem('token'));
+
+        var config = {
+            headers: { 'Authorization': AuthStr }
+        };
+        axios.post('http://127.0.0.1:8000/api/portfolio/transaction/new/', { 
             symbol: values.stock,
             amount: values.amount,
-        })
+        },config)
+
+        
     };
 
     render() {
