@@ -4,23 +4,6 @@ import { Card } from 'antd';
 
 //UNUSED& UNFINISHEDba  
 
-const tabList = [
-  {
-    key: 'tab1',
-    tab: 'Overview',
-  },
-  {
-    key: 'tab2',
-    tab: 'Coole Daten',
-  },
-];
-
-const contentList = {
-  tab1: <p> </p>,
-  tab2: <p>Not yet</p>,
-};
-
-
 class StocksDetail extends React.Component {
   state = {
     stock: {},
@@ -52,6 +35,24 @@ class StocksDetail extends React.Component {
 
   };
 
+  tabList = [
+    {
+      key: 'tab1',
+      tab: 'Overview',
+    },
+    {
+      key: 'tab2',
+      tab: 'Coole Daten',
+    },
+  ];
+  
+  contentList = {
+    tab1: <p>This is the overview of the company {this.state.stock.company_name}.
+    It is trading under the symbol {this.state.stock.symbol} in the S&P 500.
+    It is currently trading at a price of ${this.state.prices.p_close} per share.</p>,
+    tab2: <p>Not yet</p>,
+  };
+
   render() {
     return (
       <div>
@@ -59,16 +60,13 @@ class StocksDetail extends React.Component {
           style={{ width: '100%' }}
           title={this.state.stock.company_name}
           extra={<a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${this.state.stock.symbol}&action=getcompany`}>SEC Filings</a>}
-          tabList={tabList}
+          tabList={this.tabList}
           activeTabKey={this.state.key}
           onTabChange={key => {
             this.onTabChange(key, 'key');
           }}
         >
-          This is the overview of the company {this.state.stock.company_name}.
-          It is trading under the symbol {this.state.stock.symbol} in the S&P 500.
-          It is currently trading at a price of ${this.state.prices.p_close} per share.
-          {contentList[this.state.key]}
+          {this.contentList[this.state.key]}
         </Card>
       </div>
     );
