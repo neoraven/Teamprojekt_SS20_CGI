@@ -76,10 +76,20 @@ class StocksDetail extends React.Component {
             y: this.state.stockChartYValues,
             type: 'scatter',
             mode: 'lines',
-            marker: { color: 'red' },
+            marker: { color: 'blue' },
           }
         ]}
-        layout={{ autosize: true }}
+        layout={
+          {
+            autosize: true,
+            margin: {
+              t: 0,
+              l: 0,
+              r: 0,
+              b: 0,
+            }
+          }
+        }
       />
     </div>
   };
