@@ -10,9 +10,9 @@ class StocksDetail extends React.Component {
     stock: {},
     most_recent: [],
     key: 'tab1',
-    prices : [],
-    stockChartXValues : [],
-    stockChartYValues : [],
+    prices: [],
+    stockChartXValues: [],
+    stockChartYValues: [],
   }
   onTabChange = (key, type) => {
     console.log(key, type);
@@ -39,12 +39,12 @@ class StocksDetail extends React.Component {
     axios.get(`http://127.0.0.1:8000/api/stocks/${symbol}/prices/all/`)
       .then(res => {
         this.setState({
-          prices : res.data
-        }) 
-      this.state.prices.map(price => this.state.stockChartXValues.push(price.date))
-      this.state.prices.map(price => this.state.stockChartYValues.push(price.p_open))
-      console.log(this.state.stockChartXValues)
-      console.log(this.state.stockChartYValues)
+          prices: res.data
+        })
+        this.state.prices.map(price => this.state.stockChartXValues.push(price.date))
+        this.state.prices.map(price => this.state.stockChartYValues.push(price.p_open))
+        console.log(this.state.stockChartXValues)
+        console.log(this.state.stockChartYValues)
       })
   };
 
@@ -55,33 +55,33 @@ class StocksDetail extends React.Component {
     },
     {
       key: 'tab2',
-      tab: 'Coole Daten',
+      tab: 'Cool data',
     },
     {
       key: 'tab3',
-      tab: 'Aktienchart'
+      tab: 'Stock chart'
     }
   ];
-  
+
   contentList = {
     tab1: <p>This is the overview of the company {this.state.stock.company_name}.
     It is trading under the symbol {this.state.stock.symbol} in the S&P 500.
     It is currently trading at a price of ${this.state.prices.p_close} per share.</p>,
     tab2: <p>Not yet</p>,
     tab3: <div>
-    <Plot
-      data={[
-        {
-          x: this.state.stockChartXValues,
-          y: this.state.stockChartYValues,
-          type: 'scatter',
-          mode: 'lines',
-          marker: {color: 'red'},
-        }
-      ]}
-      layout={{autosize : true}}
-    />
-  </div>
+      <Plot
+        data={[
+          {
+            x: this.state.stockChartXValues,
+            y: this.state.stockChartYValues,
+            type: 'scatter',
+            mode: 'lines',
+            marker: { color: 'red' },
+          }
+        ]}
+        layout={{ autosize: true }}
+      />
+    </div>
   };
 
   render() {
