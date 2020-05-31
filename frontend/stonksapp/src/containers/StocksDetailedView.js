@@ -1,14 +1,18 @@
 import React from 'react';
 import axios from 'axios';
 import { Card } from 'antd';
+import Plot from 'react-plotly.js';
 
 //UNUSED& UNFINISHEDba  
 
 class StocksDetail extends React.Component {
   state = {
     stock: {},
-    prices: [],
+    most_recent: [],
     key: 'tab1',
+    prices : [],
+    stockChartXValues : [],
+    stockChartYValues : [],
   }
   onTabChange = (key, type) => {
     console.log(key, type);
@@ -28,11 +32,20 @@ class StocksDetail extends React.Component {
     axios.get(`http://127.0.0.1:8000/api/stocks/${symbol}/prices/most-recent/`)
       .then(res => {
         this.setState({
-          prices: res.data
+          most_recent: res.data
         })
         console.log(res.data);
       })
-
+    axios.get(`http://127.0.0.1:8000/api/stocks/${symbol}/prices/all/`)
+      .then(res => {
+        this.setState({
+          prices : res.data
+        }) 
+      this.state.prices.map(price => this.state.stockChartXValues.push(price.date))
+      this.state.prices.map(price => this.state.stockChartYValues.push(price.p_open))
+      console.log(this.state.stockChartXValues)
+      console.log(this.state.stockChartYValues)
+      })
   };
 
   tabList = [
@@ -44,6 +57,10 @@ class StocksDetail extends React.Component {
       key: 'tab2',
       tab: 'Coole Daten',
     },
+    {
+      key: 'tab3',
+      tab: 'Aktienchart'
+    }
   ];
   
   contentList = {
@@ -51,6 +68,20 @@ class StocksDetail extends React.Component {
     It is trading under the symbol {this.state.stock.symbol} in the S&P 500.
     It is currently trading at a price of ${this.state.prices.p_close} per share.</p>,
     tab2: <p>Not yet</p>,
+    tab3: <div>
+    <Plot
+      data={[
+        {
+          x: this.state.stockChartXValues,
+          y: this.state.stockChartYValues,
+          type: 'scatter',
+          mode: 'lines',
+          marker: {color: 'red'},
+        }
+      ]}
+      layout={{autosize : true}}
+    />
+  </div>
   };
 
   render() {
