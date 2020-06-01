@@ -4,7 +4,6 @@ import Portfolio from '../components/Portfolio';
 import SelectStock from '../components/SelectStock';
 
 
-
 /*  What do i want in my portfolio?
       -> Symbol
       -> Amount owned
@@ -19,53 +18,65 @@ import SelectStock from '../components/SelectStock';
 
 
 class PortfolioList extends React.Component {
-  state = {
-    portfolio: [],
-    transactions: [],
-    stocks: [],
-  }
+    state = {
+        portfolio: [],
+        transactions: [],
+        stocks: [],
+        comp: [{
+            company_name: "",
+            symbol: "",
+            displayname: "",
+        }]
+    }
 
 
+    componentDidMount() {
+        var AuthStr = 'Token '.concat(localStorage.getItem('token'));
 
-  componentDidMount() {
-    var AuthStr = 'Token '.concat(localStorage.getItem('token'));
+        var config = {
+            headers: {'Authorization': AuthStr}
+        };
 
-    var config = {
-      headers: { 'Authorization': AuthStr }
-    };
+        console.log(AuthStr);
+        axios.get('http://127.0.0.1:8000/api/stocks/', config)
+            .then(res => {
+                this.setState({
+                    stocks: res.data
+                })
+                for (let stock of this.state.stocks) {
+                    let combine = stock.company_name + '; (' + stock.symbol + ')';
+                    this.state.comp.push({
+                        company_name: stock.company_name.toString(),
+                        symbol: stock.symbol.toString(),
+                        displayname: combine.toString(),
+                    })
+                }
+            })
 
-    console.log(AuthStr);
-    axios.get('http://127.0.0.1:8000/api/stocks/', config)
-      .then(res => {
-        this.setState({
-          stocks: res.data
-        })
-      })
+        axios.get('http://127.0.0.1:8000/api/portfolio/list/', config)
+            .then(res => {
+                this.setState({
+                    portfolio: res.data
+                })
+            })
 
-    axios.get('http://127.0.0.1:8000/api/portfolio/list/', config)
-      .then(res => {
-        this.setState({
-          portfolio: res.data
-        })
-      })
+        axios.get('http://127.0.0.1:8000/api/portfolio/transaction/list/', config)
+            .then(res => {
+                this.setState({
+                    transactions: res.data
+                })
+            })
+    }
 
-    axios.get('http://127.0.0.1:8000/api/portfolio/transaction/list/', config)
-      .then(res => {
-        this.setState({
-          transactions: res.data
-        })
-      })
-  }
-
-  render() {
-    return (
-      <div id="list-view">
-        <div id="portfolio"><Portfolio portfolio={this.state.portfolio} transactions={this.state.transactions} /></div>
-        <div id="selector"><SelectStock stocks={this.state.stocks} /></div>
-      </div>
-
-    )
-  }
+    render() {
+        return (
+            <div id="list-view">
+                <div id="portfolio"><Portfolio portfolio={this.state.portfolio} transactions={this.state.transactions}/>
+                </div>
+                <div id="selector"><SelectStock stocks={this.state.comp}/></div>
+            </div>
+        )
+    }
 }
 
 export default PortfolioList

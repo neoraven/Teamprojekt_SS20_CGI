@@ -69,29 +69,23 @@ class StocksDetail extends React.Component {
     It is currently trading at a price of ${this.state.prices.p_close} per share.</p>,
     tab2: <p>Not yet</p>,
     tab3: <div>
-      <Plot
-        data={[
-          {
-            x: this.state.stockChartXValues,
-            y: this.state.stockChartYValues,
-            type: 'scatter',
-            mode: 'lines',
-            marker: { color: 'blue' },
-          }
-        ]}
-        layout={
-          {
-            autosize: true,
-            margin: {
-              t: 0,
-              l: 0,
-              r: 0,
-              b: 0,
-            }
-          }
-        }
-      />
-    </div>
+            <Plot
+              data={[
+                {
+                  x: this.state.stockChartXValues,
+                  y: this.state.stockChartYValues,
+                  type: 'scatter',
+                  mode: 'lines',
+                  marker: { color: 'blue' },
+                }
+              ]}
+              layout={
+                {
+                  autosize: true,
+                }
+              }
+            />
+          </div>
   };
 
   render() {

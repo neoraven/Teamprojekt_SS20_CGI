@@ -1,8 +1,8 @@
-import { Select, InputNumber, Button, Form } from 'antd';
+import {Button, Form, InputNumber, Select} from 'antd';
 import React from 'react';
 import axios from 'axios'
 
-const { Option } = Select;
+const {Option} = Select;
 
 function onChange(value) {
     console.log(`selected ${value}`);
@@ -34,27 +34,18 @@ class SelectStocks extends React.Component {
         var AuthStr = 'Token '.concat(localStorage.getItem('token'));
 
         var config = {
-            headers: { 'Authorization': AuthStr }
+            headers: {'Authorization': AuthStr}
         };
-        axios.post('http://127.0.0.1:8000/api/portfolio/transaction/new/', { 
+        axios.post('http://127.0.0.1:8000/api/portfolio/transaction/new/', {
             symbol: values.stock,
             amount: values.amount,
-        },config)
+        }, config)
 
-        
+
     };
 
+
     render() {
-
-        for (let stock of this.props.stocks) {
-            var combine = stock.company_name + '; (' + stock.symbol + ')'
-            comp.push({
-                company_name: stock.company_name.toString(),
-                symbol: stock.symbol.toString(),
-                displayname: combine.toString(),
-            })
-        }
-
         return (
 
             <Form
@@ -77,7 +68,7 @@ class SelectStocks extends React.Component {
                 >
                     <Select //Trouble with multiple value entrys. not beautiful but works atm
                         showSearch
-                        style={{ width: 300 }}
+                        style={{width: 300}}
                         placeholder="Select a Stock"
                         optionFilterProp="children"
                         onChange={onChange}
@@ -88,7 +79,7 @@ class SelectStocks extends React.Component {
                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }
                     >
-                        {comp.map(item => (
+                        {this.props.stocks.map(item => (
                             <Option key={item.symbol} value={item.symbol} label={item.company_name}>
                                 {item.displayname}
                             </Option>
@@ -105,27 +96,28 @@ class SelectStocks extends React.Component {
                     ]}
                 >
                     <InputNumber
-                        style={{ width: 200 }}
+                        style={{width: 200}}
                         placeholder="Enter Amount to Buy/Sell"
                         min={1}
                         max={9999}
                     />
                 </Form.Item>
                 <Form.Item name="buy">
-                    <Button type="primary" htmlType="submit" >
+                    <Button type="primary" htmlType="submit">
                         Buy
-                </Button>
+                    </Button>
                 </Form.Item>
                 <Form.Item name="sell">
                     <Button type="primary" danger htmlType="submit">
                         Sell
-                </Button>
+                    </Button>
                 </Form.Item>
             </Form>
 
         );
     }
 }
+
 export default SelectStocks
 
 
