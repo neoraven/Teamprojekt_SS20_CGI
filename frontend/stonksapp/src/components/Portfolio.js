@@ -90,7 +90,7 @@ function Portfolio(props) {
     { title: 'Price', dataIndex: 'price', key: 'price' },
     { title: 'Amount', dataIndex: 'amount', key: 'amount' },
     { title: 'Owner', dataIndex: 'user', key: 'user' },
-    { title: 'Date of last pruchase', dataIndex: 'date_posted', key: 'date_posted' },
+    { title: 'Date of last purchase', dataIndex: 'date_posted', key: 'date_posted' },
     { title: 'Action', key: 'operation', render: () => <a>Action!</a> },
   ];
 
@@ -117,7 +117,6 @@ function Portfolio(props) {
         priceavg += (transactions.price_at*transactions.amount);
         if(latestdate === 1 | latestdate < transactions.date_posted){
           latestdate = transactions.date_posted;
-
         }
       }
     }
@@ -126,8 +125,8 @@ function Portfolio(props) {
       symbol: portfolio.symbol,
       amount: portfolio.amount,
       user: portfolio.user,
-      price: priceavg,
-      date_posted: latestdate,
+      price: parseFloat(priceavg).toFixed(2),
+      date_posted: new Date(latestdate).toDateString(),
     });
   }
 
