@@ -37,9 +37,13 @@ class TransactionPutSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """
-        Overwrites the create() method to return a ``Portfolio`` object 
-        after the POSTED ``Transaction`` has occured 
+        Overwrites the create() method to return a ``Portfolio`` object
+        after the POSTED ``Transaction`` has occured
         (instead of a ``Transaction`` object).
+
+        Note that the validation for the posted transaction
+        is done in the .save() method of the model, not here.
+        (Model raises ValidationError on errors.)
         """
         transaction = Transaction(
             user=validated_data["user"],
@@ -47,6 +51,9 @@ class TransactionPutSerializer(serializers.ModelSerializer):
             amount=validated_data["amount"],
             date_posted=validated_data["date_posted"],
         )
+        # this automatically adds to / substracts from
+        # the user's Portfolio for given <symbol>
+        # (see Portfolio's .save() method overwrite)
         transaction.save()
         try:
             portfolio = Portfolio.objects.get(
@@ -54,5 +61,5 @@ class TransactionPutSerializer(serializers.ModelSerializer):
             )
             return portfolio
         except Portfolio.DoesNotExist:
-            #
+            # user sold all his stocks > return a dummy portfolio
             return Portfolio(symbol=validated_data["symbol"], amount=0)
