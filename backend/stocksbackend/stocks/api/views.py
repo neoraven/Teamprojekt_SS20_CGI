@@ -10,7 +10,12 @@ from rest_framework.permissions import (
 )
 from rest_framework.pagination import PageNumberPagination
 from stocks.models import Stock, Company, Price
-from .serializers import StocksSerializer, CompanySerializer, PricesSerializer
+from .serializers import (
+    StocksSerializer,
+    CompanySerializer,
+    PricesSerializer,
+    StockMetaDataSerializer,
+)
 
 
 class StockRudView(generics.RetrieveUpdateDestroyAPIView):
@@ -72,7 +77,7 @@ class StockAllView(generics.ListAPIView):
 
 class StockAllDetailView(generics.ListAPIView):
     queryset = Company.objects.all()
-    serializer_class = CompanySerializer
+    serializer_class = StockMetaDataSerializer
 
 
 class StockDetailView(generics.RetrieveAPIView):
