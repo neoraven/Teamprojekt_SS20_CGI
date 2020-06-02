@@ -11,6 +11,7 @@
     "antd": "^4.2.2",
     "axios": "^0.19.2",
     "plotly.js": "^1.54.1",
+    "plotly.js-basic-dist": "^1.54.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-plotly.js": "^2.4.0",
