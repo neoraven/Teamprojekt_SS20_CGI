@@ -3,11 +3,9 @@ import dateutil.parser
 from django.core.exceptions import ValidationError
 from django.http import Http404
 from rest_framework import generics
-from rest_framework.response import Response
 from rest_framework.permissions import (
     AllowAny,
     IsAuthenticatedOrReadOnly,
-    IsAuthenticated,
     IsAdminUser,
 )
 from rest_framework.pagination import PageNumberPagination
@@ -67,11 +65,14 @@ class StockAllView(generics.ListAPIView):
         ]
     """
 
+    queryset = Stock.objects.all()
     permission_classes = [AllowAny]
     serializer_class = StocksSerializer
 
-    def get_queryset(self):
-        return Stock.objects.all()
+
+class StockAllDetailView(generics.ListAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
 
 
 class StockDetailView(generics.RetrieveAPIView):
@@ -160,7 +161,7 @@ class MostRecentPriceView(generics.RetrieveAPIView):
         queryset = Price.objects.filter(
             symbol__symbol__iexact=self.kwargs.get("symbol"), interval__iexact=interval
         ).order_by("-date", "-exchange_time", "-interval")
-        if queryset:
-            return queryset.first()
-        else:
+        if not queryset:
             raise Http404
+
+        return queryset.first()
