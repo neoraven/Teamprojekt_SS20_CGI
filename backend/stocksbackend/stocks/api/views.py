@@ -23,7 +23,7 @@ class StockRudView(generics.RetrieveUpdateDestroyAPIView):
 
     Permissions:
         IsAdminUser -- for PUT / PATCH / DELETE
-    
+
     Request data:
         symbol {str} -- from URI. Stock symbol to look up in database.
         company_name {str} (optional) -- for PUT / PATCH / DELETE.
@@ -40,10 +40,10 @@ class StockRudView(generics.RetrieveUpdateDestroyAPIView):
 
 class StockCreateView(generics.CreateAPIView):
     """POST endpoint to create new stocks.
-    
+
     Permissions:
         IsAdminUser
-    
+
     Request data:
         symbol {str} -- Stock symbol (max_length=5)
         company_name {str} -- Name of company for given symbol (max_length=5 | nullable)  
@@ -59,10 +59,10 @@ class StockAllView(generics.ListAPIView):
 
     Permissions:
         AllowAny
-    
+
     Request data:
         None
-    
+
     Response data:
         List[
             {symbol: ""},
