@@ -5,7 +5,7 @@ import { Card } from 'antd';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 const Plot = createPlotlyComponent(Plotly);
- 
+
 
 class StocksDetail extends React.Component {
   state = {
@@ -71,23 +71,23 @@ class StocksDetail extends React.Component {
     It is currently trading at a price of ${this.state.prices.p_close} per share.</p>,
     tab2: <p>Not yet</p>,
     tab3: <div>
-            <Plot
-              data={[
-                {
-                  x: this.state.stockChartXValues,
-                  y: this.state.stockChartYValues,
-                  type: 'scatter',
-                  mode: 'lines',
-                  marker: { color: 'blue' },
-                }
-              ]}
-              layout={
-                {
-                  autosize: true,
-                }
-              }
-            />
-          </div>
+      <Plot
+        data={[
+          {
+            x: this.state.stockChartXValues,
+            y: this.state.stockChartYValues,
+            type: 'scatter',
+            mode: 'lines',
+            marker: { color: 'blue' },
+          }
+        ]}
+        layout={
+          {
+            autosize: true,
+          }
+        }
+      />
+    </div>
   };
 
   render() {
