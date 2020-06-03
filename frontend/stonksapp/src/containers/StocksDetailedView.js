@@ -1,5 +1,6 @@
 import React from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../utils/api';
 import { Card } from 'antd';
 //import Plot from 'react-plotly.js';
 import Plotly from "plotly.js-basic-dist";
@@ -24,21 +25,21 @@ class StocksDetail extends React.Component {
   componentDidMount() {
     const symbol = this.props.match.params.stocksSymbol
     console.log(symbol)
-    axios.get(`http://127.0.0.1:8000/api/stocks/${symbol}`)
+    api.get(`/api/stocks/${symbol}`)
       .then(res => {
         this.setState({
           stock: res.data
         })
         console.log(res.data);
       })
-    axios.get(`http://127.0.0.1:8000/api/stocks/${symbol}/prices/most-recent/`)
+    api.get(`/api/stocks/${symbol}/prices/most-recent/`)
       .then(res => {
         this.setState({
           most_recent: res.data
         })
         console.log(res.data);
       })
-    axios.get(`http://127.0.0.1:8000/api/stocks/${symbol}/prices/all/`)
+    api.get(`/api/stocks/${symbol}/prices/all/`)
       .then(res => {
         this.setState({
           prices: res.data

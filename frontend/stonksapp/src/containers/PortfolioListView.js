@@ -1,5 +1,6 @@
 import React from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../utils/api';
 import Portfolio from '../components/Portfolio';
 import SelectStock from '../components/SelectStock';
 
@@ -38,7 +39,7 @@ class PortfolioList extends React.Component {
         };
 
         console.log(AuthStr);
-        axios.get('http://127.0.0.1:8000/api/stocks/', config)
+        api.get('/api/stocks/', config)
             .then(res => {
                 this.setState({
                     stocks: res.data
@@ -53,14 +54,14 @@ class PortfolioList extends React.Component {
                 }
             })
 
-        axios.get('http://127.0.0.1:8000/api/portfolio/list/', config)
+        api.get('/api/portfolio/list/', config)
             .then(res => {
                 this.setState({
                     portfolio: res.data
                 })
             })
 
-        axios.get('http://127.0.0.1:8000/api/portfolio/transaction/list/', config)
+        api.get('/api/portfolio/transaction/list/', config)
             .then(res => {
                 this.setState({
                     transactions: res.data

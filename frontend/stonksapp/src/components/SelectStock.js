@@ -1,6 +1,7 @@
 import {Button, Form, InputNumber, Select} from 'antd';
 import React from 'react';
-import axios from 'axios'
+//import axios from 'axios';
+import api from '../utils/api';
 
 const {Option} = Select;
 
@@ -36,7 +37,7 @@ class SelectStocks extends React.Component {
         var config = {
             headers: {'Authorization': AuthStr}
         };
-        axios.post('http://127.0.0.1:8000/api/portfolio/transaction/new/', {
+        api.post('/api/portfolio/transaction/new/', {
             symbol: values.stock,
             amount: values.amount,
         }, config)

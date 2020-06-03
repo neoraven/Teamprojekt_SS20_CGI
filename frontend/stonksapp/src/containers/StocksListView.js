@@ -1,6 +1,7 @@
 import React from 'react';
 import Stocks from '../components/Stocks';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../utils/api';
 
 
 
@@ -10,7 +11,7 @@ class StocksList extends React.Component {
     stocks: []
   }
   componentDidMount() {
-    axios.get('http://127.0.0.1:8000/api/stocks/')
+    api.get('/api/stocks/')
       .then(res => {
         this.setState({
           stocks: res.data
