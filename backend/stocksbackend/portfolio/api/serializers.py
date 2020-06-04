@@ -61,5 +61,7 @@ class TransactionPutSerializer(serializers.ModelSerializer):
             )
             return portfolio
         except Portfolio.DoesNotExist:
-            # user sold all his stocks > return a dummy portfolio
+            # user sold all his stocks
+            #  > user's portfolio for given <symbol> was deleted
+            #  > return a dummy portfolio
             return Portfolio(symbol=validated_data["symbol"], amount=0)
