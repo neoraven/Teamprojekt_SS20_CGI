@@ -70,7 +70,7 @@ class StocksDetail extends React.Component {
     tab1: <p>This is the overview of the company {this.state.stock.company_name}.
     It is trading under the symbol {this.state.stock.symbol} in the S&P 500.
     It is currently trading at a price of ${this.state.prices.p_close} per share.</p>,
-    tab2: <p>Not yet</p>,
+    tab2: <p><p>Not yet</p><p><img width="50%" height="50%" src="https://cdn.vox-cdn.com/thumbor/_cPCJb9uJ3TN7qJQiIKxPjf50k0=/0x0:3173x2332/1200x800/filters:focal(1329x658:1835x1164)/cdn.vox-cdn.com/uploads/chorus_image/image/66150011/GettyImages_1173078245.0.jpg"></img></p></p>,
     tab3: <div>
       <Plot
         data={[
