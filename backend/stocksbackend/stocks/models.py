@@ -49,6 +49,7 @@ class Price(models.Model):
     p_open = models.DecimalField(max_digits=8, decimal_places=3)
     p_high = models.DecimalField(max_digits=8, decimal_places=3)
     p_close = models.DecimalField(max_digits=8, decimal_places=3)
+    p_adjusted_close = models.DecimalField(max_digits=8, decimal_places=3)
     volume = models.BigIntegerField(null=True, blank=True)
 
     def __str__(self):

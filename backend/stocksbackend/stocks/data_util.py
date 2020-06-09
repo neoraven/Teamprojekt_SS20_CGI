@@ -73,7 +73,7 @@ def initial_load(**kwargs):
 
 def pull_write_prices_for_symbol(ts: TimeSeries, symbol: str, interval: str = "1d"):
     try:
-        price_data, _ = ts.get_daily(symbol=symbol, outputsize=_AV_OUTPUT_SIZE)
+        price_data, _ = ts.get_daily_adjusted(symbol=symbol, outputsize=_AV_OUTPUT_SIZE)
     except ValueError:
         print("Daily limit of number API calls exceeded (500).\nAborting...")
         return
@@ -88,7 +88,8 @@ def pull_write_prices_for_symbol(ts: TimeSeries, symbol: str, interval: str = "1
                 "p_open": price._1,
                 "p_high": price._2,
                 "p_close": price._4,
-                "volume": price._5,
+                "p_adjusted_close": price._5,
+                "volume": price._6,
             },
         )
         if not price_created:

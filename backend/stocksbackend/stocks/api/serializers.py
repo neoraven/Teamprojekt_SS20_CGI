@@ -82,5 +82,6 @@ class PricesSerializer(serializers.ModelSerializer):
             "p_open",
             "p_high",
             "p_close",
+            "p_adjusted_close",
             "volume",
         ]
