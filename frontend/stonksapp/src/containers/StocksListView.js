@@ -11,7 +11,7 @@ class StocksList extends React.Component {
     stocks: []
   }
   componentDidMount() {
-    api.get('/api/stocks/')
+    api.get('/api/stocks/list/details/')
       .then(res => {
         this.setState({
           stocks: res.data

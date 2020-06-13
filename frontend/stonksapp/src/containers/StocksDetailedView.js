@@ -25,7 +25,7 @@ class StocksDetail extends React.Component {
   componentDidMount() {
     const symbol = this.props.match.params.stocksSymbol
     console.log(symbol)
-    api.get(`/api/stocks/${symbol}`)
+    api.get(`/api/stocks/${symbol}/details/`)
       .then(res => {
         this.setState({
           stock: res.data

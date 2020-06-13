@@ -2,7 +2,7 @@ import React from 'react';
 import BaseRouter from './routes';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { connect } from 'react-redux'
-import './App.css';
+//import './App.css';
 import 'antd/dist/antd.css';
 import SecondLayout from './containers/Layout2';
 import * as actions from './store/actions/auth';
