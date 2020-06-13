@@ -37,4 +37,4 @@ def create_company_meta_data_models():
         )
 
         if not created:
-            print(f"Company {company['symbol']} already existed. Updating...")
+            print(f"Company {company.symbol} already existed. Updating...")
