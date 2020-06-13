@@ -22,7 +22,7 @@ def create_company_meta_data_models():
             print(f"Encountered error parsing symbol {company['symbol']}. Skipping...")
             continue
 
-        company, created = Company.objects.update_or_create(
+        company_obj, created = Company.objects.update_or_create(
             symbol=stock,
             defaults={
                 "company_name": company["companyName"],
@@ -37,4 +37,4 @@ def create_company_meta_data_models():
         )
 
         if not created:
-            print(f"Company {company.symbol} already existed. Updating...")
+            print(f"Company {company_obj.symbol} already existed. Updating...")
