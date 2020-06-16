@@ -6,7 +6,10 @@ import { Link } from 'react-router-dom';
 
 class Stocks extends React.Component {
 
-  state = { searchString: ''}
+  state = { 
+    searchString: '',
+    displayname : ''
+  }
   handleChange = (e) => {
     this.setState({
       searchString : e.target.value
@@ -14,13 +17,13 @@ class Stocks extends React.Component {
   }
 
   render() {
-
     var stocks = this.props.data,
         searchString = this.state.searchString.trim().toLowerCase();
     if (searchString.length > 0) {
       stocks = stocks.filter((stock) => {
-          return stock.company_name.toLowerCase().match(searchString);
-      })
+        let displayname = stock.symbol + ", " + stock.company_name;   
+        return displayname.toLowerCase().match(searchString);
+      })  
     }
     
     return(
