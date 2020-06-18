@@ -42,6 +42,7 @@ class SelectStocks extends React.Component {
             amount: values.amount,
         }, config)
 
+        window.location.reload(true);
 
     };
 
