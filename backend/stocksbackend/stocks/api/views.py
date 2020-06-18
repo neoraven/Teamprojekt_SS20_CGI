@@ -149,10 +149,13 @@ class PriceLiveQuoteView(generics.RetrieveAPIView):
         except:
             print("Error contacting API")
             raise Http404("Error contacting alphavantage API.")
+        # TODO(jonas): check if a quote with same prices already exists
         quote = Price.objects.create(
             symbol=stock,
             interval="quote",
             date=dateutil.parser.parse(av_quote["07. latest trading day"]).date(),
+            # TODO(jonas): if this is the prev. day
+            # we need to write midnight as timestamp instead
             exchange_time=timezone.now().time(),
             p_low=float(av_quote["04. low"]),
             p_open=float(av_quote["02. open"]),
