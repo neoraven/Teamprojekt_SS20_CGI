@@ -68,7 +68,10 @@ class SecondLayout extends React.Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    logout: () => dispatch(actions.logout())
+    logout: () => {
+        dispatch(actions.logout())
+        window.location.reload(true)
+    }
   }
 };
 
