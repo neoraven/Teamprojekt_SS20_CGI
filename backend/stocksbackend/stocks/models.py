@@ -29,12 +29,12 @@ class Company(models.Model):
 
 class Price(models.Model):
     class Interval(models.TextChoices):
+        QUOTE = ("quote", "quote")
         ONE_MIN_INTERVAL = ("1min", "1min")
         QUARTER_HOUR_INTERVAL = ("15min", "15min")
         HALF_HOUR_INTERVAL = ("30min", "30min")
         HOUR_INTERVAL = ("60min", "60min")
         DAILY_INTERVAL = ("1d", "1d")
-        QUOTE = ("quote", "quote")
 
     symbol = models.ForeignKey(Stock, on_delete=models.CASCADE)
     # max_length case: '60min' ()
