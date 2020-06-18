@@ -76,7 +76,7 @@ class StockAllView(generics.ListAPIView):
 
 
 class StockAllDetailView(generics.ListAPIView):
-    queryset = Company.objects.all()
+    queryset = Company.objects.all().order_by("symbol")
     serializer_class = StockMetaDataSerializer
 
 
