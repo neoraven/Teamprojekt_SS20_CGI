@@ -72,6 +72,9 @@ class PricesSerializer(serializers.ModelSerializer):
     p_close = serializers.DecimalField(
         max_digits=8, decimal_places=3, coerce_to_string=False
     )
+    p_adjusted_close = serializers.DecimalField(
+        max_digits=8, decimal_places=3, coerce_to_string=False
+    )
 
     class Meta:
         model = Price

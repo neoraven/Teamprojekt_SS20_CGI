@@ -1,5 +1,8 @@
 import dateutil.parser
+from alpha_vantage.timeseries import TimeSeries
 
+from django.http import HttpResponse
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.http import Http404
 from rest_framework import generics
@@ -7,6 +10,7 @@ from rest_framework.permissions import (
     AllowAny,
     IsAuthenticatedOrReadOnly,
     IsAdminUser,
+    IsAuthenticated,
 )
 from rest_framework.pagination import PageNumberPagination
 from stocks.models import Stock, Company, Price
@@ -16,6 +20,8 @@ from .serializers import (
     PricesSerializer,
     StockMetaDataSerializer,
 )
+
+_AV_LIVE_API_QUOTE_KEY = "9BFOZ18JCKRN3XEB"
 
 
 class StockRudView(generics.RetrieveUpdateDestroyAPIView):
@@ -123,6 +129,39 @@ class PriceListView(generics.ListAPIView):
             return queryset.order_by("date", "exchange_time")
         else:
             raise Http404
+
+
+class PriceLiveQuoteView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PricesSerializer
+
+    def get_object(self):
+        symbol = self.kwargs.get("symbol")
+        try:
+            stock = Stock.objects.get(symbol__iexact=symbol)
+        except Stock.DoesNotExist:
+            print("Stock does not exist!")
+            raise Http404(f"Stock symbol <{symbol}> does not exist!")
+        ts = TimeSeries(key=_AV_LIVE_API_QUOTE_KEY, output_format="json")
+        try:
+            av_response = ts.get_quote_endpoint(symbol=symbol)
+            av_quote = av_response[0]
+        except:
+            print("Error contacting API")
+            raise Http404("Error contacting alphavantage API.")
+        quote = Price.objects.create(
+            symbol=stock,
+            interval="quote",
+            date=dateutil.parser.parse(av_quote["07. latest trading day"]).date(),
+            exchange_time=timezone.now().time(),
+            p_low=float(av_quote["04. low"]),
+            p_open=float(av_quote["02. open"]),
+            p_high=float(av_quote["03. high"]),
+            p_close=float(av_quote["05. price"]),
+            p_adjusted_close=float(av_quote["05. price"]),
+            volume=int(av_quote["06. volume"]),
+        )
+        return quote
 
 
 class PriceListNoPaginationView(generics.ListAPIView):

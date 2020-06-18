@@ -1,5 +1,4 @@
 import time
-import re
 from itertools import cycle
 
 from datetime import datetime
