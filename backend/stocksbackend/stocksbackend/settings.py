@@ -26,7 +26,7 @@ SECRET_KEY = "4&5w%aqsjc4jt$d9vsf*q&3mkq(n3uld_*c06f$_!2kz1r3$hr"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["172.104.234.63"]
+ALLOWED_HOSTS = ["tubstp.englich.eu", "172.104.234.63", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -141,14 +141,14 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
         # "rest_framework.authentication.BasicAuthentication",
     ),
     "EXCEPTION_HANDLER": "stocksbackend.exceptions.exception_handler",
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_EMAIL_REQUIRED = False

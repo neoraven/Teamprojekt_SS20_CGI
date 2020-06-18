@@ -45,7 +45,7 @@ class StocksDetail extends React.Component {
           prices: res.data
         })
         this.state.prices.map(price => this.state.stockChartXValues.push(price.date))
-        this.state.prices.map(price => this.state.stockChartYValues.push(price.p_adjusted_close))
+        this.state.prices.map(price => this.state.stockChartYValues.push(price.p_close))
         console.log(this.state.stockChartXValues)
         console.log(this.state.stockChartYValues)
       })
