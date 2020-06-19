@@ -82,6 +82,9 @@ class StockAllView(generics.ListAPIView):
 
 
 class StockAllDetailView(generics.ListAPIView):
+    # TODO(jonas): change this to still return when logged in
+    # but the meta_data["icon_url"] is empty string / placeholder
+    authentication_classes = [IsAuthenticated]
     queryset = Company.objects.all().order_by("symbol")
     serializer_class = StockMetaDataSerializer
 
