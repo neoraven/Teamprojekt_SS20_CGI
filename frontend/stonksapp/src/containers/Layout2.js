@@ -8,8 +8,8 @@ import * as actions from '../store/actions/auth'
 const { Header, Content, Footer } = Layout;
 
 class SecondLayout extends React.Component {
-  componentDidMount(){
-    if (this.props.failedAuthentication === true){
+  componentDidMount() {
+    if (this.props.isAuthenticated === true) {
       console.log("FAME")
     }
   }
@@ -18,11 +18,11 @@ class SecondLayout extends React.Component {
       <Layout className="layout">
         <Header>
           <div className="logo" />
-          
+
           <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-          
-           <Menu.Item key="0" disabled="true"> 
-              <img src = {logo} alt="stonks" width="200" height="57"/>
+
+            <Menu.Item key="0" disabled="true">
+              <img src={logo} alt="stonks" width="200" height="57" />
             </Menu.Item>
             <Menu.Item key="1" >
               <Link to='/'>Stocks</Link>
@@ -44,10 +44,22 @@ class SecondLayout extends React.Component {
 
             }
 
+            {
+              this.props.isAuthenticated ?
 
-            <Menu.Item key="3" >
-              <Link to='/portfolio/'>Portfolio</Link>
-            </Menu.Item>
+                <Menu.Item key="3" >
+                  <Link to='/portfolio/'>Portfolio</Link>
+                </Menu.Item>
+
+                :
+
+                <Menu.Item key="3" > 
+                  
+                </Menu.Item>
+
+            }
+
+
 
 
           </Menu>
@@ -69,8 +81,8 @@ class SecondLayout extends React.Component {
 const mapDispatchToProps = dispatch => {
   return {
     logout: () => {
-        dispatch(actions.logout())
-        window.location.reload(true)
+      dispatch(actions.logout())
+      window.location.reload(true)
     }
   }
 };
