@@ -1,4 +1,4 @@
-import {Button, Form, InputNumber, Select} from 'antd';
+import {Button, Form, InputNumber, Select, notification} from 'antd';
 import React from 'react';
 //import axios from 'axios';
 import api from '../utils/api';
@@ -33,7 +33,6 @@ class SelectStocks extends React.Component {
     state = {
         stockval : {},
         stockamount : {}
-
     }
 
     onFinish = values => {
@@ -60,11 +59,28 @@ class SelectStocks extends React.Component {
         var config = {
             headers: {'Authorization': AuthStr}
         };
-        api.post('/api/portfolio/transaction/new/', {
-            symbol: this.state.stockval,
-            amount: (this.state.stockamount * (-1)),
-        }, config)
-        window.location.reload(true);//TODO: use state to make this prettier
+
+        let amount_sum = 0
+        for (let transaction in this.props.transactions) {
+            if (transaction.symbol === this.state.stockval) {
+                amount_sum += transaction.amount
+            }
+        }
+        if (amount_sum < this.state.stockamount) {
+            notification.open({
+                message: 'Selling failed',
+                description:
+                  'Looks like the amount of the stock you want to sell is too high. Please enter a valid amount.',
+                onClick: () => {
+                  console.log('Notification Clicked!');
+                },
+            });
+        } else {
+            api.post('/api/portfolio/transaction/new/', {
+                symbol: this.state.stockval,
+                amount: (this.state.stockamount * (-1)),
+            }, config)
+        }
       }
 
     onChange = values =>{
