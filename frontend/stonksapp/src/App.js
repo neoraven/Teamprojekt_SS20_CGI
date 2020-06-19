@@ -17,7 +17,7 @@ class App extends React.Component {
       <div className="App">
         <Router >
           <SecondLayout {...this.props}>
-            <BaseRouter />
+            <BaseRouter {...this.props}/>
           </SecondLayout>
         </Router>
       </div>
