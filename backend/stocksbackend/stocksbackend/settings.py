@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "stocks",
     "portfolio",
-    "django_celery_beat"
+    "django_celery_beat",
 ]
 
 SITE_ID = 1
@@ -141,8 +141,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        # "rest_framework.authentication.BasicAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
     ),
     "EXCEPTION_HANDLER": "stocksbackend.exceptions.exception_handler",
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
