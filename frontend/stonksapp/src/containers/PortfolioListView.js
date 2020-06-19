@@ -72,10 +72,16 @@ class PortfolioList extends React.Component {
     render() {
         return (
             <div id="list-view">
-                <div id="portfolio"><Portfolio portfolio={this.state.portfolio} transactions={this.state.transactions}/>
-                </div>
-                <div id="selector"><SelectStock stocks={this.state.comp}/></div>
-            </div>
+                {this.props.isAuthenticated ?
+                    <div>
+                        <div id="portfolio"><Portfolio portfolio={this.state.portfolio} transactions={this.state.transactions}/>
+                        </div>
+                        <div id="selector"><SelectStock stocks={this.state.comp}/></div>
+                    </div>
+                :
+                    <p>Bitte loggen Sie sich ein, um die Portfolio-Seite zu sehen.</p>             
+                }    
+            </div>    
         )
     }
 }

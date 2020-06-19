@@ -43,25 +43,9 @@ class SecondLayout extends React.Component {
                 </Menu.Item>
 
             }
-
-            {
-              this.props.isAuthenticated ?
-
                 <Menu.Item key="3" >
                   <Link to='/portfolio/'>Portfolio</Link>
                 </Menu.Item>
-
-                :
-
-                <Menu.Item key="3" > 
-                  
-                </Menu.Item>
-
-            }
-
-
-
-
           </Menu>
         </Header>
         <Content style={{ padding: '0 50px' }}>
@@ -82,7 +66,6 @@ const mapDispatchToProps = dispatch => {
   return {
     logout: () => {
       dispatch(actions.logout())
-      window.location.reload(true)
     }
   }
 };
