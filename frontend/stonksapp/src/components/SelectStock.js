@@ -28,8 +28,13 @@ const comp = [{
 }]
 
 
-// to identify buttons: https://stackoverflow.com/questions/3577469/form-onsubmit-determine-which-submit-button-was-pressed
+// TODO: Make the entire api request prettier/more compact/outsource them to another file
 class SelectStocks extends React.Component {
+    state = {
+        stockval : {},
+        stockamount : {}
+
+    }
 
     onFinish = values => {
         var AuthStr = 'Token '.concat(localStorage.getItem('token'));
@@ -42,10 +47,38 @@ class SelectStocks extends React.Component {
             amount: values.amount,
         }, config)
 
-        window.location.reload(true);
+        console.log(values)
+
+        window.location.reload(true); //TODO: use state to make this prettier
 
     };
 
+    handleAlternate(event) { 
+        event.preventDefault();
+        var AuthStr = 'Token '.concat(localStorage.getItem('token'));
+
+        var config = {
+            headers: {'Authorization': AuthStr}
+        };
+        api.post('/api/portfolio/transaction/new/', {
+            symbol: this.state.stockval,
+            amount: (this.state.stockamount * (-1)),
+        }, config)
+        window.location.reload(true);//TODO: use state to make this prettier
+      }
+
+    onChange = values =>{
+        if (values.stock === undefined){
+            this.setState({
+                stockamount: values.amount
+            })
+        }else{
+            this.setState({
+                stockval: values.stock
+            })
+        }
+
+    }
 
     render() {
         return (
@@ -58,6 +91,7 @@ class SelectStocks extends React.Component {
                     remember: true,
                 }}
                 onFinish={this.onFinish}
+                onValuesChange = {this.onChange}
             >
                 <Form.Item
                     name="stock"
@@ -103,6 +137,7 @@ class SelectStocks extends React.Component {
                         min={1}
                         max={9999}
                     />
+                
                 </Form.Item>
                 <Form.Item name="buy">
                     <Button type="primary" htmlType="submit">
@@ -110,7 +145,7 @@ class SelectStocks extends React.Component {
                     </Button>
                 </Form.Item>
                 <Form.Item name="sell">
-                    <Button type="primary" danger htmlType="submit">
+                    <Button type="primary" danger onClick={this.handleAlternate.bind(this)} >
                         Sell
                     </Button>
                 </Form.Item>
