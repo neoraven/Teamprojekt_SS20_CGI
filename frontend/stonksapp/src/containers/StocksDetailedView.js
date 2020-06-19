@@ -2,7 +2,7 @@ import React from 'react';
 import api from '../utils/api';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
-import { Tabs } from 'antd';
+import { Tabs, Button } from 'antd';
 
 const { TabPane } = Tabs;
 
@@ -10,6 +10,8 @@ function callback(key) {
     console.log(key);
 }
 const Plot = createPlotlyComponent(Plotly);
+
+//const operations = ;
 
 
 class StocksDetail extends React.Component {
@@ -56,7 +58,7 @@ class StocksDetail extends React.Component {
 
     render() {
         return (
-            <Tabs defaultActiveKey="1" onChange={callback}>
+            <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${this.state.stock.symbol}&action=getcompany`}> Action </a>}>
                 <TabPane tab="Overview" key="1">
                     {this.state.stock.description}
                 </TabPane>
