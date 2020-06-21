@@ -4,7 +4,7 @@ class Impressum extends React.Component {
     render(){
         return(
             <div>
-                <p>Diese Website wurde im Rahmen eine studentischen Teamprojekts der TU-Braunschweig erstellt.</p>
+                <p>Diese Website wurde im Rahmen eines studentischen Teamprojekts der TU-Braunschweig erstellt.</p>
                 <p>Ansprechpartnerin für das Projekt ist Frau Ninja Soeffker (n [dot] soeffker [at] tu-braunschweig [dot] de)</p>
                     <p>               Institut für Wirtschaftsinformatik <br/>
                     Lehrstuhl Decision Support <br/>
