@@ -8,11 +8,6 @@ import * as actions from '../store/actions/auth'
 const { Header, Content, Footer } = Layout;
 
 class SecondLayout extends React.Component {
-  componentDidMount() {
-    if (this.props.isAuthenticated === true) {
-      console.log("FAME")
-    }
-  }
   render() {
     return (
       <Layout className="layout">
@@ -55,7 +50,9 @@ class SecondLayout extends React.Component {
           </Breadcrumb>
           <div className="site-layout-content">{this.props.children}</div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+        <Footer style={{ textAlign: 'center' }}>
+          <Link to='/impressum/'>Impressum</Link>
+        </Footer>
       </Layout>
     );
 
