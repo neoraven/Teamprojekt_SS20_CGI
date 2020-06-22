@@ -61,7 +61,7 @@ class SelectStocks extends React.Component {
         };
 
         let amount_sum = 0
-        for (let transaction in this.props.transactions) {
+        for (let transaction of this.props.transactions) {
             if (transaction.symbol === this.state.stockval) {
                 amount_sum += transaction.amount
             }
