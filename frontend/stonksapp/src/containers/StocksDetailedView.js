@@ -16,6 +16,7 @@ const Plot = createPlotlyComponent(Plotly);
 class StocksDetail extends React.Component {
     state = {
         stock: {},
+        realtime: {},
         most_recent: [],
         key: 'tab2',
         prices: [],
@@ -25,6 +26,11 @@ class StocksDetail extends React.Component {
 
 
     componentDidMount() {
+        var AuthStr = 'Token '.concat(localStorage.getItem('token'));
+
+        var config = {
+            headers: {'Authorization': AuthStr}
+        };
         const symbol = this.props.match.params.stocksSymbol
         console.log(symbol)
         api.get(`/api/stocks/${symbol}/details/`)
@@ -51,13 +57,22 @@ class StocksDetail extends React.Component {
                 console.log(this.state.stockChartXValues)
                 console.log(this.state.stockChartYValues)
             })
+        api.get(`/api/stocks/${symbol}/prices/quote/`, config)
+            .then(res => {
+                this.setState({
+                    realtime: res.data
+                })
+                console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                console.log(res.data);
+        })
     };
 
 
 
     render() {
+        //<a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${this.state.stock.symbol}&action=getcompany`}> SEC files </a>
         return (
-            <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${this.state.stock.symbol}&action=getcompany`}> SEC files </a>}>
+        <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={`Price: ${this.state.realtime.p_close}$`}>
                 <TabPane tab="Overview" key="1">
                     {this.state.stock.description}
                 </TabPane>
