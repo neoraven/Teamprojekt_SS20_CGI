@@ -27,7 +27,7 @@ schema_view = get_schema_view(
         description="Documentation for all endpoints within the app",
     ),
     public=False,
-    permission_classes=[permissions.AllowAny,],
+    permission_classes=[permissions.IsAdminUser,],
 )
 
 urlpatterns = [
