@@ -3,6 +3,7 @@ import { List, Avatar, Space } from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import dummychart from '../dummychart.png';
 import { Link } from 'react-router-dom';
+//import expandedRowRender from './PortfolioExpandebleRows';
 
 
 
@@ -29,63 +30,52 @@ const menu = (
   </Menu>
 );
 
+const transactionsTable = entry => {
+  const columns = [
+    { title: 'Symbol', dataIndex: 'symbol', key: 'symbol' },
+    { title: 'Amount', dataIndex: 'amount', key: 'amount' },
+    { title: 'Action', dataIndex: 'action', key: 'action' },
+    { title: 'Price', dataIndex: 'price_at', key: 'price_at' },
+    { title: 'Date', dataIndex: 'date_posted', key: 'date_posted' },
+  ];
+
+  return <Table columns={columns} dataSource={entry} pagination={false} />; 
+}
+
 function Portfolio(props) {
-  const expandedRowRender = () => { //this probably needs to be moved to its own component to match the transaction symbols with the portfolio symbols
+  const fullportfolio = [];
+  
+ /* const expandedRowRender = () => { //this probably needs to be moved to its own component to match the transaction symbols with the portfolio symbols
     const columns = [
       { title: 'Symbol', dataIndex: 'symbol', key: 'symbol' },
       { title: 'Amount', dataIndex: 'amount', key: 'amount' },
       { title: 'Action', dataIndex: 'action', key: 'action' },
-      { title: 'Price', dataIndex: 'price', key: 'price'},
+      { title: 'Price', dataIndex: 'price', key: 'price' },
       { title: 'Date', dataIndex: 'date_posted', key: 'date_posted' },
-     /* {
-        title: 'Action',
-        dataIndex: 'operation',
-        key: 'operation',
-        render: () => (
-          <span className="table-operation">
-            <a>Pause</a>
-            <a>Stop</a>
-            <Dropdown overlay={menu}>
-              <a>
-                More <DownOutlined />
-              </a>
-            </Dropdown>
-          </span>
-        ),
-      },*/
     ];
 
-
-    const data = [];
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        key: i,
-        symbol: 'TSLA',
-        action: 'Buy/Sell',
-        amount: '99',
-        price: '13,37$',
-        date_posted: '01.01.1970'
-      });
-    }
     const modifiedtransactions = []; //Not useful atm
-    for(let portfolio of props.portfolio){
-      for(let transaction of props.transactions){
-        if(portfolio.symbol === transaction.symbol){
+    let i = 0;
+    for (let portfolio of props.portfolio) {
+      for (let transaction of props.transactions) {
+        if (portfolio.symbol === transaction.symbol) {
           modifiedtransactions.push({
+            key: i,
             symbol: transaction.symbol,
             action: 'buy',
             amount: transaction.amount,
             price: '',
             date: transaction.date_posted,
           });
+          i += 1;
         }
       }
+
     }
 
-    return <Table columns={columns} dataSource={data} pagination={false} />;
-  };
-
-  const columns = [ // Some warning about symbols/primary key; needs to be fixed
+    return <Table columns={columns} dataSource={fullportfolio.transaction} pagination={false} />;
+  };*/
+  const columns = [
     { title: 'Symbol', dataIndex: 'symbol', key: 'symbol' },
     { title: 'Price', dataIndex: 'price', key: 'price' },
     { title: 'Amount', dataIndex: 'amount', key: 'amount' },
@@ -94,39 +84,27 @@ function Portfolio(props) {
     { title: 'Action', key: 'operation', render: () => <a>Action!</a> },
   ];
 
-  /*      //All fields are being expanded because the portfolios in props.data are missing a key property 
-  const data = [];
-  for (let i = 0; i < 3; ++i) {
-    data.push({
-      key: i,
-      name: 'Screem',
-      platform: 'iOS',
-      version: '10.3.4.5654',
-      upgradeNum: 500,
-      creator: 'Jack',
-      createdAt: '2014-12-24 23:12:00',
-    });
-  }
-  */
-  const fullportfolio = [];
-  for(let portfolio of props.portfolio){
+  for (let portfolio of props.portfolio) {
     var latestdate = 1;
     var priceavg = 0;
-    for(let transactions of props.transactions){
-      if(portfolio.symbol == transactions.symbol){
-        priceavg += (transactions.price_at*transactions.amount);
-        if(latestdate === 1 | latestdate < transactions.date_posted){
+    for (let transactions of props.transactions) {
+      if (portfolio.symbol == transactions.symbol) {
+        priceavg += (transactions.price_at * transactions.amount);
+        if (latestdate === 1 | latestdate < transactions.date_posted) {
           latestdate = transactions.date_posted;
         }
       }
     }
-    priceavg = priceavg/portfolio.amount;
+    priceavg = priceavg / portfolio.amount;
+    
     fullportfolio.push({
+      key: portfolio.symbol,
       symbol: portfolio.symbol,
       amount: portfolio.amount,
       user: portfolio.user,
       price: parseFloat(priceavg).toFixed(2),
       date_posted: new Date(latestdate).toDateString(),
+      transaction: props.transactions.filter(tr => tr.symbol == portfolio.symbol),
     });
   }
 
@@ -134,7 +112,7 @@ function Portfolio(props) {
     <Table
       className="components-table-demo-nested"
       columns={columns}
-      expandable={{ expandedRowRender }}
+      expandable={{ expandedRowRender: record =>  transactionsTable(record.transaction) } }
       dataSource={fullportfolio}
     />
   );
