@@ -39,7 +39,26 @@ const transactionsTable = entry => {
     { title: 'Date', dataIndex: 'date_posted', key: 'date_posted' },
   ];
 
-  return <Table columns={columns} dataSource={entry} pagination={false} />; 
+  const transactions = [];
+  let i = 0;
+  for(let transaction of entry){
+    let action = ''
+    if(transaction.amount > 0){
+      action = 'Buy'
+    }else{
+      action = 'Sell'
+    }
+    transactions.push({
+      key: i,
+      symbol: transaction.symbol,
+      amount: transaction.amount,
+      price_at: transaction.price_at,
+      date_posted: new Date(transaction.date_posted).toDateString(),
+      action: action,
+    })
+  }
+
+  return <Table columns={columns} dataSource={transactions} pagination={false} />; 
 }
 
 function Portfolio(props) {
