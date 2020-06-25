@@ -143,3 +143,5 @@ cython_debug/
 # vscode settings
 .vscode/
 .idea/
+
+*.csv
