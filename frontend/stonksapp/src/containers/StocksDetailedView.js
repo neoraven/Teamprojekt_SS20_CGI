@@ -13,39 +13,90 @@ function callback(key) {
 }
 const Plot = createPlotlyComponent(Plotly);
 
-const Price =(val) => {
-    return(
-        <div className="site-statistic-demo-card">
-            <Row gutter={16}>
-                <Col span={12}>
-                    <Card>
-                        <Statistic
-                            title="Price"
-                            value={val}
-                            precision={2}
-                            valueStyle={{ color: '#3f8600' }}
-                            prefix={<ArrowUpOutlined />}
-                            suffix="$"
-                        />
-                    </Card>
-                </Col>
-                <Col span={12}>
-                    <Card>
+const Price = (price, lastprice) => {
+    let change = price/lastprice;
+    console.log(change, price, lastprice);
+    if (change < 1){
+        change = (1-change)*100;
+        return (
+            <div className="site-statistic-demo-card" >
+                
+                <Row gutter={25}>
                     
-                        <Statistic
-                            title="Change since last close"
-                            value={9.3}
-                            precision={2}
-                            valueStyle={{ color: '#cf1322' }}
-                            prefix={<ArrowDownOutlined />}
-                            suffix="%"
-                            style={{ width: '110%', height: '50%' }}
-                        />
-                    </Card>
-                </Col>
-            </Row>
-        </div>
-    );
+                    <Col span={12}>
+                       
+                            <Statistic
+                                title="Price"
+                                value={price}
+                                precision={2}
+                                valueStyle={{ color: '#cf1322', fontSize: '18px' }}
+                                prefix={<ArrowDownOutlined />}
+                                suffix="$"
+                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
+                            />
+                        
+                    </Col>
+                    <Col span={12} >
+    
+                       
+                        
+                            <Statistic
+                                title="Change %"
+                                value={-change}
+                                precision={2}
+                                valueStyle={{ color: '#cf1322', fontSize: '18px' }}
+                                prefix={<ArrowDownOutlined />}
+                                suffix="%"
+                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
+                            />
+    
+                     
+                    </Col>
+                </Row>
+            </div>
+        );
+    } else {
+        change = (change-1)*100;
+        return (
+            <div className="site-statistic-demo-card" >
+                
+                <Row gutter={25}>
+                    
+                    <Col span={12}>
+                       
+                            <Statistic
+                                title="Price"
+                                value={price}
+                                precision={2}
+                                valueStyle={{ color: '#3f8600', fontSize: '18px' }}
+                                prefix={<ArrowUpOutlined />}
+                                suffix="$"
+                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
+                            />
+                        
+                    </Col>
+                    <Col span={12} >
+    
+                       
+                        
+                            <Statistic
+                                title="Change %"
+                                value={change}
+                                precision={2}
+                                valueStyle={{ color: '#3f8600', fontSize: '18px' }}
+                                prefix={<ArrowUpOutlined />}
+                                suffix="%"
+                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
+                            />
+    
+                     
+                    </Col>
+                </Row>
+            </div>
+        );
+    }
+
+
 }
 
 class StocksDetail extends React.Component {
@@ -74,7 +125,7 @@ class StocksDetail extends React.Component {
                     stock: res.data
                 })
             })
-        api.get(`/api/stocks/${symbol}/prices/most-recent/`)
+        api.get(`/api/stocks/${symbol}/prices/most-recent/?interval=1d`)
             .then(res => {
                 this.setState({
                     most_recent: res.data
@@ -103,8 +154,9 @@ class StocksDetail extends React.Component {
 
     render() {
         //<a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${this.state.stock.symbol}&action=getcompany`}> SEC files </a>
+        //this.state.realtime.p_close -- add into price later, removed while debugging
         return (
-            <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={Price(this.state.realtime.p_close)}>
+            <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={Price(this.state.realtime.p_close, this.state.most_recent.p_close)}>
                 <TabPane tab="Overview" key="1">
                     {this.state.stock.description}
                 </TabPane>
