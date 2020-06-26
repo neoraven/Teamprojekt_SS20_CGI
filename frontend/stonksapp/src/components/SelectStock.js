@@ -80,6 +80,7 @@ class SelectStocks extends React.Component {
                 symbol: this.state.stockval,
                 amount: (this.state.stockamount * (-1)),
             }, config)
+            window.location.reload(true);
         }
       }
 

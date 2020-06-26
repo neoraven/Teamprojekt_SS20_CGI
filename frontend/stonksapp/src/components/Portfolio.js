@@ -63,37 +63,6 @@ const transactionsTable = entry => {
 
 function Portfolio(props) {
   const fullportfolio = [];
-  
- /* const expandedRowRender = () => { //this probably needs to be moved to its own component to match the transaction symbols with the portfolio symbols
-    const columns = [
-      { title: 'Symbol', dataIndex: 'symbol', key: 'symbol' },
-      { title: 'Amount', dataIndex: 'amount', key: 'amount' },
-      { title: 'Action', dataIndex: 'action', key: 'action' },
-      { title: 'Price', dataIndex: 'price', key: 'price' },
-      { title: 'Date', dataIndex: 'date_posted', key: 'date_posted' },
-    ];
-
-    const modifiedtransactions = []; //Not useful atm
-    let i = 0;
-    for (let portfolio of props.portfolio) {
-      for (let transaction of props.transactions) {
-        if (portfolio.symbol === transaction.symbol) {
-          modifiedtransactions.push({
-            key: i,
-            symbol: transaction.symbol,
-            action: 'buy',
-            amount: transaction.amount,
-            price: '',
-            date: transaction.date_posted,
-          });
-          i += 1;
-        }
-      }
-
-    }
-
-    return <Table columns={columns} dataSource={fullportfolio.transaction} pagination={false} />;
-  };*/
   const columns = [
     { title: 'Symbol', dataIndex: 'symbol', key: 'symbol' },
     { title: 'Price', dataIndex: 'price', key: 'price' },
