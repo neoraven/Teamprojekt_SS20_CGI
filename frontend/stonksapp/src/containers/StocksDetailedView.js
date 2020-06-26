@@ -2,10 +2,8 @@ import React from 'react';
 import api from '../utils/api';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
-import { Tabs, Button } from 'antd';
-import { Statistic, Card, Row, Col } from 'antd';
+import { Tabs, Popover, Statistic, Row, Col, Descriptions } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import { Descriptions } from 'antd';
 
 const { TabPane } = Tabs;
 
@@ -15,45 +13,38 @@ function callback(key) {
 const Plot = createPlotlyComponent(Plotly);
 
 const Price = (price, lastprice) => {
-    let change = price / lastprice;
-    console.log(change, price, lastprice);
+    let change = price / lastprice.p_adjusted_close;
+    console.log(change, price, lastprice.p_close);
     if (change < 1) {
         change = (1 - change) * 100;
         return (
             <div className="site-statistic-demo-card" >
-
-                <Row gutter={25}>
-
-                    <Col span={12}>
-
-                        <Statistic
-                            title="Price"
-                            value={price}
-                            precision={2}
-                            valueStyle={{ color: '#cf1322', fontSize: '18px' }}
-                            prefix={<ArrowDownOutlined />}
-                            suffix="$"
-                            style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
-                        />
-
-                    </Col>
-                    <Col span={12} >
-
-
-
-                        <Statistic
-                            title="Change %"
-                            value={-change}
-                            precision={2}
-                            valueStyle={{ color: '#cf1322', fontSize: '18px' }}
-                            prefix={<ArrowDownOutlined />}
-                            suffix="%"
-                            style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
-                        />
-
-
-                    </Col>
-                </Row>
+                <Popover content={lastprice.date} title="Date of last close">
+                    <Row gutter={25}>
+                        <Col span={12}>
+                            <Statistic
+                                title="Price"
+                                value={price}
+                                precision={2}
+                                valueStyle={{ color: '#cf1322', fontSize: '18px' }}
+                                prefix={<ArrowDownOutlined />}
+                                suffix="$"
+                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
+                            />
+                        </Col>
+                        <Col span={12} >
+                            <Statistic
+                                title="Change %"
+                                value={-change}
+                                precision={2}
+                                valueStyle={{ color: '#cf1322', fontSize: '18px' }}
+                                prefix={<ArrowDownOutlined />}
+                                suffix="%"
+                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
+                            />
+                        </Col>
+                    </Row>
+                </Popover>
             </div>
         );
     } else {
@@ -103,7 +94,7 @@ const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 2
-  })
+})
 
 const DescTable = (desc, industry, sector, ceo, website, sec, mcap) => {
     mcap = formatter.format(mcap)
@@ -120,8 +111,8 @@ const DescTable = (desc, industry, sector, ceo, website, sec, mcap) => {
                 <Descriptions.Item label="SEC Filings"><a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${sec}&action=getcompany`}> SEC files </a></Descriptions.Item>
                 <Descriptions.Item label="Market Capitalization">{mcap}</Descriptions.Item>
                 <Descriptions.Item label="Company description">
-                {desc}
-        </Descriptions.Item>
+                    {desc}
+                </Descriptions.Item>
             </Descriptions>
         </div>
     );
@@ -187,12 +178,12 @@ class StocksDetail extends React.Component {
         return (
             <div>
                 <h1>{this.state.stock.company_name}</h1>
-                <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={Price(this.state.realtime.p_close, this.state.most_recent.p_close)}>
+                <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={Price(this.state.realtime.p_close, this.state.most_recent)}>
                     <TabPane tab="Overview" key="1">
                         {DescTable(this.state.stock.description, this.state.stock.industry,
-                             this.state.stock.sector, this.state.stock.ceo,
-                             this.state.stock.website_url, this.state.stock.symbol,
-                             this.state.stock.market_cap)}
+                            this.state.stock.sector, this.state.stock.ceo,
+                            this.state.stock.website_url, this.state.stock.symbol,
+                            this.state.stock.market_cap)}
                     </TabPane>
                     <TabPane tab="Chart" key="2">
                         <Plot
