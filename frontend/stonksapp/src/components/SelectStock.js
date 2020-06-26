@@ -151,7 +151,7 @@ class SelectStocks extends React.Component {
                     <InputNumber
                         style={{width: 200}}
                         placeholder="Enter Amount to Buy/Sell"
-                        min={1}
+                        min={0}
                         max={9999}
                     />
                 
