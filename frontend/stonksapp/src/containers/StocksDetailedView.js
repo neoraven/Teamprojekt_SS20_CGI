@@ -3,6 +3,8 @@ import api from '../utils/api';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { Tabs, Button } from 'antd';
+import { Statistic, Card, Row, Col } from 'antd';
+import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
 
@@ -11,11 +13,45 @@ function callback(key) {
 }
 const Plot = createPlotlyComponent(Plotly);
 
-
+const Price =(val) => {
+    return(
+        <div className="site-statistic-demo-card">
+            <Row gutter={16}>
+                <Col span={12}>
+                    <Card>
+                        <Statistic
+                            title="Price"
+                            value={val}
+                            precision={2}
+                            valueStyle={{ color: '#3f8600' }}
+                            prefix={<ArrowUpOutlined />}
+                            suffix="$"
+                        />
+                    </Card>
+                </Col>
+                <Col span={12}>
+                    <Card>
+                    
+                        <Statistic
+                            title="Change since last close"
+                            value={9.3}
+                            precision={2}
+                            valueStyle={{ color: '#cf1322' }}
+                            prefix={<ArrowDownOutlined />}
+                            suffix="%"
+                            style={{ width: '110%', height: '50%' }}
+                        />
+                    </Card>
+                </Col>
+            </Row>
+        </div>
+    );
+}
 
 class StocksDetail extends React.Component {
     state = {
         stock: {},
+        realtime: {},
         most_recent: [],
         key: 'tab2',
         prices: [],
@@ -25,6 +61,11 @@ class StocksDetail extends React.Component {
 
 
     componentDidMount() {
+        var AuthStr = 'Token '.concat(localStorage.getItem('token'));
+
+        var config = {
+            headers: { 'Authorization': AuthStr }
+        };
         const symbol = this.props.match.params.stocksSymbol
         console.log(symbol)
         api.get(`/api/stocks/${symbol}/details/`)
@@ -32,14 +73,12 @@ class StocksDetail extends React.Component {
                 this.setState({
                     stock: res.data
                 })
-                console.log(res.data);
             })
         api.get(`/api/stocks/${symbol}/prices/most-recent/`)
             .then(res => {
                 this.setState({
                     most_recent: res.data
                 })
-                console.log(res.data);
             })
         api.get(`/api/stocks/${symbol}/prices/all/`)
             .then(res => {
@@ -51,13 +90,21 @@ class StocksDetail extends React.Component {
                 console.log(this.state.stockChartXValues)
                 console.log(this.state.stockChartYValues)
             })
+        api.get(`/api/stocks/${symbol}/prices/quote/`, config)
+            .then(res => {
+                this.setState({
+                    realtime: res.data
+                })
+            })
     };
 
 
 
+
     render() {
+        //<a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${this.state.stock.symbol}&action=getcompany`}> SEC files </a>
         return (
-            <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${this.state.stock.symbol}&action=getcompany`}> SEC files </a>}>
+            <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={Price(this.state.realtime.p_close)}>
                 <TabPane tab="Overview" key="1">
                     {this.state.stock.description}
                 </TabPane>
