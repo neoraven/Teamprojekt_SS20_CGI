@@ -99,8 +99,14 @@ const Price = (price, lastprice) => {
 
 
 }
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+  })
 
 const DescTable = (desc, industry, sector, ceo, website, sec, mcap) => {
+    mcap = formatter.format(mcap)
     return (
         <div>
             <Descriptions
@@ -112,7 +118,7 @@ const DescTable = (desc, industry, sector, ceo, website, sec, mcap) => {
                 <Descriptions.Item label="CEO">{ceo}</Descriptions.Item>
                 <Descriptions.Item label="Website"><a href={website} >{website}</a></Descriptions.Item>
                 <Descriptions.Item label="SEC Filings"><a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${sec}&action=getcompany`}> SEC files </a></Descriptions.Item>
-                <Descriptions.Item label="Market Capitalization">{mcap} USD</Descriptions.Item>
+                <Descriptions.Item label="Market Capitalization">{mcap}</Descriptions.Item>
                 <Descriptions.Item label="Company description">
                 {desc}
         </Descriptions.Item>
