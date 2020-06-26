@@ -51,39 +51,32 @@ const Price = (price, lastprice) => {
         change = (change - 1) * 100;
         return (
             <div className="site-statistic-demo-card" >
-
-                <Row gutter={25}>
-
-                    <Col span={12}>
-
-                        <Statistic
-                            title="Price"
-                            value={price}
-                            precision={2}
-                            valueStyle={{ color: '#3f8600', fontSize: '18px' }}
-                            prefix={<ArrowUpOutlined />}
-                            suffix="$"
-                            style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
-                        />
-
-                    </Col>
-                    <Col span={12} >
-
-
-
-                        <Statistic
-                            title="Change %"
-                            value={change}
-                            precision={2}
-                            valueStyle={{ color: '#3f8600', fontSize: '18px' }}
-                            prefix={<ArrowUpOutlined />}
-                            suffix="%"
-                            style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
-                        />
-
-
-                    </Col>
-                </Row>
+                <Popover content={lastprice.date} title="Date of last close">
+                    <Row gutter={25}>
+                        <Col span={12}>
+                            <Statistic
+                                title="Price"
+                                value={price}
+                                precision={2}
+                                valueStyle={{ color: '#3f8600', fontSize: '18px' }}
+                                prefix={<ArrowUpOutlined />}
+                                suffix="$"
+                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
+                            />
+                        </Col>
+                        <Col span={12} >
+                            <Statistic
+                                title="Change %"
+                                value={change}
+                                precision={2}
+                                valueStyle={{ color: '#3f8600', fontSize: '18px' }}
+                                prefix={<ArrowUpOutlined />}
+                                suffix="%"
+                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
+                            />
+                        </Col>
+                    </Row>
+                </Popover>
             </div>
         );
     }
