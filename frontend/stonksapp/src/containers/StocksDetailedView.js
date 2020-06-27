@@ -2,9 +2,8 @@ import React from 'react';
 import api from '../utils/api';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
-import { Tabs, Popover, Statistic, Row, Col, Descriptions } from 'antd';
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import Price from '../components/Price';
+import { Tabs, Descriptions } from 'antd';
+import RealtimePrice from '../components/RealtimePrice';
 
 const { TabPane } = Tabs;
 
@@ -102,7 +101,7 @@ class StocksDetail extends React.Component {
         return (
             <div>
                 <h1>{this.state.stock.company_name}</h1>
-                <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<Price price = {this.state.realtime.p_close} lastprice= {this.state.most_recent}/>}>
+                <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<RealtimePrice price = {this.state.realtime.p_close} lastprice= {this.state.most_recent}/>}>
                     <TabPane tab="Overview" key="1">
                         {DescTable(this.state.stock.description, this.state.stock.industry,
                             this.state.stock.sector, this.state.stock.ceo,
