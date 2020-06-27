@@ -27,7 +27,6 @@ class StocksList extends React.Component {
   }
 
   render() {
-    console.log(this.state.stocks);
     return (
 
       <Stocks data={this.state.stocks} />
