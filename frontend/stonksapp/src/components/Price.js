@@ -1,25 +1,43 @@
 import React from 'react';
-import { Tabs, Popover, Statistic, Row, Col, Descriptions } from 'antd';
+import { Popover, Statistic, Row, Col } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import api from '../utils/api';
 
 
 class Price extends React.Component {
     state = {
-
+        most_recent: [],
+        latestDailyPrice: [],
     }
+
+    componentDidMount() {
+        console.log(this.props)
+        api.get(`/api/stocks/${this.props.symbol}/prices/most-recent/`)
+            .then(res => {
+                this.setState({
+                    most_recent: res.data
+                })
+            })
+        api.get(`/api/stocks/${this.props.symbol}/prices/most-recent/?interval=1d`)
+            .then(res => {
+                this.setState({
+                    latestDailyPrice: res.data
+                })
+            })
+    }
+
     render() {
-        let change = this.props.price / this.props.lastprice.p_close;
-        console.log(change, this.props.price, this.props.lastprice.p_close);
+        let change = this.state.most_recent.p_close / this.state.latestDailyPrice.p_close;
         if (change < 1) {
             change = (1 - change) * 100;
             return (
                 <div className="site-statistic-demo-card" >
-                    <Popover content={this.props.lastprice.date} title="Date of last close">
+                    <Popover content={this.state.latestDailyPrice.date} title="Date of last close">
                         <Row gutter={25}>
                             <Col span={12}>
                                 <Statistic
                                     title="Price"
-                                    value={this.props.price}
+                                    value={this.state.most_recent.p_close}
                                     precision={2}
                                     valueStyle={{ color: '#cf1322', fontSize: '18px' }}
                                     prefix={<ArrowDownOutlined />}
@@ -46,12 +64,12 @@ class Price extends React.Component {
             change = (change - 1) * 100;
             return (
                 <div className="site-statistic-demo-card" >
-                    <Popover content={this.props.lastprice.date} title="Date of last close">
+                    <Popover content={this.state.latestDailyPrice.date} title="Date of last close">
                         <Row gutter={25}>
                             <Col span={12}>
                                 <Statistic
                                     title="Price"
-                                    value={this.props.price}
+                                    value={this.state.most_recent.p_close}
                                     precision={2}
                                     valueStyle={{ color: '#3f8600', fontSize: '18px' }}
                                     prefix={<ArrowUpOutlined />}

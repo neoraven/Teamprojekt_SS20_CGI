@@ -1,6 +1,5 @@
 import React from 'react';
 import Stocks from '../components/Stocks';
-//import axios from 'axios';
 import api from '../utils/api';
 
 

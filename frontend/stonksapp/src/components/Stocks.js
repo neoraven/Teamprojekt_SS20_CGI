@@ -17,21 +17,7 @@ class Stocks extends React.Component {
 
   }
 
-  componentDidMount() {
-    console.log(this.props)
-    api.get(`/api/stocks/${this.props.data.symbol}/prices/most-recent/`)
-      .then(res => {
-        this.setState({
-          latestPrice: res.data
-        })
-      })
-    api.get(`/api/stocks/${this.props.data.symbol}/prices/most-recent/?interval=1d`)
-      .then(res => {
-        this.setState({
-          lastDailyPrice: res.data
-        })
-      })
-  }
+
   handleChange = (e) => {
     this.setState({
       searchString: e.target.value
@@ -74,7 +60,7 @@ class Stocks extends React.Component {
           renderItem={item => (
             <List.Item
               key={item.symbol}
-              extra={<Price price ={this.state.latestPrice.p_close} lastprice={this.state.lastDailyPrice}/>}
+              extra={<Price symbol ={item.symbol}/>}
             >
               <List.Item.Meta
                 avatar={<Avatar src={item.meta_data.image_url} />}
