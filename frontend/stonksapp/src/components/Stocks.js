@@ -1,13 +1,11 @@
 import React from 'react';
 import { List, Avatar, Input } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined, AntDesignOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-import { Tabs, Popover, Statistic, Row, Col, Descriptions } from 'antd';
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import api from '../utils/api';
 import Price from './Price';
 
 class Stocks extends React.Component {
+  constructor(props){
+    super(props);
+  }
 
   state = {
     searchString: '',
@@ -17,6 +15,9 @@ class Stocks extends React.Component {
 
   }
 
+componentDidMount(){
+  console.log(this.props.data)
+}
 
   handleChange = (e) => {
     this.setState({

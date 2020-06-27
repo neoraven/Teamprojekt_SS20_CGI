@@ -1,15 +1,6 @@
 import React from 'react';
-import { List, Avatar, Space } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
-import dummychart from '../dummychart.png';
-import { Link } from 'react-router-dom';
-//import expandedRowRender from './PortfolioExpandebleRows';
+import { Table } from 'antd';
 
-
-
-
-import { Table, Badge, Menu, Dropdown } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
 
 /*  What do i want in my portfolio?
       -> Symbol
@@ -22,13 +13,6 @@ import { DownOutlined } from '@ant-design/icons';
         -> [Cash value of each position]?
       -> Mark to market value of entire protfolio
 */
-
-const menu = (
-  <Menu>
-    <Menu.Item>Action 1</Menu.Item>
-    <Menu.Item>Action 2</Menu.Item>
-  </Menu>
-);
 
 const transactionsTable = entry => {
   const columns = [
@@ -69,7 +53,7 @@ function Portfolio(props) {
     { title: 'Amount', dataIndex: 'amount', key: 'amount' },
     { title: 'Owner', dataIndex: 'user', key: 'user' },
     { title: 'Date of last purchase', dataIndex: 'date_posted', key: 'date_posted' },
-    { title: 'Action', key: 'operation', render: () => <a>Action!</a> },
+ //   { title: 'Action', key: 'operation', render: () => <a>Action!</a> },
   ];
 
   for (let portfolio of props.portfolio) {
