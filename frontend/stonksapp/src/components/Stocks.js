@@ -3,7 +3,7 @@ import { List, Avatar, Input } from 'antd';
 import Price from './Price';
 
 class Stocks extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
   }
 
@@ -15,9 +15,10 @@ class Stocks extends React.Component {
 
   }
 
-componentDidMount(){
-  console.log(this.props.data)
-}
+  componentDidMount() {
+    console.log(this.props.data)
+    //WHY IS THIS^ F.... EMPTY
+  }
 
   handleChange = (e) => {
     this.setState({
@@ -50,7 +51,7 @@ componentDidMount(){
             onChange: page => {
               console.log(page);
             },
-            pageSize: 3,
+            pageSize: 10,
           }}
           dataSource={stocks}
           footer={
@@ -61,7 +62,7 @@ componentDidMount(){
           renderItem={item => (
             <List.Item
               key={item.symbol}
-              extra={<Price symbol ={item.symbol}/>}
+              extra={<Price symbol={item.symbol} />}
             >
               <List.Item.Meta
                 avatar={<Avatar src={item.meta_data.image_url} />}
