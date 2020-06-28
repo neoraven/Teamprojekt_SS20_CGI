@@ -2,8 +2,8 @@ import React from 'react';
 import api from '../utils/api';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
-import { Tabs, Popover, Statistic, Row, Col, Descriptions } from 'antd';
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import { Tabs, Descriptions } from 'antd';
+import RealtimePrice from '../components/RealtimePrice';
 
 const { TabPane } = Tabs;
 
@@ -12,77 +12,7 @@ function callback(key) {
 }
 const Plot = createPlotlyComponent(Plotly);
 
-const Price = (price, lastprice) => {
-    let change = price / lastprice.p_adjusted_close;
-    console.log(change, price, lastprice.p_close);
-    if (change < 1) {
-        change = (1 - change) * 100;
-        return (
-            <div className="site-statistic-demo-card" >
-                <Popover content={lastprice.date} title="Date of last close">
-                    <Row gutter={25}>
-                        <Col span={12}>
-                            <Statistic
-                                title="Price"
-                                value={price}
-                                precision={2}
-                                valueStyle={{ color: '#cf1322', fontSize: '18px' }}
-                                prefix={<ArrowDownOutlined />}
-                                suffix="$"
-                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
-                            />
-                        </Col>
-                        <Col span={12} >
-                            <Statistic
-                                title="Change %"
-                                value={-change}
-                                precision={2}
-                                valueStyle={{ color: '#cf1322', fontSize: '18px' }}
-                                prefix={<ArrowDownOutlined />}
-                                suffix="%"
-                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
-                            />
-                        </Col>
-                    </Row>
-                </Popover>
-            </div>
-        );
-    } else {
-        change = (change - 1) * 100;
-        return (
-            <div className="site-statistic-demo-card" >
-                <Popover content={lastprice.date} title="Date of last close">
-                    <Row gutter={25}>
-                        <Col span={12}>
-                            <Statistic
-                                title="Price"
-                                value={price}
-                                precision={2}
-                                valueStyle={{ color: '#3f8600', fontSize: '18px' }}
-                                prefix={<ArrowUpOutlined />}
-                                suffix="$"
-                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
-                            />
-                        </Col>
-                        <Col span={12} >
-                            <Statistic
-                                title="Change %"
-                                value={change}
-                                precision={2}
-                                valueStyle={{ color: '#3f8600', fontSize: '18px' }}
-                                prefix={<ArrowUpOutlined />}
-                                suffix="%"
-                                style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
-                            />
-                        </Col>
-                    </Row>
-                </Popover>
-            </div>
-        );
-    }
 
-
-}
 const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -171,7 +101,7 @@ class StocksDetail extends React.Component {
         return (
             <div>
                 <h1>{this.state.stock.company_name}</h1>
-                <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={Price(this.state.realtime.p_close, this.state.most_recent)}>
+                <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<RealtimePrice price = {this.state.realtime.p_close} lastprice= {this.state.most_recent}/>}>
                     <TabPane tab="Overview" key="1">
                         {DescTable(this.state.stock.description, this.state.stock.industry,
                             this.state.stock.sector, this.state.stock.ceo,
@@ -197,7 +127,7 @@ class StocksDetail extends React.Component {
                         />
                     </TabPane>
                     <TabPane tab="Dividend History" key="3">
-                        <img width="50%" height="50%" src="https://cdn.vox-cdn.com/thumbor/_cPCJb9uJ3TN7qJQiIKxPjf50k0=/0x0:3173x2332/1200x800/filters:focal(1329x658:1835x1164)/cdn.vox-cdn.com/uploads/chorus_image/image/66150011/GettyImages_1173078245.0.jpg"></img>
+                        <img width="50%" height="50%" alt='' src="https://cdn.vox-cdn.com/thumbor/_cPCJb9uJ3TN7qJQiIKxPjf50k0=/0x0:3173x2332/1200x800/filters:focal(1329x658:1835x1164)/cdn.vox-cdn.com/uploads/chorus_image/image/66150011/GettyImages_1173078245.0.jpg"></img>
                     </TabPane>
                 </Tabs>
             </div>
