@@ -1,9 +1,11 @@
-import {Button, Form, InputNumber, Select, notification} from 'antd';
+import { Button, Form, InputNumber, Select, notification, Col, Row, Typography } from 'antd';
 import React from 'react';
 //import axios from 'axios';
 import api from '../utils/api';
 
-const {Option} = Select;
+const {Text, Link} = Typography;
+
+const { Option } = Select;
 
 function onChange(value) {
     console.log(`selected ${value}`);
@@ -27,19 +29,27 @@ const comp = [{
     displayname: "",
 }]
 
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+})
+
 
 // TODO: Make the entire api request prettier/more compact/outsource them to another file
 class SelectStocks extends React.Component {
     state = {
-        stockval : {},
-        stockamount : {}
+        stockval: {},
+        stockamount: {},
+        price: {},
+        marketvalue: [],
     }
 
     onFinish = values => {
         var AuthStr = 'Token '.concat(localStorage.getItem('token'));
 
         var config = {
-            headers: {'Authorization': AuthStr}
+            headers: { 'Authorization': AuthStr }
         };
         api.post('/api/portfolio/transaction/new/', {
             symbol: values.stock,
@@ -52,12 +62,12 @@ class SelectStocks extends React.Component {
 
     };
 
-    handleAlternate(event) { 
+    handleAlternate(event) {
         event.preventDefault();
         var AuthStr = 'Token '.concat(localStorage.getItem('token'));
 
         var config = {
-            headers: {'Authorization': AuthStr}
+            headers: { 'Authorization': AuthStr }
         };
 
         let amount_sum = 0
@@ -70,9 +80,9 @@ class SelectStocks extends React.Component {
             notification.open({
                 message: 'Selling failed',
                 description:
-                  'Looks like the amount of the stock you want to sell is too high. Please enter a valid amount.',
+                    'Looks like the amount of the stock you want to sell is too high. Please enter a valid amount.',
                 onClick: () => {
-                  console.log('Notification Clicked!');
+                    console.log('Notification Clicked!');
                 },
             });
         } else {
@@ -82,14 +92,26 @@ class SelectStocks extends React.Component {
             }, config)
             window.location.reload(true);
         }
-      }
+    }
 
-    onChange = values =>{
-        if (values.stock === undefined){
+    onChange = values => {
+        if (values.stock === undefined) {
             this.setState({
-                stockamount: values.amount
+                stockamount: values.amount,
+                marketvalue: formatter.format(this.state.price.p_close * values.amount)
             })
-        }else{
+        } else {
+            var AuthStr = 'Token '.concat(localStorage.getItem('token'));
+
+            var config = {
+                headers: { 'Authorization': AuthStr }
+            };
+            api.get(`/api/stocks/${values.stock}/prices/quote/`, config)
+                .then(res => {
+                    this.setState({
+                        price: res.data
+                    })
+                })
             this.setState({
                 stockval: values.stock
             })
@@ -108,64 +130,107 @@ class SelectStocks extends React.Component {
                     remember: true,
                 }}
                 onFinish={this.onFinish}
-                onValuesChange = {this.onChange}
+                onValuesChange={this.onChange}
             >
-                <Form.Item
-                    name="stock"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please select a Stock to trade!',
-                        },
-                    ]}
-                >
-                    <Select //Trouble with multiple value entrys. not beautiful but works atm
-                        showSearch
-                        style={{width: 300}}
-                        placeholder="Select a Stock"
-                        optionFilterProp="children"
-                        onChange={onChange}
-                        onFocus={onFocus}
-                        onBlur={onBlur}
-                        onSearch={onSearch}
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                    >
-                        {this.props.stocks.map(item => (
-                            <Option key={item.symbol} value={item.symbol} label={item.company_name}>
-                                {item.displayname}
-                            </Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-                <Form.Item
-                    name="amount"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please enter an Amount!',
-                        },
-                    ]}
-                >
-                    <InputNumber
-                        style={{width: 200}}
-                        placeholder="Enter Amount to Buy/Sell"
-                        min={0}
-                        max={9999}
-                    />
-                
-                </Form.Item>
-                <Form.Item name="buy">
-                    <Button type="primary" htmlType="submit">
-                        Buy
+
+                <Row>
+                    <Col >
+                        <Form.Item
+                            name="stock"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please select a Stock to trade!',
+                                },
+                            ]}
+                        >
+                            <Select
+                                showSearch
+                                style={{ width: 300 }}
+                                placeholder="Select a Stock"
+                                optionFilterProp="children"
+                                onChange={onChange}
+                                onFocus={onFocus}
+                                onBlur={onBlur}
+                                onSearch={onSearch}
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
+                            >
+                                {this.props.stocks.map(item => (
+                                    <Option key={item.symbol} value={item.symbol} label={item.company_name}>
+                                        {item.displayname}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Row>
+                            <Form.Item name='Price'>
+                                {
+                                    this.state.price.p_close == undefined ?
+
+                                    <Text disabled >Price per share: ${this.state.price.p_close}</Text>
+
+                                    :
+
+                                    <Text >Price per share: ${this.state.price.p_close}</Text>
+                                }
+                                
+                                
+                            </Form.Item>
+                        </Row>
+                    </Col>
+                    <Col>
+                        <Form.Item
+                            name="amount"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please enter an Amount!',
+                                },
+                            ]}
+                        >
+                            <InputNumber
+                                style={{ width: 200 }}
+                                placeholder="Enter Amount to Buy/Sell"
+                                min={0}
+                                max={9999}
+                            />
+
+                        </Form.Item>
+                        <Row>
+                            <Form.Item name='MarketValue'>
+                                {
+                                    this.state.marketvalue == 0 ?
+
+                                    <Text disabled>Total value: ${this.state.marketvalue}</Text>
+
+                                    :
+
+                                    <Text >Total value: {this.state.marketvalue}</Text>
+
+                                }
+                                
+                            </Form.Item>
+                        </Row>
+                    </Col>
+                    <Form.Item name="buy">
+                        <Button type="primary" htmlType="submit">
+                            Buy
                     </Button>
-                </Form.Item>
-                <Form.Item name="sell">
-                    <Button type="primary" danger onClick={this.handleAlternate.bind(this)} >
-                        Sell
+                    </Form.Item>
+                    <Form.Item name="sell">
+                        <Button type="primary" danger onClick={this.handleAlternate.bind(this)} >
+                            Sell
                     </Button>
-                </Form.Item>
+                    </Form.Item>
+
+                </Row>
+
+
+
+
+
             </Form>
 
         );
