@@ -1,6 +1,8 @@
 import React from 'react';
-import { List, Avatar, Input } from 'antd';
+import { List, Avatar, Input, Typography } from 'antd';
 import Price from './Price';
+
+const {Text} = Typography;
 
 class Stocks extends React.Component {
   constructor(props) {
@@ -53,7 +55,7 @@ class Stocks extends React.Component {
             },
             pageSize: 10,
           }}
-          dataSource={stocks}
+          dataSource={stocks} //-> Maybe make stocks its own component to maybe make the prices comps work
           footer={
             <div>
               <b></b>
@@ -66,7 +68,11 @@ class Stocks extends React.Component {
             >
               <List.Item.Meta
                 avatar={<Avatar src={item.meta_data.image_url} />}
-                title={<a href={`/company/${item.symbol}`}>{item.company_name}</a>}
+                title={
+                  <a href={`/company/${item.symbol}`}>
+                    {item.company_name}
+                    <Text disabled >  [{item.symbol}]</Text>
+                  </a>}
                 description={item.meta_data.description}
               />
 

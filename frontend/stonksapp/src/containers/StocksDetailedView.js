@@ -55,11 +55,6 @@ class StocksDetail extends React.Component {
 
 
     componentDidMount() {
-        var AuthStr = 'Token '.concat(localStorage.getItem('token'));
-
-        var config = {
-            headers: { 'Authorization': AuthStr }
-        };
         const symbol = this.props.match.params.stocksSymbol
         console.log(symbol)
         api.get(`/api/stocks/${symbol}/details/`)
@@ -84,7 +79,7 @@ class StocksDetail extends React.Component {
                 console.log(this.state.stockChartXValues)
                 console.log(this.state.stockChartYValues)
             })
-        api.get(`/api/stocks/${symbol}/prices/quote/`, config)
+        api.get(`/api/stocks/${symbol}/prices/quote/`)
             .then(res => {
                 this.setState({
                     realtime: res.data

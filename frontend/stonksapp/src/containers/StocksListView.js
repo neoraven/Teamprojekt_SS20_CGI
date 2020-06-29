@@ -10,14 +10,7 @@ class StocksList extends React.Component {
     stocks: []
   }
   componentDidMount() {
-
-    var AuthStr = 'Token '.concat(localStorage.getItem('token'));
-
-    var config = {
-      headers: { 'Authorization': AuthStr }
-    };
-
-    api.get('/api/stocks/list/details/', config)
+    api.get('/api/stocks/list/details/')
       .then(res => {
         this.setState({
           stocks: res.data

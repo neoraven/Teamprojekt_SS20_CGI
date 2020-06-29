@@ -46,15 +46,10 @@ class SelectStocks extends React.Component {
     }
 
     onFinish = values => {
-        var AuthStr = 'Token '.concat(localStorage.getItem('token'));
-
-        var config = {
-            headers: { 'Authorization': AuthStr }
-        };
         api.post('/api/portfolio/transaction/new/', {
             symbol: values.stock,
             amount: values.amount,
-        }, config)
+        })
 
         console.log(values)
 
@@ -64,11 +59,6 @@ class SelectStocks extends React.Component {
 
     handleAlternate(event) {
         event.preventDefault();
-        var AuthStr = 'Token '.concat(localStorage.getItem('token'));
-
-        var config = {
-            headers: { 'Authorization': AuthStr }
-        };
 
         let amount_sum = 0
         for (let transaction of this.props.transactions) {
@@ -89,7 +79,7 @@ class SelectStocks extends React.Component {
             api.post('/api/portfolio/transaction/new/', {
                 symbol: this.state.stockval,
                 amount: (this.state.stockamount * (-1)),
-            }, config)
+            })
             window.location.reload(true);
         }
     }
@@ -101,12 +91,7 @@ class SelectStocks extends React.Component {
                 marketvalue: formatter.format(this.state.price.p_close * values.amount)
             })
         } else {
-            var AuthStr = 'Token '.concat(localStorage.getItem('token'));
-
-            var config = {
-                headers: { 'Authorization': AuthStr }
-            };
-            api.get(`/api/stocks/${values.stock}/prices/quote/`, config)
+            api.get(`/api/stocks/${values.stock}/prices/quote/`)
                 .then(res => {
                     this.setState({
                         price: res.data

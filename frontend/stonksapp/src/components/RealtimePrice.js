@@ -8,7 +8,8 @@ class RealtimePrice extends React.Component {
         most_recent: [],
         latestDailyPrice: [],
     }
-
+//https://stackoverflow.com/questions/40877053/use-if-else-to-declare-a-let-or-const-to-use-after-the-if-else
+// try implementing this solution to make this way less redundant code
     render() {
         let change = this.props.price / this.props.lastprice.p_close;
         if (change < 1) {
