@@ -2,9 +2,8 @@ import React from 'react';
 import api from '../utils/api';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
-import { Tabs, Button } from 'antd';
-import { Statistic, Card, Row, Col } from 'antd';
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import { Tabs, Descriptions } from 'antd';
+import RealtimePrice from '../components/RealtimePrice';
 
 const { TabPane } = Tabs;
 
@@ -13,40 +12,35 @@ function callback(key) {
 }
 const Plot = createPlotlyComponent(Plotly);
 
-const Price =(val) => {
-    return(
-        <div className="site-statistic-demo-card">
-            <Row gutter={16}>
-                <Col span={12}>
-                    <Card>
-                        <Statistic
-                            title="Price"
-                            value={val}
-                            precision={2}
-                            valueStyle={{ color: '#3f8600' }}
-                            prefix={<ArrowUpOutlined />}
-                            suffix="$"
-                        />
-                    </Card>
-                </Col>
-                <Col span={12}>
-                    <Card>
-                    
-                        <Statistic
-                            title="Change since last close"
-                            value={9.3}
-                            precision={2}
-                            valueStyle={{ color: '#cf1322' }}
-                            prefix={<ArrowDownOutlined />}
-                            suffix="%"
-                            style={{ width: '110%', height: '50%' }}
-                        />
-                    </Card>
-                </Col>
-            </Row>
+
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+})
+
+const DescTable = (desc, industry, sector, ceo, website, sec, mcap) => {
+    mcap = formatter.format(mcap)
+    return (
+        <div>
+            <Descriptions
+                bordered
+                column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
+            >
+                <Descriptions.Item label="Industry">{industry}</Descriptions.Item>
+                <Descriptions.Item label="Sector">{sector}</Descriptions.Item>
+                <Descriptions.Item label="CEO">{ceo}</Descriptions.Item>
+                <Descriptions.Item label="Website"><a href={website} >{website}</a></Descriptions.Item>
+                <Descriptions.Item label="SEC Filings"><a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${sec}&action=getcompany`}> SEC files </a></Descriptions.Item>
+                <Descriptions.Item label="Market Capitalization">{mcap}</Descriptions.Item>
+                <Descriptions.Item label="Company description">
+                    {desc}
+                </Descriptions.Item>
+            </Descriptions>
         </div>
     );
-}
+};
+
 
 class StocksDetail extends React.Component {
     state = {
@@ -74,7 +68,7 @@ class StocksDetail extends React.Component {
                     stock: res.data
                 })
             })
-        api.get(`/api/stocks/${symbol}/prices/most-recent/`)
+        api.get(`/api/stocks/${symbol}/prices/most-recent/?interval=1d`)
             .then(res => {
                 this.setState({
                     most_recent: res.data
@@ -103,33 +97,40 @@ class StocksDetail extends React.Component {
 
     render() {
         //<a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${this.state.stock.symbol}&action=getcompany`}> SEC files </a>
+        //this.state.realtime.p_close -- add into price later, removed while debugging
         return (
-            <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={Price(this.state.realtime.p_close)}>
-                <TabPane tab="Overview" key="1">
-                    {this.state.stock.description}
-                </TabPane>
-                <TabPane tab="Chart" key="2">
-                    <Plot
-                        data={[
-                            {
-                                x: this.state.stockChartXValues,
-                                y: this.state.stockChartYValues,
-                                type: 'scatter',
-                                mode: 'lines',
-                                marker: { color: 'blue' },
+            <div>
+                <h1>{this.state.stock.company_name}</h1>
+                <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<RealtimePrice price = {this.state.realtime.p_close} lastprice= {this.state.most_recent}/>}>
+                    <TabPane tab="Overview" key="1">
+                        {DescTable(this.state.stock.description, this.state.stock.industry,
+                            this.state.stock.sector, this.state.stock.ceo,
+                            this.state.stock.website_url, this.state.stock.symbol,
+                            this.state.stock.market_cap)}
+                    </TabPane>
+                    <TabPane tab="Chart" key="2">
+                        <Plot
+                            data={[
+                                {
+                                    x: this.state.stockChartXValues,
+                                    y: this.state.stockChartYValues,
+                                    type: 'scatter',
+                                    mode: 'lines',
+                                    marker: { color: 'blue' },
+                                }
+                            ]}
+                            layout={
+                                {
+                                    autosize: true,
+                                }
                             }
-                        ]}
-                        layout={
-                            {
-                                autosize: true,
-                            }
-                        }
-                    />
-                </TabPane>
-                <TabPane tab="Dividend History" key="3">
-                    <img width="50%" height="50%" src="https://cdn.vox-cdn.com/thumbor/_cPCJb9uJ3TN7qJQiIKxPjf50k0=/0x0:3173x2332/1200x800/filters:focal(1329x658:1835x1164)/cdn.vox-cdn.com/uploads/chorus_image/image/66150011/GettyImages_1173078245.0.jpg"></img>
-                </TabPane>
-            </Tabs>
+                        />
+                    </TabPane>
+                    <TabPane tab="Dividend History" key="3">
+                        <img width="50%" height="50%" alt='' src="https://cdn.vox-cdn.com/thumbor/_cPCJb9uJ3TN7qJQiIKxPjf50k0=/0x0:3173x2332/1200x800/filters:focal(1329x658:1835x1164)/cdn.vox-cdn.com/uploads/chorus_image/image/66150011/GettyImages_1173078245.0.jpg"></img>
+                    </TabPane>
+                </Tabs>
+            </div>
 
         );
     }
