@@ -53,7 +53,7 @@ class Stocks extends React.Component {
             },
             pageSize: 10,
           }}
-          dataSource={stocks}
+          dataSource={stocks} //-> Maybe make stocks its own component to maybe make the prices comps work
           footer={
             <div>
               <b></b>
