@@ -1,6 +1,7 @@
 import dateutil.parser
 from alpha_vantage.timeseries import TimeSeries
 
+from django.db.models import Q
 from django.http import HttpResponse
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -211,14 +212,22 @@ class MostRecentPriceView(generics.RetrieveAPIView):
     serializer_class = PricesSerializer
 
     def get_object(self):
-        queryset = Price.objects.filter(
-            symbol__symbol__iexact=self.kwargs.get("symbol")
-        )
+        query = Q(symbol__symbol__iexact=self.kwargs.get("symbol"))
+        # queryset = Price.objects.filter(
+        #     symbol__symbol__iexact=self.kwargs.get("symbol")
+        # )
         interval = self.request.query_params.get("interval")
         if interval is not None:
-            queryset = queryset.filter(interval__iexact=interval)
-            print("Interval is not None")
-        if not queryset:
+            query = query & Q(interval__iexact=interval)
+            queryset = (
+                Price.objects.filter(query).order_by("-date", "-exchange_time").first()
+            )
+            if queryset is None:
+                raise Http404
+            else:
+                return queryset
+        queryset = Price.objects.filter(query)
+        if queryset is None:
             raise Http404
 
         return queryset.order_by("-date", "-exchange_time", "-interval").first()
