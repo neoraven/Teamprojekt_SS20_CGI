@@ -28,6 +28,7 @@ class Price extends React.Component {
 
     render() {
         let change = this.state.most_recent.p_close / this.state.latestDailyPrice.p_close;
+        console.log(this.state.latestDailyPrice.p_close)
         if (change < 1) {
             change = (1 - change) * 100;
             return (
