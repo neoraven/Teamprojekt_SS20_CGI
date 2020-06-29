@@ -216,9 +216,9 @@ class MostRecentPriceView(generics.RetrieveAPIView):
         )
         interval = self.request.query_params.get("interval")
         if interval is not None:
-            queryset = queryset.filter(interval__iexact=interval)
-            print("Interval is not None")
-        if not queryset:
+            return queryset.filter(interval__iexact=interval).first()
+        if queryset is None:
             raise Http404
 
-        return queryset.order_by("-date", "-exchange_time", "-interval").first()
+        # .order_by("-date", "-exchange_time", "-interval")
+        return queryset.order_by("-interval").first()
