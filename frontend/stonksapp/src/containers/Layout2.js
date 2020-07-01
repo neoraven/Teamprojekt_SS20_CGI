@@ -31,7 +31,7 @@ class SecondLayout extends React.Component {
             this.props.isAuthenticated ?
 
               <div className='user'>
-                <Text>Logged in as {localStorage.getItem('user')}</Text>
+                Logged in as {localStorage.getItem('user')}
               </div>
 
               :
