@@ -11,3 +11,12 @@
     padding: 24px;
     min-height: 280px;
   }
+
+  .user {
+    width: 140px;
+    height: 51px;
+    background: rgba(255, 255, 255, 0.918);
+    float: right;
+    margin: 6px 24px 6px 0px;
+    text-align: center;
+  }
