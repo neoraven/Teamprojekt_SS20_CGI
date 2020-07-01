@@ -3,6 +3,7 @@ import React from 'react';
 import api from '../utils/api';
 import Portfolio from '../components/Portfolio';
 import SelectStock from '../components/SelectStock';
+import { Link } from 'react-router-dom';
 
 
 /*  What do i want in my portfolio?
@@ -76,7 +77,7 @@ class PortfolioList extends React.Component {
                                                         transactions={this.state.transactions}/></div>
                     </div>
                 :
-                    <p>Bitte loggen Sie sich ein, um die Portfolio-Seite zu sehen.</p>             
+                    <p>Please <Link to='/login'>Login</Link> to view your Portofolio.</p>             
                 }    
             </div>    
         )
