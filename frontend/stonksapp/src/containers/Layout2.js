@@ -1,4 +1,4 @@
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Typography } from 'antd';
 import React from 'react';
 import logo from '../logo.jpg'
 import { Link } from 'react-router-dom';
@@ -7,6 +7,7 @@ import * as actions from '../store/actions/auth'
 import './layout.css';
 
 const { Header, Content, Footer } = Layout;
+const { Text } = Typography;
 
 /*
 <Menu.Item key="0" disabled="true">
@@ -25,6 +26,18 @@ class SecondLayout extends React.Component {
           <a href='/'>
             <img src={logo} className="logo" alt="stonks" width="200" height="57" />
           </a>
+          {
+
+            this.props.isAuthenticated ?
+
+              <div className='user'>
+                <Text>Logged in as {localStorage.getItem('user')}</Text>
+              </div>
+
+              :
+
+              <div></div>
+          }
           <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
 
 
@@ -51,6 +64,7 @@ class SecondLayout extends React.Component {
               <Link to='/portfolio/'>Portfolio</Link>
             </Menu.Item>
           </Menu>
+
         </Header>
         <Content style={{ padding: '0 50px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
