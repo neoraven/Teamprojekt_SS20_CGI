@@ -1,24 +1,46 @@
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Typography } from 'antd';
 import React from 'react';
 import logo from '../logo.jpg'
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import * as actions from '../store/actions/auth'
+import './layout.css';
 
 const { Header, Content, Footer } = Layout;
+const { Text } = Typography;
+
+/*
+<Menu.Item key="0" disabled="true">
+              <img src={logo} alt="stonks" width="200" height="57" />
+            </Menu.Item>
+
+*/
+
+
 
 class SecondLayout extends React.Component {
   render() {
     return (
       <Layout className="layout">
-        <Header>
-          <div className="logo" />
+        <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+          <a href='/'>
+            <img src={logo} className="logo" alt="stonks" width="200" height="57" />
+          </a>
+          {
 
+            this.props.isAuthenticated ?
+
+              <div className='user'>
+                Logged in as {localStorage.getItem('user')}
+              </div>
+
+              :
+
+              <div></div>
+          }
           <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
 
-            <Menu.Item key="0" disabled="true">
-              <img src={logo} alt="stonks" width="200" height="57" />
-            </Menu.Item>
+
             <Menu.Item key="1" >
               <Link to='/'>Stocks</Link>
             </Menu.Item>
@@ -38,10 +60,11 @@ class SecondLayout extends React.Component {
                 </Menu.Item>
 
             }
-                <Menu.Item key="3" >
-                  <Link to='/portfolio/'>Portfolio</Link>
-                </Menu.Item>
+            <Menu.Item key="3" >
+              <Link to='/portfolio/'>Portfolio</Link>
+            </Menu.Item>
           </Menu>
+
         </Header>
         <Content style={{ padding: '0 50px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
