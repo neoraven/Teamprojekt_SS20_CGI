@@ -9,7 +9,7 @@ import Impressum from './containers/Impressum';
 
 const BaseRouter = (props) =>(
   <div>
-    <Route exact path ='/' component = {StocksList} />
+    <Route exact path ='/' render = { () => (<StocksList isAuthenticated={props.isAuthenticated}/>)} />
     <Route exact path ='/login/' component = {Login} />
     <Route exact path ='/signup/' component = {Signup} />
     <Route exact path ='/portfolio/' render = { () => (<PortfolioList isAuthenticated={props.isAuthenticated}/>)}/>

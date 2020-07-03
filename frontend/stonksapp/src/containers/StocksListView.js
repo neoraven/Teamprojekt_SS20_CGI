@@ -1,6 +1,7 @@
 import React from 'react';
 import Stocks from '../components/Stocks';
 import api from '../utils/api';
+import { Link } from 'react-router-dom';
 
 
 
@@ -20,8 +21,14 @@ class StocksList extends React.Component {
 
   render() {
     return (
-
-      <Stocks data={this.state.stocks} />
+      <div>
+        {this.props.isAuthenticated ? 
+          
+          <Stocks data={this.state.stocks}/>
+          :
+          <p>Please <Link to='/login'>Login</Link> to see the list of stocks.</p>
+        }
+      </div>
     )
   }
 }
