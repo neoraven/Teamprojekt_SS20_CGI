@@ -18,7 +18,6 @@ class NormalLoginForm extends React.Component {
   onFinish = values => {
     console.log(values.username, values.password)
     this.props.onAuth(values.username, values.password);
-    this.props.history.push('/')
   };
 
 
