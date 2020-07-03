@@ -23,7 +23,6 @@ class StocksList extends React.Component {
     return (
       <div>
         {this.props.isAuthenticated ? 
-          
           <Stocks data={this.state.stocks}/>
           :
           <p>Please <Link to='/login'>Login</Link> to see the list of stocks.</p>
