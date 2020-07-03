@@ -8,19 +8,12 @@ import * as actions from '../store/actions/auth'
 //import { Router, Route, Link, BrowserRouter} from 'react-router-dom';
 
 
-
-
-
-
-
 class NormalLoginForm extends React.Component {
 
   onFinish = values => {
     console.log(values.username, values.password)
     this.props.onAuth(values.username, values.password);
   };
-
-
 
   render() {
     console.log(this.props);

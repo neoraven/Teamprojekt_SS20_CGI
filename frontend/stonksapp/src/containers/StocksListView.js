@@ -3,9 +3,6 @@ import Stocks from '../components/Stocks';
 import api from '../utils/api';
 import { Link } from 'react-router-dom';
 
-
-
-
 class StocksList extends React.Component {
   state = {
     stocks: []
