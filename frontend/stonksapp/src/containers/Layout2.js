@@ -1,6 +1,6 @@
 import { Layout, Menu, Breadcrumb, Typography } from 'antd';
 import React from 'react';
-import logo from '../logo.jpg'
+import logo from '../freeLogo.jpeg'
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import * as actions from '../store/actions/auth'
