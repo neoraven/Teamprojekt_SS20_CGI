@@ -8,11 +8,6 @@ import * as actions from '../store/actions/auth'
 //import { Router, Route, Link, BrowserRouter} from 'react-router-dom';
 
 
-
-
-
-
-
 class NormalLoginForm extends React.Component {
 
   onFinish = values => {
@@ -20,8 +15,6 @@ class NormalLoginForm extends React.Component {
     this.props.onAuth(values.username, values.password);
     this.props.history.push('/')
   };
-
-
 
   render() {
     console.log(this.props);
