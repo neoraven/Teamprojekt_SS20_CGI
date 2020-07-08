@@ -73,7 +73,9 @@ class StocksDetail extends React.Component {
                 })
                 console.log(this.state.prices)
                 this.state.prices.map(price => {
-                    if (!(price in this.state.chart_prices)) {
+                    price in this.state.chart_prices ?  
+                        void(0)
+                    :
                         this.state.chart_prices.push({
                             date : new Date(price.date),
                             open : price.p_open,
@@ -82,7 +84,6 @@ class StocksDetail extends React.Component {
                             close : price.p_close,
                             volume : price.volume
                         })
-                    }
                 })
                 console.log(this.state.chart_prices)
             })
