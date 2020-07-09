@@ -22,6 +22,8 @@ from .serializers import (
     StockMetaDataSerializer,
 )
 
+_DEFAULT_JOIN_CHAR = ","
+_BOOLEAN_TRUE_EQUIVALENTS = ["true", "y", "yes", "1", "t"]
 _AV_LIVE_API_QUOTE_KEY = "9BFOZ18JCKRN3XEB"
 
 
@@ -182,17 +184,26 @@ class PriceListNoPaginationView(generics.ListAPIView):
 
     def get_queryset(self):
         symbol = self.kwargs.get("symbol")
-        interval, date_from, date_to = (
+        interval, date_from, date_to, batch = (
             self.request.query_params.get("interval", "1d"),
             self.request.query_params.get("from"),
             self.request.query_params.get("to"),
+            self.request.query_params.get("batch"),
         )
-        queryset = Price.objects.filter(symbol__symbol__iexact=symbol)
+        if batch is not None:
+            assert (
+                batch in _BOOLEAN_TRUE_EQUIVALENTS
+            ), f"Invalid boolean value ({batch})"
+            symbol = [s.upper() for s in symbol.split(_DEFAULT_JOIN_CHAR)]
+            queryset = Price.objects.filter(
+                symbol__symbol__in=symbol, interval=interval
+            )
+        else:
+            queryset = Price.objects.filter(
+                symbol__symbol__iexact=symbol, interval=interval
+            )
         if not queryset:
-            raise ValidationError(f"Stock `{symbol}` does not exist!")
-        queryset = queryset.filter(interval=interval)
-        if not queryset:
-            raise ValidationError(f"Interval `{interval}` does not exist!")
+            raise ValidationError(f"Invalid query!")
         if date_from:
             date_from = dateutil.parser.parse(date_from)
             queryset = queryset.filter(date__gte=date_from)
@@ -206,28 +217,40 @@ class PriceListNoPaginationView(generics.ListAPIView):
             raise Http404
 
 
-class MostRecentPriceView(generics.RetrieveAPIView):
+class MostRecentPriceView(generics.ListAPIView):
     permission_classes = [AllowAny]
     lookup_field = "symbol"
     serializer_class = PricesSerializer
 
-    def get_object(self):
-        query = Q(symbol__symbol__iexact=self.kwargs.get("symbol"))
-        # queryset = Price.objects.filter(
-        #     symbol__symbol__iexact=self.kwargs.get("symbol")
-        # )
-        interval = self.request.query_params.get("interval")
+    def get_serializer_class(self):
+        if self.request.query_params.get("batch") is not None:
+            PricesSerializer.Meta.fields.insert(0, "symbol")
+            PricesSerializer.Meta.fields.append("interval")
+            return PricesSerializer
+
+    def get_queryset(self):
+        symbol = self.kwargs.get("symbol")
+        interval, batch = (
+            self.request.query_params.get("interval"),
+            self.request.query_params.get("batch"),
+        )
+        if batch is not None:
+            assert (
+                batch.lower() in _BOOLEAN_TRUE_EQUIVALENTS
+            ), f"Invalid boolean value ({batch})"
+            symbol = [s.upper() for s in symbol.split(_DEFAULT_JOIN_CHAR)]
+            query = Q(symbol__symbol__in=symbol)
+        else:
+            query = Q(symbol__symbol__iexact=symbol)
+
         if interval is not None:
             query = query & Q(interval__iexact=interval)
-            queryset = (
-                Price.objects.filter(query).order_by("-date", "-exchange_time").first()
-            )
-            if queryset is None:
-                raise Http404
-            else:
-                return queryset
+
         queryset = Price.objects.filter(query)
         if queryset is None:
             raise Http404
 
-        return queryset.order_by("-date", "-exchange_time", "-interval").first()
+        return queryset.order_by(
+            "symbol__symbol", "-date", "-exchange_time", "-interval"
+        ).distinct("symbol__symbol")
+
