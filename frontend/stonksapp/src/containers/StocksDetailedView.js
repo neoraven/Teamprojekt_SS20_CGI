@@ -47,7 +47,7 @@ class StocksDetail extends React.Component {
         most_recent: [],
         key: 'tab2',
         prices: [],
-        chart_prices : []
+        chart_prices : [],
     }
 
 
@@ -85,6 +85,9 @@ class StocksDetail extends React.Component {
                             volume : price.volume
                         })
                 })
+                this.setState({
+                    chart : <Chart data={this.state.chart_prices}/>
+                })
                 console.log(this.state.chart_prices)
             })
         api.get(`/api/stocks/${symbol}/prices/quote/`)
@@ -112,7 +115,7 @@ class StocksDetail extends React.Component {
                             this.state.stock.market_cap)}
                     </TabPane>
                     <TabPane tab="Chart" key="2">
-                        <Chart data={this.state.chart_prices}/>
+                        {this.state.chart}
                     </TabPane>
                 </Tabs>
             </div>
