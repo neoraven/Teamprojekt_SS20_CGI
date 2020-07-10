@@ -226,7 +226,7 @@ class MostRecentPriceView(generics.ListAPIView):
         if self.request.query_params.get("batch") is not None:
             PricesSerializer.Meta.fields.insert(0, "symbol")
             PricesSerializer.Meta.fields.append("interval")
-            return PricesSerializer
+        return PricesSerializer
 
     def get_queryset(self):
         symbol = self.kwargs.get("symbol")
