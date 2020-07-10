@@ -1,16 +1,14 @@
 import React from 'react';
 import api from '../utils/api';
-import Plotly from "plotly.js-basic-dist";
-import createPlotlyComponent from "react-plotly.js/factory";
 import { Tabs, Descriptions } from 'antd';
 import RealtimePrice from '../components/RealtimePrice';
+import Chart from '../components/Chart';
 
 const { TabPane } = Tabs;
 
 function callback(key) {
     console.log(key);
 }
-const Plot = createPlotlyComponent(Plotly);
 
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -49,8 +47,7 @@ class StocksDetail extends React.Component {
         most_recent: [],
         key: 'tab2',
         prices: [],
-        stockChartXValues: [],
-        stockChartYValues: [],
+        chart_prices : [],
     }
 
 
@@ -74,10 +71,24 @@ class StocksDetail extends React.Component {
                 this.setState({
                     prices: res.data
                 })
-                this.state.prices.map(price => this.state.stockChartXValues.push(price.date))
-                this.state.prices.map(price => this.state.stockChartYValues.push(price.p_close))
-                console.log(this.state.stockChartXValues)
-                console.log(this.state.stockChartYValues)
+                console.log(this.state.prices)
+                this.state.prices.map(price => {
+                    price in this.state.chart_prices ?  
+                        void(0)
+                    :
+                        this.state.chart_prices.push({
+                            date : new Date(price.date),
+                            open : price.p_open,
+                            low : price.p_low,
+                            high : price.p_high,
+                            close : price.p_close,
+                            volume : price.volume
+                        })
+                })
+                this.setState({
+                    chart : <Chart data={this.state.chart_prices}/>
+                })
+                console.log(this.state.chart_prices)
             })
         api.get(`/api/stocks/${symbol}/prices/quote/`)
             .then(res => {
@@ -104,26 +115,10 @@ class StocksDetail extends React.Component {
                             this.state.stock.market_cap)}
                     </TabPane>
                     <TabPane tab="Chart" key="2">
-                        <Plot
-                            data={[
-                                {
-                                    x: this.state.stockChartXValues,
-                                    y: this.state.stockChartYValues,
-                                    type: 'scatter',
-                                    mode: 'lines',
-                                    marker: { color: 'blue' },
-                                }
-                            ]}
-                            layout={
-                                {
-                                    autosize: true,
-                                }
-                            }
-                        />
+                        {this.state.chart}
                     </TabPane>
                 </Tabs>
             </div>
-
         );
     }
 }
