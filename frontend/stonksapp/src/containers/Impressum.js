@@ -5,7 +5,7 @@ class Impressum extends React.Component {
         return(
             <div>
                 <p>Diese Website wurde in kooperation mit <a href="https://www.de.cgi.com/de">CGI</a> in Braunschweig erstellt.</p>
-                <p>Ansprechpartner ist Tobias Volze (t [dot] volze [at] gmail [dot] com</p>
+                <p>Ansprechpartner ist Tobias Volze (t [dot] volze [at] gmail [dot] com)</p>
                     <p>Helenenstraße 31 <br/>
                      38118 Braunschweig</p>
                 
