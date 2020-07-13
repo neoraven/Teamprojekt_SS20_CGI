@@ -4,12 +4,10 @@ class Impressum extends React.Component {
     render(){
         return(
             <div>
-                <p>Diese Website wurde im Rahmen eines studentischen Teamprojekts der TU-Braunschweig in kooperation mit <a href="https://www.de.cgi.com/de">CGI</a> in Braunschweig erstellt.</p>
-                <p>Ansprechpartnerin für das Projekt ist Frau <a href= "https://www.tu-braunschweig.de/winfo/team/soeffker"> Ninja Soeffker</a> (n [dot] soeffker [at] tu-braunschweig [dot] de)</p>
-                    <p>               Institut für Wirtschaftsinformatik <br/>
-                    Lehrstuhl Decision Support <br/>
-                    Mühlenpfordtstraße 23, 5. OG <br/>
-                38106 Braunschweig</p>
+                <p>Diese Website in kooperation mit <a href="https://www.de.cgi.com/de">CGI</a> in Braunschweig erstellt.</p>
+                <p>Ansprechpartner ist Tobias Volze (t [dot] volze [at] gmail [dot] com</p>
+                    <p>Helenenstraße 31 <br/>
+                     38118 Braunschweig</p>
                 
                <br/>
                 

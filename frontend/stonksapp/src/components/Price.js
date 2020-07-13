@@ -27,6 +27,10 @@ class Price extends React.Component {
     }
 
     render() {
+        if (this.state.latestDailyPrice == undefined || this.state.most_recent == undefined){
+            return <p>No prices found</p>
+        }
+            
         let change = this.state.most_recent.p_close / this.state.latestDailyPrice.p_close;
         console.log(this.state.latestDailyPrice.p_close)
         if (change < 1) {
