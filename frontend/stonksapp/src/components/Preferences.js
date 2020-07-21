@@ -2,7 +2,7 @@ import React from 'react'
 import Slider from './Slider';
 import { Button } from 'antd';
 
-class Recommendation extends React.Component {
+class Preferences extends React.Component {
     render() {
         return (
             <div>
@@ -31,4 +31,4 @@ class Recommendation extends React.Component {
         )
     }
 }
-export default Recommendation
+export default Preferences
