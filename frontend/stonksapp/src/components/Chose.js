@@ -1,5 +1,5 @@
 import React from 'react'
-import Recommendation from '../components/Recommendations'
+import Recommendation from './Slider'
 import { Button } from 'antd';
 
 class Chose extends React.Component {

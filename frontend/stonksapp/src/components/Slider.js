@@ -1,7 +1,7 @@
 import React from 'react'
 import { Slider } from 'antd';
 import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
-import './Recommendations.css';
+import './Slider.css';
 
 
 
@@ -33,4 +33,4 @@ class Recommendation extends React.Component {
 
 
 
-export default Recommendation
+export default Slider
