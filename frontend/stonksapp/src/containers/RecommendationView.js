@@ -3,6 +3,8 @@ import Slider from '../components/Slider'
 import Preferences from '../components/Preferences';
 import { Steps, Button, message } from 'antd';
 import { Link } from 'react-router-dom';
+import Strategies from '../components/Strategies';
+import Recommendations from '../components/Recommendations';
 
 
 const { Step } = Steps;
@@ -13,11 +15,11 @@ const steps = [
     },
     {
         title: 'Strategies',
-        content: <Preferences></Preferences>,
+        content: <Strategies></Strategies>,
     },
     {
         title: 'Recommendations',
-        content: <Preferences></Preferences>,
+        content: <Recommendations></Recommendations>,
     },
 ];
 
