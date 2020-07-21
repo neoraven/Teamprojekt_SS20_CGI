@@ -7,6 +7,7 @@ import Details from './containers/StocksDetailedView';
 import PortfolioList from './containers/PortfolioListView';
 import Impressum from './containers/Impressum';
 import RecommendationView from './containers/RecommendationView'
+import Chose from './components/Chose';
 
 const BaseRouter = (props) =>(
   <div>
@@ -17,6 +18,7 @@ const BaseRouter = (props) =>(
     <Route exact path ='/recommendations/' component = {RecommendationView}/>
     <Route exact path ='/company/:stocksSymbol' component = {Details} />
     <Route exact path ='/impressum/' component = {Impressum} />
+    <Route exact path ='/chose/' component = {Chose} />
   </div>
 );
 

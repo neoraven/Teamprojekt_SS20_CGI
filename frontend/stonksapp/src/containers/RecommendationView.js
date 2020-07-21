@@ -1,5 +1,7 @@
 import React from 'react'
 import Recommendation from '../components/Recommendations'
+import { Button } from 'antd';
+import { Link } from 'react-router-dom';
 
 class RecommendationView extends React.Component {
     render() {
@@ -19,8 +21,13 @@ class RecommendationView extends React.Component {
                         <Recommendation />
                         <p>I prefer a diversified portfolio over a concentrated one.</p>
                     </div>
-                    <Recommendation />
+                    <div>
+                        <p>Diversification slider</p>
+                        <Recommendation />
+                        <p>I prefer a diversified portfolio over a concentrated one.</p>
+                    </div>
                 </div>
+            <Button ><Link to='/chose'>Next</Link></Button>
             </div>
         )
     }
