@@ -13,6 +13,7 @@ const BaseRouter = (props) =>(
     <Route exact path ='/login/' component = {Login} />
     <Route exact path ='/signup/' component = {Signup} />
     <Route exact path ='/portfolio/' render = { () => (<PortfolioList isAuthenticated={props.isAuthenticated}/>)}/>
+    <Route exact path ='/recommendations/' component = {Recommendations}/>
     <Route exact path ='/company/:stocksSymbol' component = {Details} />
     <Route exact path ='/impressum/' component = {Impressum} />
   </div>
