@@ -63,6 +63,9 @@ class SecondLayout extends React.Component {
             <Menu.Item key="3" >
               <Link to='/portfolio/'>Portfolio</Link>
             </Menu.Item>
+            <Menu.Item key="4">
+              <Link to='/recommendations/'>Recommendations</Link>
+            </Menu.Item>
           </Menu>
 
         </Header>
