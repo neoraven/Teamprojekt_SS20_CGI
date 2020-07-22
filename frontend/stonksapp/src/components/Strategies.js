@@ -12,7 +12,7 @@ class Strategies extends React.Component {
         return (
             <Collapse defaultActiveKey={['1']} onChange={callback}>
                 <Panel header="Dogs of the Stocks" key="1">
-                    <p>The 'Dogs of the Stocks' Strategy is an adaptation of the well known 'Dogs of the Dow' Strategy </p>
+                    <p>The 'Dogs of the Stocks' Strategy is an adaptation of the well known 'Dogs of the Dow' Strategy. </p>
                 
                 </Panel>
                 <Panel header="This is panel header 2" key="2">
