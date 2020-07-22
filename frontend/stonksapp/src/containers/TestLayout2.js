@@ -30,33 +30,35 @@ class RespoDemo extends React.Component {
                         </a>
                     </div>
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-                        <Menu.Item key="1" icon={<UserOutlined />} >
-                       
-                                    Stocks
-                            
+                        <Menu.Item key="1" >
+                            <Link to='/'>
+                                Stocks
+                            </Link>
                         </Menu.Item>
 
                         {
 
                             this.props.isAuthenticated ?
 
-                                <Menu.Item key="2" onClick={this.props.logout} icon={<UploadOutlined />}>
+                                <Menu.Item key="2" onClick={this.props.logout}>
                                     Logout
                                 </Menu.Item>
 
                                 :
 
-                                <Menu.Item key="2" icon={<UploadOutlined />}>
+                                <Menu.Item key="2" >
                                     <Link to='/login'>Login</Link>
                                 </Menu.Item>
 
                         }
 
-                        <Menu.Item key="3" icon={<UploadOutlined />}>
-                            <Link to='/portfolio/'>Portfolio</Link>
+                        <Menu.Item key="3" >
+                            <Link to='/portfolio/'>
+                                Portfolio
+                            </Link>
                         </Menu.Item>
-                        <Menu.Item key="4" icon={<UserOutlined />}>
-                            <Link to='/recommendations/'>Recommendations</Link>
+                        <Menu.Item key="4" >
+                            <Link to='/recommendations/' >Recommendations</Link>
                         </Menu.Item>
                     </Menu>
                 </Sider>
@@ -80,9 +82,9 @@ class RespoDemo extends React.Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-      logout: () => {
-        dispatch(actions.logout())
-      }
+        logout: () => {
+            dispatch(actions.logout())
+        }
     }
 };
 
