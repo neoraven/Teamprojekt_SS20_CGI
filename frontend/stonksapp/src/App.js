@@ -4,8 +4,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { connect } from 'react-redux'
 //import './App.css';
 import 'antd/dist/antd.css';
-import SecondLayout from './containers/Layout2';
+import SecondLayout from './containers/Layout2'; //Original Layout
 import * as actions from './store/actions/auth';
+//import SiderDemo from './containers/TESTLAYOUT1'; // for testing purposes
+//import RespoDemo from './containers/TestLayout2'; // new layout
 
 
 class App extends React.Component {
