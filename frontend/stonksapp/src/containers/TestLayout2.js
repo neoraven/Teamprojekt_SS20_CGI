@@ -2,7 +2,7 @@ import { Layout, Menu, Typography } from 'antd';
 import React from 'react';
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import './TestLayout2.css';
-import logo from '../freeLogo.jpeg'
+import logo from '../stonks_logo_whateveriwant.svg'
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import * as actions from '../store/actions/auth'
@@ -23,15 +23,16 @@ class RespoDemo extends React.Component {
                     onCollapse={(collapsed, type) => {
                         console.log(collapsed, type);
                     }}
+
                 >
                     <div className="logo" >
                         <a href='/'>
-                            <img src={logo} className="t" alt="stonks" width="165" height="40" />
+                            <img src={logo} className="t" alt="stonks" width="165" />
                         </a>
                     </div>
-                    <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
+                    <Menu theme="dark" mode="inline" >
                         <Menu.Item key="1" >
-                            <Link to='/'>
+                            <Link to='/stocks/'>
                                 Stocks
                             </Link>
                         </Menu.Item>
@@ -62,7 +63,7 @@ class RespoDemo extends React.Component {
                         </Menu.Item>
                     </Menu>
                 </Sider>
-                <Layout>
+                <Layout >
                     <Content style={{ margin: '24px 16px 0' }}>
                         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
                             {this.props.children}
