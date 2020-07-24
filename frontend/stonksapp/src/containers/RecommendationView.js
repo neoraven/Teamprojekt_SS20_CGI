@@ -1,5 +1,4 @@
 import React from 'react'
-import Slider from '../components/Slider'
 import Preferences from '../components/Preferences';
 import { Steps, Button, message } from 'antd';
 import { Link } from 'react-router-dom';
