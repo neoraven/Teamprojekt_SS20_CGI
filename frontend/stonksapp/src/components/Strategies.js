@@ -46,14 +46,14 @@ class Strategies extends React.Component {
 
 
                     </Panel>
-                    <Panel header="This is panel header 2" key="2"
+                    <Panel header="Exponential moving averages" key="2"
                         extra={
                             <Checkbox onChange={onChange}>Use this!</Checkbox>
                         }
                     >
                         <p>can i has cheezburger?</p>
                     </Panel>
-                    <Panel header="This is panel header 3" key="3" extra={
+                    <Panel header="Markowitz Diversification" key="3" extra={
                         <Checkbox onChange={onChange}>Use this!</Checkbox>
                     }
                     >

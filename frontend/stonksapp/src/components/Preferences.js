@@ -1,7 +1,8 @@
 import React from 'react'
-import Slider from './Slider';
+import Slider from './CustomSlider';
 import { Button, Layout } from 'antd';
 import './Preferences.css';
+
 
 
 const { Header, Content, Footer, Sider } = Layout;

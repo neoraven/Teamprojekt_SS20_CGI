@@ -1,11 +1,11 @@
 import React from 'react'
 import { Slider } from 'antd';
 import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
-import './Slider.css';
+import './CustomSlider.css';
 
 
 
-class Recommendation extends React.Component {
+class CustomSlider extends React.Component {
 
     state = {
         value: 0,
@@ -33,4 +33,4 @@ class Recommendation extends React.Component {
 
 
 
-export default Slider
+export default CustomSlider
