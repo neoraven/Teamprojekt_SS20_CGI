@@ -18,11 +18,19 @@ function onChange(e) {
 class Strategies extends React.Component {
     render() {
         return (
+
             <div className="content">
+                <div className='description'>
+                    <p>
+                        Here you can select a strategy on which we will use to recommend stocks to you.
+                        We will apply your preferences to this strategy and after a quick historical backtest the stocks with the highest potential will be recommended to you.
+                        If you are unsure what which one you should select, we have recommended one for you.
+                    </p>
+                </div>
                 <Collapse defaultActiveKey={['1']} onChange={callback} style={{ textAlign: "justify" }}>
                     <Panel header="Dogs of the Stocks" key="1"
                         extra={
-                            <Checkbox onChange={onChange}>Use this! (recommended)</Checkbox>
+                            <Checkbox onChange={onChange} defaultChecked="true">Use this! (recommended)</Checkbox>
                         }
                     >
                         <p>
