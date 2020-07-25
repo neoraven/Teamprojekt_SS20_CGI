@@ -1,5 +1,5 @@
 import React from 'react'
-import { Collapse } from 'antd';
+import { Collapse, Checkbox } from 'antd';
 import './Strategies.css';
 
 
@@ -11,12 +11,20 @@ const { Panel } = Collapse;
 function callback(key) {
     console.log(key);
 }
+
+function onChange(e) {
+    console.log(`checked = ${e.target.checked}`);
+}
 class Strategies extends React.Component {
     render() {
         return (
             <div className="content">
                 <Collapse defaultActiveKey={['1']} onChange={callback} style={{ textAlign: "justify" }}>
-                    <Panel header="Dogs of the Stocks" key="1">
+                    <Panel header="Dogs of the Stocks" key="1"
+                        extra={
+                            <Checkbox onChange={onChange}>Use this! (recommended)</Checkbox>
+                        }
+                    >
                         <p>
                             The 'Dogs of the Stocks' Strategy is an adaptation of the well known 'Dogs of the Dow' Strategy.
                             Under this model, an investor annually reinvesting in high-yield companies has the potential to out-perform the overall market.
@@ -30,10 +38,17 @@ class Strategies extends React.Component {
 
 
                     </Panel>
-                    <Panel header="This is panel header 2" key="2">
+                    <Panel header="This is panel header 2" key="2"
+                        extra={
+                            <Checkbox onChange={onChange}>Use this!</Checkbox>
+                        }
+                    >
                         <p>can i has cheezburger?</p>
                     </Panel>
-                    <Panel header="This is panel header 3" key="3" disabled>
+                    <Panel header="This is panel header 3" key="3" extra={
+                        <Checkbox onChange={onChange}>Use this!</Checkbox>
+                    }
+                    >
                         <p></p>
                     </Panel>
                 </Collapse>
