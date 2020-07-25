@@ -23,7 +23,7 @@ class RespoDemo extends React.Component {
                     onCollapse={(collapsed, type) => {
                         console.log(collapsed, type);
                     }}
-
+                    
                 >
                     <div className="logo" >
                         <a href='/'>
