@@ -1,8 +1,10 @@
 import React from 'react';
 import { List, Avatar, Input, Typography } from 'antd';
 import Price from './Price';
+import api from '../utils/api';
 
-const {Text} = Typography;
+const { Text } = Typography;
+let once = 0;
 
 class Stocks extends React.Component {
   constructor(props) {
@@ -14,6 +16,9 @@ class Stocks extends React.Component {
     displayname: '',
     latestPrice: [],
     lastDailyPrice: [],
+    symbollist: [],
+    batchprices: [],
+    mostrecentbatchprices: [],
 
   }
 
@@ -37,6 +42,49 @@ class Stocks extends React.Component {
         return displayname.toLowerCase().match(searchString);
       })
     }
+
+    for (let stock of stocks) {
+      console.log(stock.symbol)
+      this.state.symbollist.push(stock.symbol)
+    }
+    
+
+    if (once < 2) {
+      api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true&interval=1d`)
+        .then(res => {
+          this.setState({
+            batchprices: res.data
+          })
+        })
+      api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true`)
+        .then(res => {
+          this.setState({
+            mostrecentbatchprices: res.data
+          })
+        })
+      once++;
+    }
+
+    for (let batchprice of this.state.batchprices) {
+      for (let stock of stocks) {
+      if (batchprice.symbol == stock.symbol) {
+        stock.latestDailyPrice = batchprice.p_close
+        stock.lastUpdated = batchprice.date
+      }
+      }
+    }
+    for (let mostrecentbatchprice of this.state.mostrecentbatchprices) {
+      for (let stock of stocks) {
+      if (mostrecentbatchprice.symbol == stock.symbol) {
+        stock.most_recent = mostrecentbatchprice.p_close
+      }
+      }
+    }
+
+    console.log("-------------------------------------------------------------")
+    console.log("Render Called")
+    console.log(stocks)
+    console.log("-------------------------------------------------------------")
 
     return (
       <div>
@@ -64,7 +112,8 @@ class Stocks extends React.Component {
           renderItem={item => (
             <List.Item
               key={item.symbol}
-              extra={<Price symbol={item.symbol} />}
+              extra={<Price symbol={item.symbol} latestDailyPrice={item.latestDailyPrice}
+               most_recent={item.most_recent} date={item.lastUpdated} />}
             >
               <List.Item.Meta
                 avatar={<Avatar src={item.meta_data.image_url} />}
