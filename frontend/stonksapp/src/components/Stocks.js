@@ -46,49 +46,45 @@ class Stocks extends React.Component {
     for (let stock of stocks) {
       console.log(stock.symbol)
       this.state.symbollist.push(stock.symbol)
-
-      if(this.state.symbollist.length % 10 == 0){
-        if (once < 2) {
-          api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true&interval=1d`)
-            .then(res => {
-              this.setState({
-                batchprices: res.data
-              })
-            })
-          api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true`)
-            .then(res => {
-              this.setState({
-                mostrecentbatchprices: res.data
-              })
-            })
-          once++;
-        }
-    
-        for (let batchprice of this.state.batchprices) {
-          for (let stock of stocks) {
-          if (batchprice.symbol == stock.symbol) {
-            stock.latestDailyPrice = batchprice.p_close
-            stock.lastUpdated = batchprice.date
-          }
-          }
-        }
-        for (let mostrecentbatchprice of this.state.mostrecentbatchprices) {
-          for (let stock of stocks) {
-          if (mostrecentbatchprice.symbol == stock.symbol) {
-            stock.most_recent = mostrecentbatchprice.p_close
-          }
-          }
-        }
-    
-        console.log("-------------------------------------------------------------")
-        console.log("Render Called")
-        console.log(stocks)
-        console.log("-------------------------------------------------------------")
-      }
     }
     
 
+    if (once < 2) {
+      api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true&interval=1d`)
+        .then(res => {
+          this.setState({
+            batchprices: res.data
+          })
+        })
+      api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true`)
+        .then(res => {
+          this.setState({
+            mostrecentbatchprices: res.data
+          })
+        })
+      once++;
+    }
 
+    for (let batchprice of this.state.batchprices) {
+      for (let stock of stocks) {
+      if (batchprice.symbol == stock.symbol) {
+        stock.latestDailyPrice = batchprice.p_close
+        stock.lastUpdated = batchprice.date
+      }
+      }
+    }
+    for (let mostrecentbatchprice of this.state.mostrecentbatchprices) {
+      for (let stock of stocks) {
+      if (mostrecentbatchprice.symbol == stock.symbol) {
+        stock.most_recent = mostrecentbatchprice.p_close
+      }
+      }
+    }
+
+    console.log("-------------------------------------------------------------")
+    console.log("Render Called")
+    console.log(stocks)
+    console.log("-------------------------------------------------------------")
 //*************End: Hacky implementation of Batch endpoint****************/
     return (
       <div>
