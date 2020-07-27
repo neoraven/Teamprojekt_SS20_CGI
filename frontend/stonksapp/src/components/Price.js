@@ -12,7 +12,7 @@ class Price extends React.Component {
 
     componentDidMount() {
         console.log(this.props)
-        this.setState.most_recent = this.props.most_recent
+        this.setState.most_recent = this.props.most_recent //prices are now coming from the batch endpoint in stocks.js
         this.setState.latestDailyPrice = this.props.latestDailyPrice
        /* api.get(`/api/stocks/${this.props.symbol}/prices/most-recent/`) //prices are now coming from the batch endpoint in stocks.js
             .then(res => {
@@ -27,7 +27,7 @@ class Price extends React.Component {
                 })
             })*/
     }
-
+//**To revert implementation of batchprices endpoint use the api calls in this file and swap datat from props to state */
     render() {
         if (this.state.latestDailyPrice == undefined || this.state.most_recent == undefined){
             return <p>No prices found</p>

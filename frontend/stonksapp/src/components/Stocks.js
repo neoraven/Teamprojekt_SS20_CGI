@@ -42,7 +42,7 @@ class Stocks extends React.Component {
         return displayname.toLowerCase().match(searchString);
       })
     }
-
+//*************Begin: Hacky implementation of Batch endpoint****************/
     for (let stock of stocks) {
       console.log(stock.symbol)
       this.state.symbollist.push(stock.symbol)
@@ -85,7 +85,7 @@ class Stocks extends React.Component {
     console.log("Render Called")
     console.log(stocks)
     console.log("-------------------------------------------------------------")
-
+//*************End: Hacky implementation of Batch endpoint****************/
     return (
       <div>
         <Input
