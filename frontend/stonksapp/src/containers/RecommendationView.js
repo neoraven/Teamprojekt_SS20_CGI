@@ -80,7 +80,7 @@ class RecommendationView extends React.Component {
 
                         :
 
-                        <p>Please <Link to='/login'>Login</Link> to gain access to Your recomendations.</p>
+                        <p>Please <Link to='/login'>Login</Link> to gain access to your recomendations.</p>
                 }
 
 
