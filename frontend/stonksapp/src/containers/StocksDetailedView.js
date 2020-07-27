@@ -102,8 +102,6 @@ class StocksDetail extends React.Component {
 
 
     render() {
-        //<a href={`https://www.sec.gov/cgi-bin/browse-edgar?CIK=${this.state.stock.symbol}&action=getcompany`}> SEC files </a>
-        //this.state.realtime.p_close -- add into price later, removed while debugging
         return (
             <div>
                 <h1>{this.state.stock.company_name}</h1>

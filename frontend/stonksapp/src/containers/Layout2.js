@@ -9,15 +9,6 @@ import './layout.css';
 const { Header, Content, Footer } = Layout;
 const { Text } = Typography;
 
-/*
-<Menu.Item key="0" disabled="true">
-              <img src={logo} alt="stonks" width="200" height="57" />
-            </Menu.Item>
-
-*/
-
-
-
 class SecondLayout extends React.Component {
   render() {
     return (
@@ -62,6 +53,9 @@ class SecondLayout extends React.Component {
             }
             <Menu.Item key="3" >
               <Link to='/portfolio/'>Portfolio</Link>
+            </Menu.Item>
+            <Menu.Item key="4">
+              <Link to='/recommendations/'>Recommendations</Link>
             </Menu.Item>
           </Menu>
 

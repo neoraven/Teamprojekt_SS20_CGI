@@ -6,13 +6,17 @@ import Signup from './containers/Signup';
 import Details from './containers/StocksDetailedView';
 import PortfolioList from './containers/PortfolioListView';
 import Impressum from './containers/Impressum';
+import RecommendationView from './containers/RecommendationView';
+import Landingpage from './containers/Landinpage';
 
 const BaseRouter = (props) =>(
   <div>
-    <Route exact path ='/' render = { () => (<StocksList isAuthenticated={props.isAuthenticated}/>)} />
+    <Route exact path ='/' component = {Landingpage} />
+    <Route exact path ='/stocks/' render = { () => (<StocksList isAuthenticated={props.isAuthenticated}/>)} />
     <Route exact path ='/login/' component = {Login} />
     <Route exact path ='/signup/' component = {Signup} />
     <Route exact path ='/portfolio/' render = { () => (<PortfolioList isAuthenticated={props.isAuthenticated}/>)}/>
+    <Route exact path ='/recommendations/' render = { () => (<RecommendationView isAuthenticated={props.isAuthenticated}/>)}/>
     <Route exact path ='/company/:stocksSymbol' component = {Details} />
     <Route exact path ='/impressum/' component = {Impressum} />
   </div>
