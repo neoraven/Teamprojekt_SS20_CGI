@@ -12,7 +12,9 @@ class Price extends React.Component {
 
     componentDidMount() {
         console.log(this.props)
-        api.get(`/api/stocks/${this.props.symbol}/prices/most-recent/`)
+        this.setState.most_recent = this.props.most_recent //prices are now coming from the batch endpoint in stocks.js
+        this.setState.latestDailyPrice = this.props.latestDailyPrice
+       /* api.get(`/api/stocks/${this.props.symbol}/prices/most-recent/`) //prices are now coming from the batch endpoint in stocks.js
             .then(res => {
                 this.setState({
                     most_recent: res.data[0]
@@ -23,26 +25,27 @@ class Price extends React.Component {
                 this.setState({
                     latestDailyPrice: res.data[0]
                 })
-            })
+            })*/
     }
-
+//**To revert implementation of batchprices endpoint use the api calls in this file and swap datat from props to state */
     render() {
         if (this.state.latestDailyPrice == undefined || this.state.most_recent == undefined){
             return <p>No prices found</p>
         }
             
-        let change = this.state.most_recent.p_close / this.state.latestDailyPrice.p_close;
-        console.log(this.state.latestDailyPrice.p_close)
+        //let change = this.state.most_recent.p_close / this.state.latestDailyPrice.p_close; //this is the old one that was used with the api calls
+        let change = this.props.most_recent / this.props.latestDailyPrice;
+        //console.log(this.state.latestDailyPrice)
         if (change < 1) {
             change = (1 - change) * 100;
             return (
                 <div className="site-statistic-demo-card" >
-                    <Popover content={this.state.latestDailyPrice.date} title="Date of last close">
+                    <Popover content={this.props.date} title="Date of last close">
                         <Row gutter={25}>
                             <Col span={12}>
                                 <Statistic
                                     title="Price"
-                                    value={this.state.most_recent.p_close}
+                                    value={this.props.most_recent}
                                     precision={2}
                                     valueStyle={{ color: '#cf1322', fontSize: '17px' }}
                                     prefix={<ArrowDownOutlined />}
@@ -69,12 +72,12 @@ class Price extends React.Component {
             change = (change - 1) * 100;
             return (
                 <div className="site-statistic-demo-card" >
-                    <Popover content={this.state.latestDailyPrice.date} title="Date of last close">
+                    <Popover content={this.props.date} title="Date of last close">
                         <Row gutter={25}>
                             <Col span={12}>
                                 <Statistic
                                     title="Price"
-                                    value={this.state.most_recent.p_close}
+                                    value={this.props.most_recent}
                                     precision={2}
                                     valueStyle={{ color: '#3f8600', fontSize: '17px' }}
                                     prefix={<ArrowUpOutlined />}
