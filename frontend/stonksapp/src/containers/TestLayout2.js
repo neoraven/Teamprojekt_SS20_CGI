@@ -1,4 +1,4 @@
-import { Layout, Menu, Typography } from 'antd';
+import { Layout, Menu, Typography, Button } from 'antd';
 import React from 'react';
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import './TestLayout2.css';
@@ -23,7 +23,7 @@ class RespoDemo extends React.Component {
                     onCollapse={(collapsed, type) => {
                         console.log(collapsed, type);
                     }}
-                    
+
                 >
                     <div className="logo" >
                         <a href='/'>
@@ -31,27 +31,35 @@ class RespoDemo extends React.Component {
                         </a>
                     </div>
                     <Menu theme="dark" mode="inline" >
-                        <Menu.Item key="1" >
-                            <Link to='/stocks/'>
-                                Stocks
-                            </Link>
-                        </Menu.Item>
 
                         {
 
                             this.props.isAuthenticated ?
 
-                                <Menu.Item key="2" onClick={this.props.logout}>
-                                    Logout
+                                <Menu.Item key="1" onClick={this.props.logout}>
+                                    <Button type="primary" danger>
+                                        Logout
+                                     </Button>
                                 </Menu.Item>
 
                                 :
 
-                                <Menu.Item key="2" >
-                                    <Link to='/login'>Login</Link>
+                                <Menu.Item key="1" >
+                                    <Button type="primary"><Link to='/login'>Login</Link></Button>
                                 </Menu.Item>
 
                         }
+
+
+
+
+                        <Menu.Item key="2" >
+                            <Link to='/stocks/'>
+                                Stocks
+                            </Link>
+                        </Menu.Item>
+
+
 
                         <Menu.Item key="3" >
                             <Link to='/portfolio/'>
