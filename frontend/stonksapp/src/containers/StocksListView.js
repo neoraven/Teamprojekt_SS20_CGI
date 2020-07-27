@@ -2,6 +2,19 @@ import React from 'react';
 import Stocks from '../components/Stocks';
 import api from '../utils/api';
 import { Link } from 'react-router-dom';
+import { BackTop } from 'antd';
+
+
+const style = {
+  height: 40,
+  width: 40,
+  lineHeight: '40px',
+  borderRadius: 4,
+  backgroundColor: '#1088e9',
+  color: '#fff',
+  textAlign: 'center',
+  fontSize: 14,
+};
 
 class StocksList extends React.Component {
   state = {
@@ -20,7 +33,7 @@ class StocksList extends React.Component {
       localStorage.setItem('logged', 2)
       window.location.reload();
       return
-    } else { 
+    } else {
       return
     }
   }
@@ -29,19 +42,24 @@ class StocksList extends React.Component {
     return (
       <div>
         {this.props.isAuthenticated && localStorage.getItem('logged') == null ?
-        localStorage.setItem('logged',1)
-        :
+          localStorage.setItem('logged', 1)
+          :
           <p></p>
         }
         {localStorage.getItem('logged') == 1 ?
-        this.log(true)
-        :
+          this.log(true)
+          :
           <p></p>
         }
 
 
         {this.props.isAuthenticated ?
+        <div>
           <Stocks data={this.state.stocks} />
+          <BackTop>
+            <div style={style}>UP</div>
+          </BackTop>
+        </div>
           :
           <p>Please <Link to='/login'>Login</Link> to see the list of stocks.</p>
         }

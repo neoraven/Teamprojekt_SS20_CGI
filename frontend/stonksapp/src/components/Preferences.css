@@ -1,0 +1,15 @@
+.slider-content{
+    border-bottom: 1.5px solid #dbdbdbab;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+.h1{
+    margin-bottom: 25px;
+}
+.description{
+    text-justify: auto;
+    text-align: justify;
+    border: 2px solid #dbdbdbab;;
+    margin-bottom: 10px;
+    padding: 8px;
+}

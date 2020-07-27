@@ -1,0 +1,11 @@
+.content{
+    margin-bottom: 20px;
+}
+
+.description{
+    text-justify: auto;
+    text-align: justify;
+    border: 2px solid #dbdbdbab;;
+    margin-bottom: 10px;
+    padding: 8px;
+}
