@@ -51,11 +51,13 @@ class Price(models.Model):
     p_close = models.DecimalField(max_digits=8, decimal_places=3)
     p_adjusted_close = models.DecimalField(max_digits=8, decimal_places=3)
     volume = models.BigIntegerField(null=True, blank=True)
-    # TODO(jonas): add ["7. dividend amount", "8. split coefficient"]
+    # Fields from the Alphavantage DAILY ADJUSTED endpoint
+    dividend_amount = models.DecimalField(max_digits=8, decimal_places=3, default=0.0)
+    split_coefficient = models.DecimalField(max_digits=8, decimal_places=3, default=1.0)
 
     def __str__(self):
         return (
             f"{self.symbol}@{str(self.date)}: "
             f"[{self.p_open} | {self.p_high} | {self.p_low} | {self.p_close}]"
-            f" -- Volume = {self.volume:,}"
+            f" -- Volume = {self.volume:,} ({self.interval})"
         )

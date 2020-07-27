@@ -14,7 +14,7 @@ _AV_OUTPUT_FORMAT = "pandas"
 _AV_OUTPUT_SIZE = "compact"
 _AV_TIME_PER_CALL = 60 / 5  # 5 calls per minute
 
-_DEFAULT_RETRY_WAIT_DURATION = 5.
+_DEFAULT_RETRY_WAIT_DURATION = 5.0
 
 SP_500_STOCKLIST_URL = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
 
@@ -76,15 +76,22 @@ def pull_write_prices_for_symbol(ts: TimeSeries, symbol: str, interval: str = "1
     price_data = None
     while price_data is None:
         try:
-            price_data, _ = ts.get_daily_adjusted(symbol=symbol, outputsize=_AV_OUTPUT_SIZE)
+            price_data, _ = ts.get_daily_adjusted(
+                symbol=symbol, outputsize=_AV_OUTPUT_SIZE
+            )
         except ValueError:
-            print(f"Encountered error requesting data from API at symbol {symbol}. Retrying in {_DEFAULT_RETRY_WAIT_DURATION}s...")
+            print(
+                f"Encountered error requesting data from API at symbol {symbol}."
+                f"Retrying in {_DEFAULT_RETRY_WAIT_DURATION}s..."
+            )
             time.sleep(_DEFAULT_RETRY_WAIT_DURATION)
     for idx, price in enumerate(price_data.itertuples()):
         django_price, price_created = Price.objects.get_or_create(
             symbol=Stock.objects.get(symbol=symbol),
             interval=interval,
             date=price.Index.date(),
+            dividend_amount=price._7,
+            split_coefficient=price._8,
             defaults={
                 "p_low": price._3,
                 "p_open": price._1,
