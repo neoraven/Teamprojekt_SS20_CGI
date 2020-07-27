@@ -12,12 +12,16 @@ class RealtimePrice extends React.Component {
 //https://stackoverflow.com/questions/40877053/use-if-else-to-declare-a-let-or-const-to-use-after-the-if-else
 // try implementing this solution to make this way less redundant code
     render() {
-        let change = this.props.price / this.props.lastprice.p_close;
+        let lprice = this.props.lastprice
+        let change = this.props.price / lprice;
+        console.log(change)
+        console.log(this.props.price)
+        console.log(lprice)
         if (change < 1) {
             change = (1 - change) * 100;
             return (
                 <div className="price-card" >
-                    <Popover content={this.props.lastprice.date} title="Date of last close">
+                    <Popover content="a" title="Date of last close">
                         <Row gutter={25} >
                             <Col span={12}>
                                 <Statistic
@@ -49,7 +53,7 @@ class RealtimePrice extends React.Component {
             change = (change - 1) * 100;
             return (
                 <div className="price-card" >
-                    <Popover content={this.props.lastprice.date} title="Date of last close">
+                    <Popover content="a" title="Date of last close">
                         <Row gutter={25}>
                             <Col span={12}>
                                 <Statistic
