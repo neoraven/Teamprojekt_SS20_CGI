@@ -11,7 +11,7 @@ from .models import Price, Stock
 _AV_API_KEY = "6CYJ430CSUYT2B19"
 _AV_API_KEY_LIST = ["1077F37TLBGNSVY2", "H73WEF95O0IAME5U", "6CYJ430CSUYT2B19"]
 _AV_OUTPUT_FORMAT = "pandas"
-_AV_OUTPUT_SIZE = "compact"
+_AV_OUTPUT_SIZE = "full"
 _AV_TIME_PER_CALL = 60 / 5  # 5 calls per minute
 
 _DEFAULT_RETRY_WAIT_DURATION = 5.0
@@ -86,12 +86,10 @@ def pull_write_prices_for_symbol(ts: TimeSeries, symbol: str, interval: str = "1
             )
             time.sleep(_DEFAULT_RETRY_WAIT_DURATION)
     for idx, price in enumerate(price_data.itertuples()):
-        django_price, price_created = Price.objects.get_or_create(
+        django_price, price_created = Price.objects.update_or_create(
             symbol=Stock.objects.get(symbol=symbol),
             interval=interval,
             date=price.Index.date(),
-            dividend_amount=price._7,
-            split_coefficient=price._8,
             defaults={
                 "p_low": price._3,
                 "p_open": price._1,
@@ -99,6 +97,8 @@ def pull_write_prices_for_symbol(ts: TimeSeries, symbol: str, interval: str = "1
                 "p_close": price._4,
                 "p_adjusted_close": price._5,
                 "volume": price._6,
+                "dividend_amount": price._7,
+                "split_coefficient": price._8,
             },
         )
         if not price_created:
