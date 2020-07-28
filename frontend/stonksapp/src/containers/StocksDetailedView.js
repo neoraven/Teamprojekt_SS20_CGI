@@ -44,7 +44,7 @@ class StocksDetail extends React.Component {
     state = {
         stock: {},
         realtime: {},
-        most_recent: [],
+        most_recent: {},
         key: 'tab2',
         prices: [],
         chart_prices : [],
@@ -105,7 +105,8 @@ class StocksDetail extends React.Component {
         return (
             <div>
                 <h1>{this.state.stock.company_name}</h1>
-                <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<RealtimePrice price = {this.state.realtime.p_close} lastprice= {this.state.most_recent}/>}>
+                <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<RealtimePrice price = {this.state.realtime.p_close} 
+                lastprice= {this.state.most_recent.p_close} date={this.state.most_recent.date}/>}>
                     <TabPane tab="Overview" key="1">
                         {DescTable(this.state.stock.description, this.state.stock.industry,
                             this.state.stock.sector, this.state.stock.ceo,
