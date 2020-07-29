@@ -15,7 +15,6 @@ class Preferences extends React.Component {
     render() {
         return (
             <div>
-t
                 <center> <h1 className='h1'>Welcome to our Simulation-Based Recommendation System</h1></center>
                 <div className='description'>
                     <p>Our algorithm provides you with stock recommendations based on your preferences and an investing strategy of your choices.</p>
