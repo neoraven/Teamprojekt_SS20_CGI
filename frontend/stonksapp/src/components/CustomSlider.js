@@ -13,6 +13,7 @@ class CustomSlider extends React.Component {
 
     handleChange = value => {
         this.setState({ value });
+        this.props.onUserAction(value)
     };
 
     render() {
