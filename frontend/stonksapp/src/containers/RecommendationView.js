@@ -7,38 +7,54 @@ import Recommendations from '../components/Recommendations';
 import './RecommendationView.css';
 
 const { Step } = Steps;
-const steps = [
-    {
-        title: 'Preferences',
-        content: <Preferences></Preferences>,
-    },
-    {
-        title: 'Strategies',
-        content: <Strategies></Strategies>,
-    },
-    {
-        title: 'Recommendations',
-        content: <Recommendations></Recommendations>,
-    },
-];
+
 
 
 class RecommendationView extends React.Component {
     constructor(props) {
         super(props);
+        this.testRef = React.createRef();
         this.state = {
             current: 0,
+            risk: 0,
+            diversification: 0,
+            slider3: 0,
+
         };
     }
 
+    steps = [ //content here is not being used anymore. It has been integrated diretctly in the render function below
+        {
+            title: 'Preferences',
+            content: <Preferences />,
+        },
+        {
+            title: 'Strategies',
+            content: <Strategies></Strategies>,
+        },
+        {
+            title: 'Recommendations',
+            content: <Recommendations></Recommendations>,
+        },
+    ];
+
     next() {
         const current = this.state.current + 1;
+        console.log(this.testRef.current)
+        this.setState({
+            risk: this.testRef.current.state.risk,
+            diversification: this.testRef.current.state.diversification,
+            slider3: this.testRef.current.state.slider3,
+        })
         this.setState({ current });
     }
 
     prev() {
         const current = this.state.current - 1;
         this.setState({ current });
+    }
+    oc(){
+        console.log(this.testRef)
     }
 
     render() {
@@ -53,19 +69,31 @@ class RecommendationView extends React.Component {
                         <div>
                             <div className="steps">
                                 <Steps current={current}>
-                                    {steps.map(item => (
+                                    {this.steps.map(item => (
                                         <Step key={item.title} title={item.title} />
                                     ))}
                                 </Steps>
                             </div>
-                            <div className="steps-content">{steps[current].content}</div>
+                            <div className="steps-content">
+                                { current === 0 &&(
+                                <Preferences ref={this.testRef}/>
+                                )}
+                                { current === 1 &&(
+                                <Strategies ref={this.testRef}/>
+                                )}
+                                { current === 2 &&(
+                                <Recommendations ref={this.testRef}/>
+                                )}
+                                
+                                
+                                </div>
                             <div className="steps-action">
-                                {current < steps.length - 1 && (
+                                {current < this.steps.length - 1 && (
                                     <Button type="primary" onClick={() => this.next()}>
                                         Next
                                     </Button>
                                 )}
-                                {current === steps.length - 1 && (
+                                {current === this.steps.length - 1 && (
                                     <Button type="primary" onClick={() => message.success('Processing complete!')}>
                                         Done
                                     </Button>
@@ -76,6 +104,7 @@ class RecommendationView extends React.Component {
                                     </Button>
                                 )}
                             </div>
+                            
                         </div>
 
                         :
