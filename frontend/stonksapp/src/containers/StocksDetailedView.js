@@ -47,7 +47,7 @@ class StocksDetail extends React.Component {
         most_recent: {},
         key: 'tab2',
         prices: [],
-        chart_prices : [],
+        chart_prices: [],
     }
 
 
@@ -73,20 +73,20 @@ class StocksDetail extends React.Component {
                 })
                 console.log(this.state.prices)
                 this.state.prices.map(price => {
-                    price in this.state.chart_prices ?  
-                        void(0)
-                    :
+                    price in this.state.chart_prices ?
+                        void (0)
+                        :
                         this.state.chart_prices.push({
-                            date : new Date(price.date),
-                            open : price.p_open,
-                            low : price.p_low,
-                            high : price.p_high,
-                            close : price.p_close,
-                            volume : price.volume
+                            date: new Date(price.date),
+                            open: price.p_open,
+                            low: price.p_low,
+                            high: price.p_high,
+                            close: price.p_close,
+                            volume: price.volume
                         })
                 })
                 this.setState({
-                    chart : <Chart data={this.state.chart_prices}/>
+                    chart: <Chart data={this.state.chart_prices} />
                 })
                 console.log(this.state.chart_prices)
             })
@@ -105,8 +105,13 @@ class StocksDetail extends React.Component {
         return (
             <div>
                 <h1>{this.state.stock.company_name}</h1>
-                <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<RealtimePrice price = {this.state.realtime.p_close} 
-                lastprice= {this.state.most_recent.p_close} date={this.state.most_recent.date}/>}>
+                <Tabs defaultActiveKey="1" onChange={callback}
+                    tabBarExtraContent={<div style={{marginLeft:0}}>
+                        <RealtimePrice
+                            price={this.state.realtime.p_close}
+                            lastprice={this.state.most_recent.p_close}
+                            date={this.state.most_recent.date}
+                        /> </div>}>
                     <TabPane tab="Overview" key="1">
                         {DescTable(this.state.stock.description, this.state.stock.industry,
                             this.state.stock.sector, this.state.stock.ceo,

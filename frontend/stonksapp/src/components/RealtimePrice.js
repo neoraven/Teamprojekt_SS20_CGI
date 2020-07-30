@@ -28,7 +28,7 @@ class RealtimePrice extends React.Component {
                                     title="Price"
                                     value={this.props.price}
                                     precision={2}
-                                    valueStyle={{ color: '#cf1322', fontSize: '17px' }}
+                                    valueStyle={{ color: '#cf1322', fontSize: '16px' }}
                                     prefix={<ArrowDownOutlined />}
                                     suffix="$"
                                     style={{ width: '120%', height: '10%', marginLeft: '-15%'}}
@@ -39,7 +39,7 @@ class RealtimePrice extends React.Component {
                                     title="Change %"
                                     value={-change}
                                     precision={2}
-                                    valueStyle={{ color: '#cf1322', fontSize: '17px' }}
+                                    valueStyle={{ color: '#cf1322', fontSize: '16px' }}
                                     prefix={<ArrowDownOutlined />}
                                     suffix="%"
                                     style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
@@ -60,7 +60,7 @@ class RealtimePrice extends React.Component {
                                     title="Price"
                                     value={this.props.price}
                                     precision={2}
-                                    valueStyle={{ color: '#3f8600', fontSize: '17px' }}
+                                    valueStyle={{ color: '#3f8600', fontSize: '16px' }}
                                     prefix={<ArrowUpOutlined />}
                                     suffix="$"
                                     style={{ width: '120%', height: '10%',  marginLeft: '-15%' }}
@@ -71,7 +71,7 @@ class RealtimePrice extends React.Component {
                                     title="Change %"
                                     value={change}
                                     precision={2}
-                                    valueStyle={{ color: '#3f8600', fontSize: '17px' }}
+                                    valueStyle={{ color: '#3f8600', fontSize: '16px' }}
                                     prefix={<ArrowUpOutlined />}
                                     suffix="%"
                                     style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
