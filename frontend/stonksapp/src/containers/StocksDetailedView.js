@@ -63,7 +63,7 @@ class StocksDetail extends React.Component {
         api.get(`/api/stocks/${symbol}/prices/most-recent/?interval=1d`)
             .then(res => {
                 this.setState({
-                    most_recent: res.data
+                    most_recent: res.data[0]
                 })
             })
         api.get(`/api/stocks/${symbol}/prices/all/`)

@@ -21,7 +21,7 @@ class RealtimePrice extends React.Component {
             change = (1 - change) * 100;
             return (
                 <div className="price-card" >
-                    <Popover content="a" title="Date of last close">
+                    <Popover content={this.props.date} title="Date of last close">
                         <Row gutter={25} >
                             <Col span={12}>
                                 <Statistic
@@ -53,7 +53,7 @@ class RealtimePrice extends React.Component {
             change = (change - 1) * 100;
             return (
                 <div className="price-card" >
-                    <Popover content="a" title="Date of last close">
+                    <Popover content={this.props.date} title="Date of last close">
                         <Row gutter={25}>
                             <Col span={12}>
                                 <Statistic
