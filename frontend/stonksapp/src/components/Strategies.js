@@ -12,10 +12,43 @@ function callback(key) {
     console.log(key);
 }
 
-function onChange(e) {
-    console.log(`checked = ${e.target.checked}`);
-}
+
 class Strategies extends React.Component {
+    state={
+        checkbox1: true,
+        checkbox2: false,
+        checkbox3: false,
+    }
+
+    onChange = (e) => {
+        if(e===undefined){
+            return
+        }
+        console.log(typeof e.target.id)
+        switch (e.target.id) {
+            case 1:
+                this.setState({
+                    checkbox1 : e.target.checked
+                })
+                break;
+            case 2:
+                this.setState({
+                    checkbox2 : e.target.checked
+                })
+                break;
+
+            case 3:
+                this.setState({
+                    checkbox3 : e.target.checked
+                })
+                break;
+
+            default:
+                console.log("default")
+                break;
+        }
+    }
+
     render() {
         return (
 
@@ -27,10 +60,10 @@ class Strategies extends React.Component {
                         If you are unsure what which one you should select, we have recommended one for you.
                     </p>
                 </div>
-                <Collapse defaultActiveKey={['1']} onChange={callback} style={{ textAlign: "justify" }}>
+                <Collapse defaultActiveKey={['1']} style={{ textAlign: "justify" }}>
                     <Panel header="Dogs of the Stocks" key="1"
                         extra={
-                            <Checkbox onChange={onChange} defaultChecked="true">Use this! (recommended)</Checkbox>
+                            <Checkbox id={1} onChange={this.onChange} defaultChecked="true">Use this! (recommended)</Checkbox>
                         }
                     >
                         <p>
@@ -48,13 +81,13 @@ class Strategies extends React.Component {
                     </Panel>
                     <Panel header="Exponential moving averages" key="2"
                         extra={
-                            <Checkbox onChange={onChange}>Use this!</Checkbox>
+                            <Checkbox id={2} onChange={this.onChange}>Use this!</Checkbox>
                         }
                     >
                         <p>can i has cheezburger?</p>
                     </Panel>
                     <Panel header="Markowitz Diversification" key="3" extra={
-                        <Checkbox onChange={onChange}>Use this!</Checkbox>
+                        <Checkbox id={3} onChange={this.onChange}>Use this!</Checkbox>
                     }
                     >
                         <p></p>

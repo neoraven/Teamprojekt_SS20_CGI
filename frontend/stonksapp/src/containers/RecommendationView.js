@@ -13,13 +13,16 @@ const { Step } = Steps;
 class RecommendationView extends React.Component {
     constructor(props) {
         super(props);
-        this.testRef = React.createRef();
+        this.preferencesRef = React.createRef();
+        this.strategiesRef = React.createRef();
         this.state = {
             current: 0,
             risk: 0,
             diversification: 0,
             slider3: 0,
-
+            strategy1: false,
+            strategy2: false,
+            strategy3: false,
         };
     }
 
@@ -30,22 +33,30 @@ class RecommendationView extends React.Component {
         },
         {
             title: 'Strategies',
-            content: <Strategies></Strategies>,
+            content: <Strategies/>,
         },
         {
             title: 'Recommendations',
-            content: <Recommendations></Recommendations>,
+            content: <Recommendations/>,
         },
     ];
 
     next() {
+        if(this.state.current === 0){
+            this.setState({
+                risk: this.preferencesRef.current.state.risk,
+                diversification: this.preferencesRef.current.state.diversification,
+                slider3: this.preferencesRef.current.state.slider3,
+            })
+        }
+        if(this.state.current === 1){
+            this.setState({
+                strategy1: this.strategiesRef.current.state.checkbox1,
+                strategy2: this.strategiesRef.current.state.checkbox2,
+                strategy3: this.strategiesRef.current.state.checkbox3,
+            })
+        }
         const current = this.state.current + 1;
-        console.log(this.testRef.current)
-        this.setState({
-            risk: this.testRef.current.state.risk,
-            diversification: this.testRef.current.state.diversification,
-            slider3: this.testRef.current.state.slider3,
-        })
         this.setState({ current });
     }
 
@@ -76,13 +87,13 @@ class RecommendationView extends React.Component {
                             </div>
                             <div className="steps-content">
                                 { current === 0 &&(
-                                <Preferences ref={this.testRef}/>
+                                <Preferences ref={this.preferencesRef}/>
                                 )}
                                 { current === 1 &&(
-                                <Strategies ref={this.testRef}/>
+                                <Strategies ref={this.strategiesRef}/>
                                 )}
                                 { current === 2 &&(
-                                <Recommendations ref={this.testRef}/>
+                                <Recommendations ref={this.preferencesRef}/>
                                 )}
                                 
                                 
