@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
+import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 
 
 /*  What do i want in my portfolio?
@@ -16,11 +17,11 @@ import { Table } from 'antd';
 
 const transactionsTable = entry => {
   const columns = [
-    { title: 'Symbol', dataIndex: 'symbol', key: 'symbol' },
+    { title: 'Symbol', dataIndex: 'symbol', key: 'symbol',  responsive:["lg"] },
+    { title: 'Price', dataIndex: 'price_at', key: 'price_at' },
     { title: 'Amount', dataIndex: 'amount', key: 'amount' },
     { title: 'Action', dataIndex: 'action', key: 'action' },
-    { title: 'Price', dataIndex: 'price_at', key: 'price_at' },
-    { title: 'Date', dataIndex: 'date_posted', key: 'date_posted' },
+    { title: 'Date', dataIndex: 'date_posted', key: 'date_posted',  responsive:["lg"] },
   ];
 
   const transactions = [];
@@ -48,11 +49,11 @@ const transactionsTable = entry => {
 function Portfolio(props) {
   const fullportfolio = [];
   const columns = [
-    { title: 'Symbol', dataIndex: 'symbol', key: 'symbol' },
-    { title: 'Price', dataIndex: 'price', key: 'price' },
-    { title: 'Amount', dataIndex: 'amount', key: 'amount' },
-    { title: 'Owner', dataIndex: 'user', key: 'user' },
-    { title: 'Date of last purchase', dataIndex: 'date_posted', key: 'date_posted' },
+    { title: 'Symbol', dataIndex: 'symbol', key: 'symbol'} ,
+    { title: 'Price', dataIndex: 'price', key: 'price'},
+    { title: 'Amount', dataIndex: 'amount', key: 'amount'},
+    { title: 'Owner', dataIndex: 'user', key: 'user' ,responsive:["lg"]},
+    { title: 'Date of last purchase', dataIndex: 'date_posted', key: 'date_posted', responsive:["lg"] },
  //   { title: 'Action', key: 'operation', render: () => <a>Action!</a> },
   ];
 
