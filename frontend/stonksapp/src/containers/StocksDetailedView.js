@@ -17,15 +17,21 @@ const formatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2
 })
 
-const DescTable = (desc, industry, sector, ceo, website, sec, mcap) => {
+const DescTable = (desc, industry, sector, ceo, website, sec, mcap, screensize) => {
     mcap = formatter.format(mcap)
+    let tablesize = ""
+    if(screensize < 500){
+        tablesize ="small"
+        console.log("rerendered table")
+    }
     return (
         <div>
             <Descriptions
                 bordered
+                size={tablesize}
                 column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
             >
-                <Descriptions.Item label="Industry">{industry}</Descriptions.Item>
+                <Descriptions.Item label="Industry" >{industry}</Descriptions.Item>
                 <Descriptions.Item label="Sector">{sector}</Descriptions.Item>
                 <Descriptions.Item label="CEO">{ceo}</Descriptions.Item>
                 <Descriptions.Item label="Website"><a href={website} >{website}</a></Descriptions.Item>
@@ -41,17 +47,26 @@ const DescTable = (desc, industry, sector, ceo, website, sec, mcap) => {
 
 
 class StocksDetail extends React.Component {
-    state = {
-        stock: {},
-        realtime: {},
-        most_recent: {},
-        key: 'tab2',
-        prices: [],
-        chart_prices: [],
-    }
+    constructor(props) {
+        super(props);
+        this.state = {
+            stock: {},
+            realtime: {},
+            most_recent: {},
+            key: 'tab2',
+            prices: [],
+            chart_prices: [],
+            width: 0, 
+            height: 0,
+        }
+        this.updateWindowDimensions = this.updateWindowDimensions;
+      }
+
 
 
     componentDidMount() {
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
         const symbol = this.props.match.params.stocksSymbol
         console.log(symbol)
         api.get(`/api/stocks/${symbol}/details/`)
@@ -98,6 +113,13 @@ class StocksDetail extends React.Component {
             })
     };
 
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowDimensions);
+      }
+      
+      updateWindowDimensions= ()=> {
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
+      }
 
 
 
@@ -116,7 +138,7 @@ class StocksDetail extends React.Component {
                         {DescTable(this.state.stock.description, this.state.stock.industry,
                             this.state.stock.sector, this.state.stock.ceo,
                             this.state.stock.website_url, this.state.stock.symbol,
-                            this.state.stock.market_cap)}
+                            this.state.stock.market_cap, this.state.width)}
                     </TabPane>
                     <TabPane tab="Chart" key="2">
                         {this.state.chart}
