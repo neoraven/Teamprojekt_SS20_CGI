@@ -11,7 +11,6 @@ class Price extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
         this.setState.most_recent = this.props.most_recent //prices are now coming from the batch endpoint in stocks.js
         this.setState.latestDailyPrice = this.props.latestDailyPrice
        /* api.get(`/api/stocks/${this.props.symbol}/prices/most-recent/`) //prices are now coming from the batch endpoint in stocks.js

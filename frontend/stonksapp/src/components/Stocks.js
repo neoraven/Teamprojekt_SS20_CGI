@@ -9,21 +9,24 @@ let once = 0;
 class Stocks extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      searchString: '',
+      displayname: '',
+      latestPrice: [],
+      lastDailyPrice: [],
+      symbollist: [],
+      batchprices: [],
+      mostrecentbatchprices: [],
+  
+    }
   }
 
-  state = {
-    searchString: '',
-    displayname: '',
-    latestPrice: [],
-    lastDailyPrice: [],
-    symbollist: [],
-    batchprices: [],
-    mostrecentbatchprices: [],
 
-  }
 
   componentDidMount() {
+    console.log("-------------------------------------------------------------")
     console.log(this.props.data)
+    console.log("-------------------------------------------------------------")
     //WHY IS THIS^ F.... EMPTY
   }
 
@@ -44,7 +47,6 @@ class Stocks extends React.Component {
     }
 //*************Begin: Hacky implementation of Batch endpoint****************/
     for (let stock of stocks) {
-      console.log(stock.symbol)
       this.state.symbollist.push(stock.symbol)
     }
     
@@ -80,11 +82,6 @@ class Stocks extends React.Component {
       }
       }
     }
-
-    console.log("-------------------------------------------------------------")
-    console.log("Render Called")
-    console.log(stocks)
-    console.log("-------------------------------------------------------------")
 //*************End: Hacky implementation of Batch endpoint****************/
     return (
       <div>
