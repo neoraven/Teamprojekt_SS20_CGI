@@ -29,7 +29,7 @@ class Preferences extends React.Component {
                     <div className="slider-content">
                         <p>Do you want many stocks or just a few?</p>
                         <CustomSlider onUserAction={(diversification) => (this.setState({ diversification }))} />
-                        <p><b>Note: </b>More companys in your Portfolio means less potentially less swings in your capital but also again usally a little less gains.</p>
+                        <p><b>Note: </b>More companies in your Portfolio means less potentially less swings in your capital but also again usally a little less gains.</p>
                     </div>
                     <div className="slider-content">
                         <p>I will think about something</p>
