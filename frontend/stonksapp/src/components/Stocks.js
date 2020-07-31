@@ -17,7 +17,8 @@ class Stocks extends React.Component {
       symbollist: [],
       batchprices: [],
       mostrecentbatchprices: [],
-  
+      stocks: [],
+
     }
   }
 
@@ -27,7 +28,39 @@ class Stocks extends React.Component {
     console.log("-------------------------------------------------------------")
     console.log(this.props.data)
     console.log("-------------------------------------------------------------")
-    //WHY IS THIS^ F.... EMPTY
+    
+
+    /*var stocks = this.props.data //WORK IN PROGRESS
+
+    for (let stock of stocks) {
+      this.state.symbollist.push(stock.symbol)
+    }
+
+    let firstten = this.state.symbollist.slice(0,10)
+
+    api.get(`/api/stocks/${firstten}/prices/most-recent/?batch=true&interval=1d`)
+      .then(res => {
+        this.setState({
+          batchprices: res.data
+        })
+      })
+    api.get(`/api/stocks/${firstten}/prices/most-recent/?batch=true`)
+      .then(res => {
+        this.setState({
+          mostrecentbatchprices: res.data
+        })
+      })
+
+    for(let stock of stocks){
+      for(let batchprice of this.state.batchprices){
+        if(stock.symbol === batchprice.symbol){
+          stock.latestPrice = batchprice.p_close
+        }
+      }
+    }
+    this.setState({
+      stocks: stocks
+    })*/
   }
 
   handleChange = (e) => {
@@ -45,44 +78,44 @@ class Stocks extends React.Component {
         return displayname.toLowerCase().match(searchString);
       })
     }
-//*************Begin: Hacky implementation of Batch endpoint****************/
-    for (let stock of stocks) {
-      this.state.symbollist.push(stock.symbol)
-    }
-    
-
-    if (once < 2) {
-      api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true&interval=1d`)
-        .then(res => {
-          this.setState({
-            batchprices: res.data
-          })
-        })
-      api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true`)
-        .then(res => {
-          this.setState({
-            mostrecentbatchprices: res.data
-          })
-        })
-      once++;
-    }
-
-    for (let batchprice of this.state.batchprices) {
-      for (let stock of stocks) {
-      if (batchprice.symbol == stock.symbol) {
-        stock.latestDailyPrice = batchprice.p_close
-        stock.lastUpdated = batchprice.date
-      }
-      }
-    }
-    for (let mostrecentbatchprice of this.state.mostrecentbatchprices) {
-      for (let stock of stocks) {
-      if (mostrecentbatchprice.symbol == stock.symbol) {
-        stock.most_recent = mostrecentbatchprice.p_close
-      }
-      }
-    }
-//*************End: Hacky implementation of Batch endpoint****************/
+    //*************Begin: Hacky implementation of Batch endpoint****************/
+       for (let stock of stocks) {
+         this.state.symbollist.push(stock.symbol)
+       }
+       
+   
+       if (once < 2) {
+         api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true&interval=1d`)
+           .then(res => {
+             this.setState({
+               batchprices: res.data
+             })
+           })
+         api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true`)
+           .then(res => {
+             this.setState({
+               mostrecentbatchprices: res.data
+             })
+           })
+         once++;
+       }
+   
+       for (let batchprice of this.state.batchprices) {
+         for (let stock of stocks) {
+         if (batchprice.symbol == stock.symbol) {
+           stock.latestDailyPrice = batchprice.p_close
+           stock.lastUpdated = batchprice.date
+         }
+         }
+       }
+       for (let mostrecentbatchprice of this.state.mostrecentbatchprices) {
+         for (let stock of stocks) {
+         if (mostrecentbatchprice.symbol == stock.symbol) {
+           stock.most_recent = mostrecentbatchprice.p_close
+         }
+         }
+       }
+    //*************End: Hacky implementation of Batch endpoint****************/
     return (
       <div>
         <Input
@@ -110,7 +143,7 @@ class Stocks extends React.Component {
             <List.Item
               key={item.symbol}
               extra={<Price symbol={item.symbol} latestDailyPrice={item.latestDailyPrice}
-               most_recent={item.most_recent} date={item.lastUpdated} />}
+                most_recent={item.most_recent} date={item.lastUpdated} />}
             >
               <List.Item.Meta
                 avatar={<Avatar src={item.meta_data.image_url} />}

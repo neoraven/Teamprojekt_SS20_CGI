@@ -2,7 +2,7 @@ import React from 'react';
 import Stocks from '../components/Stocks';
 import api from '../utils/api';
 import { Link } from 'react-router-dom';
-import { BackTop } from 'antd';
+import { BackTop, Empty } from 'antd';
 
 
 const style = {
@@ -39,32 +39,42 @@ class StocksList extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        {this.props.isAuthenticated && localStorage.getItem('logged') == null ?
-          localStorage.setItem('logged', 1)
-          :
-          <p></p>
-        }
-        {localStorage.getItem('logged') == 1 ?
-          this.log(true)
-          :
-          <p></p>
-        }
-
-
-        {this.props.isAuthenticated ?
+    if (this.state.stocks[0] != undefined) {
+      return (
         <div>
-          <Stocks data={this.state.stocks} />
-          <BackTop>
-            <div style={style}>UP</div>
-          </BackTop>
+          {this.props.isAuthenticated && localStorage.getItem('logged') == null ?
+            localStorage.setItem('logged', 1)
+            :
+            <p></p>
+          }
+          {localStorage.getItem('logged') == 1 ?
+            this.log(true)
+            :
+            <p></p>
+          }
+
+
+          {this.props.isAuthenticated ?
+            <div>
+              <Stocks data={this.state.stocks} />
+              <BackTop>
+                <div style={style}>UP</div>
+              </BackTop>
+            </div>
+            :
+            <p>Please <Link to='/login'>Login</Link> to see the list of stocks.</p>
+          }
         </div>
-          :
-          <p>Please <Link to='/login'>Login</Link> to see the list of stocks.</p>
-        }
-      </div>
-    )
+      )
+
+    } else if(this.props.isAuthenticated && localStorage.getItem('logged') == null){
+      localStorage.setItem('logged', 1)
+      this.log(true)
+    }else if(this.props.isAuthenticated){
+      return(<p></p>)
+    }else{
+      return(<p>Please <Link to='/login'>Login</Link> to see the list of stocks.</p>)
+    }
   }
 }
 
