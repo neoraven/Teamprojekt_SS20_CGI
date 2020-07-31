@@ -18,7 +18,7 @@ class Landingpage extends React.Component {
                 </div>
                 <div className='text' style={{ textAlign: "justify" }}>
                     <center><p><b>Welcome to our App</b></p></center>
-                    <p>With us you are able to get informations about any company that is listed in the S&P 500 index. You are also able to create your own portfolio of stocks based on realtime prices. At last you can input your investing preferences and our app will make stock recommendations based on your individual ideas.</p>
+                    <p>With us you are able to get informations about any company that is listed in the S&P 500 index. You are also able to create your own portfolio of stocks based on realtime prices. Our newest feature will help you to find stocks that you like. You can input your investing preferences and the app will make stock recommendations based on your individual ideas.</p>
                     <p>Since you wont be able to do anything around here without an account, why dont you go ahead and <Link to='/signup/'>sign up?</Link></p>
                     <p>Already have an account? Great! Just Log In <Link to='/login/'>here.</Link></p>
                 </div>

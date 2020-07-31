@@ -7,31 +7,55 @@ import Recommendations from '../components/Recommendations';
 import './RecommendationView.css';
 
 const { Step } = Steps;
-const steps = [
-    {
-        title: 'Preferences',
-        content: <Preferences></Preferences>,
-    },
-    {
-        title: 'Strategies',
-        content: <Strategies></Strategies>,
-    },
-    {
-        title: 'Recommendations',
-        content: <Recommendations></Recommendations>,
-    },
-];
+
 
 
 class RecommendationView extends React.Component {
     constructor(props) {
         super(props);
+        this.preferencesRef = React.createRef();
+        this.strategiesRef = React.createRef();
         this.state = {
             current: 0,
+            risk: 0,
+            diversification: 0,
+            slider3: 0,
+            strategy1: false,
+            strategy2: false,
+            strategy3: false,
         };
     }
 
+    steps = [ //content here is not being used anymore. It has been integrated diretctly in the render function below
+        {
+            title: 'Preferences',
+            content: <Preferences />,
+        },
+        {
+            title: 'Strategies',
+            content: <Strategies/>,
+        },
+        {
+            title: 'Recommendations',
+            content: <Recommendations/>,
+        },
+    ];
+
     next() {
+        if(this.state.current === 0){
+            this.setState({
+                risk: this.preferencesRef.current.state.risk,
+                diversification: this.preferencesRef.current.state.diversification,
+                slider3: this.preferencesRef.current.state.slider3,
+            })
+        }
+        if(this.state.current === 1){
+            this.setState({
+                strategy1: this.strategiesRef.current.state.checkbox1,
+                strategy2: this.strategiesRef.current.state.checkbox2,
+                strategy3: this.strategiesRef.current.state.checkbox3,
+            })
+        }
         const current = this.state.current + 1;
         this.setState({ current });
     }
@@ -39,6 +63,9 @@ class RecommendationView extends React.Component {
     prev() {
         const current = this.state.current - 1;
         this.setState({ current });
+    }
+    oc(){
+        console.log(this.testRef)
     }
 
     render() {
@@ -53,19 +80,31 @@ class RecommendationView extends React.Component {
                         <div>
                             <div className="steps">
                                 <Steps current={current}>
-                                    {steps.map(item => (
+                                    {this.steps.map(item => (
                                         <Step key={item.title} title={item.title} />
                                     ))}
                                 </Steps>
                             </div>
-                            <div className="steps-content">{steps[current].content}</div>
+                            <div className="steps-content">
+                                { current === 0 &&(
+                                <Preferences ref={this.preferencesRef}/>
+                                )}
+                                { current === 1 &&(
+                                <Strategies ref={this.strategiesRef}/>
+                                )}
+                                { current === 2 &&(
+                                <Recommendations ref={this.preferencesRef}/>
+                                )}
+                                
+                                
+                                </div>
                             <div className="steps-action">
-                                {current < steps.length - 1 && (
+                                {current < this.steps.length - 1 && (
                                     <Button type="primary" onClick={() => this.next()}>
                                         Next
                                     </Button>
                                 )}
-                                {current === steps.length - 1 && (
+                                {current === this.steps.length - 1 && (
                                     <Button type="primary" onClick={() => message.success('Processing complete!')}>
                                         Done
                                     </Button>
@@ -76,6 +115,7 @@ class RecommendationView extends React.Component {
                                     </Button>
                                 )}
                             </div>
+                            
                         </div>
 
                         :

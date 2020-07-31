@@ -11,7 +11,6 @@ class Price extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
         this.setState.most_recent = this.props.most_recent //prices are now coming from the batch endpoint in stocks.js
         this.setState.latestDailyPrice = this.props.latestDailyPrice
        /* api.get(`/api/stocks/${this.props.symbol}/prices/most-recent/`) //prices are now coming from the batch endpoint in stocks.js
@@ -47,7 +46,7 @@ class Price extends React.Component {
                                     title="Price"
                                     value={this.props.most_recent}
                                     precision={2}
-                                    valueStyle={{ color: '#cf1322', fontSize: '17px' }}
+                                    valueStyle={{ color: '#cf1322', fontSize: '16px' }}
                                     prefix={<ArrowDownOutlined />}
                                     suffix="$"
                                     style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
@@ -58,7 +57,7 @@ class Price extends React.Component {
                                     title="Change %"
                                     value={-change}
                                     precision={2}
-                                    valueStyle={{ color: '#cf1322', fontSize: '17px' }}
+                                    valueStyle={{ color: '#cf1322', fontSize: '16px' }}
                                     prefix={<ArrowDownOutlined />}
                                     suffix="%"
                                     style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
@@ -79,7 +78,7 @@ class Price extends React.Component {
                                     title="Price"
                                     value={this.props.most_recent}
                                     precision={2}
-                                    valueStyle={{ color: '#3f8600', fontSize: '17px' }}
+                                    valueStyle={{ color: '#3f8600', fontSize: '16px' }}
                                     prefix={<ArrowUpOutlined />}
                                     suffix="$"
                                     style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
@@ -90,7 +89,7 @@ class Price extends React.Component {
                                     title="Change %"
                                     value={change}
                                     precision={2}
-                                    valueStyle={{ color: '#3f8600', fontSize: '17px' }}
+                                    valueStyle={{ color: '#3f8600', fontSize: '16px' }}
                                     prefix={<ArrowUpOutlined />}
                                     suffix="%"
                                     style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}

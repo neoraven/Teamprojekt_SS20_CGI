@@ -21,14 +21,14 @@ class RealtimePrice extends React.Component {
             change = (1 - change) * 100;
             return (
                 <div className="price-card" >
-                    <Popover content="a" title="Date of last close">
+                    <Popover content={this.props.date} title="Date of last close">
                         <Row gutter={25} >
                             <Col span={12}>
                                 <Statistic
                                     title="Price"
                                     value={this.props.price}
                                     precision={2}
-                                    valueStyle={{ color: '#cf1322', fontSize: '17px' }}
+                                    valueStyle={{ color: '#cf1322', fontSize: '16px' }}
                                     prefix={<ArrowDownOutlined />}
                                     suffix="$"
                                     style={{ width: '120%', height: '10%', marginLeft: '-15%'}}
@@ -39,7 +39,7 @@ class RealtimePrice extends React.Component {
                                     title="Change %"
                                     value={-change}
                                     precision={2}
-                                    valueStyle={{ color: '#cf1322', fontSize: '17px' }}
+                                    valueStyle={{ color: '#cf1322', fontSize: '16px' }}
                                     prefix={<ArrowDownOutlined />}
                                     suffix="%"
                                     style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
@@ -53,14 +53,14 @@ class RealtimePrice extends React.Component {
             change = (change - 1) * 100;
             return (
                 <div className="price-card" >
-                    <Popover content="a" title="Date of last close">
+                    <Popover content={this.props.date} title="Date of last close">
                         <Row gutter={25}>
                             <Col span={12}>
                                 <Statistic
                                     title="Price"
                                     value={this.props.price}
                                     precision={2}
-                                    valueStyle={{ color: '#3f8600', fontSize: '17px' }}
+                                    valueStyle={{ color: '#3f8600', fontSize: '16px' }}
                                     prefix={<ArrowUpOutlined />}
                                     suffix="$"
                                     style={{ width: '120%', height: '10%',  marginLeft: '-15%' }}
@@ -71,7 +71,7 @@ class RealtimePrice extends React.Component {
                                     title="Change %"
                                     value={change}
                                     precision={2}
-                                    valueStyle={{ color: '#3f8600', fontSize: '17px' }}
+                                    valueStyle={{ color: '#3f8600', fontSize: '16px' }}
                                     prefix={<ArrowUpOutlined />}
                                     suffix="%"
                                     style={{ width: '120%', height: '10%', fontSize: '5px', marginLeft: '-15%' }}
