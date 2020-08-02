@@ -11,7 +11,7 @@ from .models import Price, Stock
 _AV_API_KEY = "6CYJ430CSUYT2B19"
 _AV_API_KEY_LIST = ["1077F37TLBGNSVY2", "H73WEF95O0IAME5U", "6CYJ430CSUYT2B19"]
 _AV_OUTPUT_FORMAT = "pandas"
-_AV_OUTPUT_SIZE = "full"
+_AV_OUTPUT_SIZE = "compact"
 _AV_TIME_PER_CALL = 60 / 5  # 5 calls per minute
 
 _DEFAULT_RETRY_WAIT_DURATION = 5.0
@@ -101,8 +101,8 @@ def pull_write_prices_for_symbol(ts: TimeSeries, symbol: str, interval: str = "1
                 "split_coefficient": price._8,
             },
         )
-        # if not price_created:
-        #     print(f"Encountered duplicate price object on {price.Index.date()}.")
-        #     break
+        if not price_created:
+            print(f"Encountered duplicate price object on {price.Index.date()}.")
+            break
 
     print(f"Finished writing {idx} new prices of {symbol}.")
