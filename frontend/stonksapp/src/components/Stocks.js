@@ -22,21 +22,76 @@ class Stocks extends React.Component {
     }
   }
 
+ /* loadPrices(page) {
+    let end = page * 10
+    let begin = end - 10
 
+    let firstten = this.state.stocks.slice(begin, end)
+    let fullstocks = this.state.stocks
+
+
+    api.get(`/api/stocks/${firstten}/prices/most-recent/?batch=true&interval=1d`)
+      .then(res => {
+        this.setState({
+          batchprices: res.data
+        })
+      })
+    api.get(`/api/stocks/${firstten}/prices/most-recent/?batch=true`)
+      .then(res => {
+        this.setState({
+          mostrecentbatchprices: res.data
+        })
+      })
+
+
+      let temp = []
+      for(let stock of firstten){
+        for(let batchprice of this.state.batchprices){
+          if(stock.symbol === batchprice.symbol){
+            stock.lastDailyPrice = batchprice.p_close
+            temp.push(stock)
+          }
+        }
+      }
+      let temp2 = []
+      for(let stock of temp){
+        for(let mostrecentbatchprice of this.state.mostrecentbatchprices){
+          if(stock.symbol === mostrecentbatchprice.symbol){
+            stock.most_recent = mostrecentbatchprice.p_close
+            temp2.push(stock)
+          }
+        }
+      }
+      
+      let stockscopy = []
+      for(let stock of this.state.stocks){
+        for(let tempstock of temp2){
+          if(stock.symbol === tempstock.symbol){
+            stock = tempstock
+            stockscopy.push(stock)
+          }
+        }
+
+      }
+      this.setState({
+        stocks = stockscopy
+      })
+
+  }*/
 
   componentDidMount() {
     console.log("-------------------------------------------------------------")
     console.log(this.props.data)
     console.log("-------------------------------------------------------------")
-    
+    this.setState({
+      stocks: this.props.data
+    })
 
-    /*var stocks = this.props.data //WORK IN PROGRESS
 
-    for (let stock of stocks) {
-      this.state.symbollist.push(stock.symbol)
-    }
+    /* //WORK IN PROGRESS
 
-    let firstten = this.state.symbollist.slice(0,10)
+
+    let firstten = this.state.stocks.slice(0,10)
 
     api.get(`/api/stocks/${firstten}/prices/most-recent/?batch=true&interval=1d`)
       .then(res => {
@@ -70,51 +125,51 @@ class Stocks extends React.Component {
   }
 
   render() {
-    var stocks = this.props.data,
-      searchString = this.state.searchString.trim().toLowerCase();
+    var searchString = this.state.searchString.trim().toLowerCase();
     if (searchString.length > 0) {
-      stocks = stocks.filter((stock) => {
+      this.state.stocks = this.state.stocks.filter((stock) => {
         let displayname = stock.symbol + ", " + stock.company_name;
         return displayname.toLowerCase().match(searchString);
       })
     }
     //*************Begin: Hacky implementation of Batch endpoint****************/
-       for (let stock of stocks) {
-         this.state.symbollist.push(stock.symbol)
-       }
-       
-   
-       if (once < 2) {
-         api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true&interval=1d`)
-           .then(res => {
-             this.setState({
-               batchprices: res.data
-             })
-           })
-         api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true`)
-           .then(res => {
-             this.setState({
-               mostrecentbatchprices: res.data
-             })
-           })
-         once++;
-       }
-   
-       for (let batchprice of this.state.batchprices) {
-         for (let stock of stocks) {
-         if (batchprice.symbol == stock.symbol) {
-           stock.latestDailyPrice = batchprice.p_close
-           stock.lastUpdated = batchprice.date
-         }
-         }
-       }
-       for (let mostrecentbatchprice of this.state.mostrecentbatchprices) {
-         for (let stock of stocks) {
-         if (mostrecentbatchprice.symbol == stock.symbol) {
-           stock.most_recent = mostrecentbatchprice.p_close
-         }
-         }
-       }
+    /* var stocks = this.state.stocks
+        for (let stock of stocks) {
+          this.state.symbollist.push(stock.symbol)
+        }
+        
+    
+        if (once < 2) {
+          api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true&interval=1d`)
+            .then(res => {
+              this.setState({
+                batchprices: res.data
+              })
+            })
+          api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true`)
+            .then(res => {
+              this.setState({
+                mostrecentbatchprices: res.data
+              })
+            })
+          once++;
+        }
+    
+        for (let batchprice of this.state.batchprices) {
+          for (let stock of stocks) {
+          if (batchprice.symbol == stock.symbol) {
+            stock.latestDailyPrice = batchprice.p_close
+            stock.lastUpdated = batchprice.date
+          }
+          }
+        }
+        for (let mostrecentbatchprice of this.state.mostrecentbatchprices) {
+          for (let stock of stocks) {
+          if (mostrecentbatchprice.symbol == stock.symbol) {
+            stock.most_recent = mostrecentbatchprice.p_close
+          }
+          }
+        }*/
     //*************End: Hacky implementation of Batch endpoint****************/
     return (
       <div>
@@ -133,7 +188,7 @@ class Stocks extends React.Component {
             },
             pageSize: 10,
           }}
-          dataSource={stocks} //-> Maybe make stocks its own component to maybe make the prices comps work
+          dataSource={this.state.stocks} //-> Maybe make stocks its own component to maybe make the prices comps work
           footer={
             <div>
               <b></b>
