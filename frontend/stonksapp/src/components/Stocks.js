@@ -21,63 +21,78 @@ class Stocks extends React.Component {
 
     }
   }
-
- /* loadPrices(page) {
-    let end = page * 10
-    let begin = end - 10
-
-    let firstten = this.state.stocks.slice(begin, end)
-    let fullstocks = this.state.stocks
-
-
-    api.get(`/api/stocks/${firstten}/prices/most-recent/?batch=true&interval=1d`)
-      .then(res => {
-        this.setState({
-          batchprices: res.data
-        })
-      })
-    api.get(`/api/stocks/${firstten}/prices/most-recent/?batch=true`)
+  fthis(firstten) {
+    api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true`)
       .then(res => {
         this.setState({
           mostrecentbatchprices: res.data
         })
-      })
+      }).then(() => this.backup(firstten))
+  }
 
+  backup(firstten) {
+    let temp = []
+    console.log(this.state.batchprices)
 
-      let temp = []
-      for(let stock of firstten){
-        for(let batchprice of this.state.batchprices){
-          if(stock.symbol === batchprice.symbol){
-            stock.lastDailyPrice = batchprice.p_close
-            temp.push(stock)
-          }
+    for (let stock of firstten) {
+      for (let batchprice of this.state.batchprices) {
+        if (stock.symbol === batchprice.symbol) {
+          stock.lastDailyPrice = batchprice.p_close
+          temp.push(stock)
         }
       }
-      let temp2 = []
-      for(let stock of temp){
-        for(let mostrecentbatchprice of this.state.mostrecentbatchprices){
-          if(stock.symbol === mostrecentbatchprice.symbol){
-            stock.most_recent = mostrecentbatchprice.p_close
-            temp2.push(stock)
-          }
+    }
+    console.log(temp)
+    let temp2 = []
+    for (let stock of temp) {
+      for (let mostrecentbatchprice of this.state.mostrecentbatchprices) {
+        if (stock.symbol === mostrecentbatchprice.symbol) {
+          stock.most_recent = mostrecentbatchprice.p_close
+          temp2.push(stock)
         }
       }
-      
-      let stockscopy = []
-      for(let stock of this.state.stocks){
-        for(let tempstock of temp2){
-          if(stock.symbol === tempstock.symbol){
-            stock = tempstock
-            stockscopy.push(stock)
-          }
+    }
+
+    let stockscopy = []
+    for (let stock of this.state.stocks) {
+      for (let tempstock of temp2) {
+        if (stock.symbol === tempstock.symbol) {
+          stock = tempstock
+          stockscopy.push(stock)
         }
 
       }
-      this.setState({
-        stocks = stockscopy
-      })
+      if (!stockscopy.includes(stock)) {
+        stockscopy.push(stock)
+      }
+    }
+    this.setState({
+      stocks: stockscopy
+    })
+  }
 
-  }*/
+  loadPrices(page) {
+    let end = page * 10
+    let begin = end - 10
+
+    let firstten = this.state.stocks.slice(begin, end)
+    for (let stock of firstten) {
+      this.state.symbollist.push(stock.symbol)
+    }
+
+    let fullstocks = this.state.stocks
+    console.log(firstten)
+    api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true&interval=1d`)
+      .then(res => {
+        this.setState({
+          batchprices: res.data
+        })
+      }).then(() => this.fthis(firstten))
+
+
+
+
+  }
 
   componentDidMount() {
     console.log("-------------------------------------------------------------")
@@ -85,9 +100,10 @@ class Stocks extends React.Component {
     console.log("-------------------------------------------------------------")
     this.setState({
       stocks: this.props.data
-    })
-
-
+    }, () => this.loadPrices(1))
+    /*if(this.state.stocks[0]!= undefined){
+      this.loadPrices(1)
+    }
     /* //WORK IN PROGRESS
 
 
@@ -171,51 +187,55 @@ class Stocks extends React.Component {
           }
         }*/
     //*************End: Hacky implementation of Batch endpoint****************/
-    return (
-      <div>
-        <Input
-          type="text"
-          placeholder="Search for stocks"
-          value={this.state.searchString}
-          onChange={this.handleChange}
-        />
-        <List
-          itemLayout="vertical"
-          size="large"
-          pagination={{
-            onChange: page => {
-              console.log(page);
-            },
-            pageSize: 10,
-          }}
-          dataSource={this.state.stocks} //-> Maybe make stocks its own component to maybe make the prices comps work
-          footer={
-            <div>
-              <b></b>
-            </div>
-          }
-          renderItem={item => (
-            <List.Item
-              key={item.symbol}
-              extra={<Price symbol={item.symbol} latestDailyPrice={item.latestDailyPrice}
-                most_recent={item.most_recent} date={item.lastUpdated} />}
-            >
-              <List.Item.Meta
-                avatar={<Avatar src={item.meta_data.image_url} />}
-                title={
-                  <a href={`/company/${item.symbol}`}>
-                    {item.company_name}
-                    <Text disabled >  [{item.symbol}]</Text>
-                  </a>}
-                description={item.meta_data.description}
-              />
+    if (this.state.stocks[0] != undefined) {
+      return (
+        <div>
+          <Input
+            type="text"
+            placeholder="Search for stocks"
+            value={this.state.searchString}
+            onChange={this.handleChange}
+          />
+          <List
+            itemLayout="vertical"
+            size="large"
+            pagination={{
+              onChange: page => {
+                console.log(page);
+              },
+              pageSize: 10,
+            }}
+            dataSource={this.state.stocks} //-> Maybe make stocks its own component to maybe make the prices comps work
+            footer={
+              <div>
+                <b></b>
+              </div>
+            }
+            renderItem={item => (
+              <List.Item
+                key={item.symbol}
+                extra={<Price symbol={item.symbol} latestDailyPrice={item.lastDailyPrice}
+                  most_recent={item.most_recent} date={item.lastUpdated} />}
+              >
+                <List.Item.Meta
+                  avatar={<Avatar src={item.meta_data.image_url} />}
+                  title={
+                    <a href={`/company/${item.symbol}`}>
+                      {item.company_name}
+                      <Text disabled >  [{item.symbol}]</Text>
+                    </a>}
+                  description={item.meta_data.description}
+                />
 
-            </List.Item>
-          )
-          }
-        />
-      </div>
-    )
+              </List.Item>
+            )
+            }
+          />
+        </div>
+      )
+    } else {
+      return (<div></div>)
+    }
   }
 }
 
