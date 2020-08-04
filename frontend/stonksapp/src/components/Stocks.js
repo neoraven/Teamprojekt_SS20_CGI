@@ -11,32 +11,54 @@ class Stocks extends React.Component {
     this.state = {
       searchString: '',
       displayname: '',
-      latestPrice: [],
-      lastDailyPrice: [],
       symbollist: [],
-      batchprices: [],
-      mostrecentbatchprices: [],
+      lastdayscloseprices: [],
+      mostrecentprices: [],
       stocks: [],
-
     }
   }
-  loadNextPrice(firstten) {
+
+
+  componentDidMount() {
+    this.setState({
+      stocks: this.props.data
+    }, () => this.loadPrices(1))
+  }
+
+  loadPrices(page) {
+    let end = page * 10
+    let begin = end - 10
+
+    let stocksonpage = this.state.stocks.slice(begin, end)
+    for (let stock of stocksonpage) {
+      this.state.symbollist.push(stock.symbol)
+    }
+
+    api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true&interval=1d`)
+      .then(res => {
+        this.setState({
+          lastdayscloseprices: res.data
+        })
+      }).then(() => this.loadNextPrice(stocksonpage))
+  }
+
+  loadNextPrice(stocksonpage) {
     api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true`)
       .then(res => {
         this.setState({
-          mostrecentbatchprices: res.data
+          mostrecentprices: res.data
         })
-      }).then(() => this.combinePricesIntoArray(firstten))
+      }).then(() => this.combinePricesIntoArray(stocksonpage))
   }
 
-  combinePricesIntoArray(firstten) {
-    let temp = []
-    console.log(this.state.batchprices)
+  combinePricesIntoArray(stocksonpage) {
 
-    for (let stock of firstten) {
-      for (let batchprice of this.state.batchprices) {
-        if (stock.symbol === batchprice.symbol) {
-          stock.lastDailyPrice = batchprice.p_close
+    let temp = []
+    for (let stock of stocksonpage) {
+      for (let price of this.state.lastdayscloseprices) {
+        if (stock.symbol === price.symbol) {
+          stock.lastdayscloseprice = price.p_close
+          stock.dateoflastclose = price.date
           temp.push(stock)
         }
       }
@@ -44,9 +66,9 @@ class Stocks extends React.Component {
     console.log(temp)
     let temp2 = []
     for (let stock of temp) {
-      for (let mostrecentbatchprice of this.state.mostrecentbatchprices) {
-        if (stock.symbol === mostrecentbatchprice.symbol) {
-          stock.most_recent = mostrecentbatchprice.p_close
+      for (let price of this.state.mostrecentprices) {
+        if (stock.symbol === price.symbol) {
+          stock.most_recent = price.p_close
           temp2.push(stock)
         }
       }
@@ -68,30 +90,6 @@ class Stocks extends React.Component {
     this.setState({
       stocks: stockscopy
     })
-  }
-
-  loadPrices(page) {
-    let end = page * 10
-    let begin = end - 10
-
-    let firstten = this.state.stocks.slice(begin, end)
-    for (let stock of firstten) {
-      this.state.symbollist.push(stock.symbol)
-    }
-
-    console.log(firstten)
-    api.get(`/api/stocks/${this.state.symbollist}/prices/most-recent/?batch=true&interval=1d`)
-      .then(res => {
-        this.setState({
-          batchprices: res.data
-        })
-      }).then(() => this.loadNextPrice(firstten))
-  }
-
-  componentDidMount() {
-    this.setState({
-      stocks: this.props.data
-    }, () => this.loadPrices(1))
   }
 
   handleChange = (e) => {
@@ -136,8 +134,8 @@ class Stocks extends React.Component {
             renderItem={item => (
               <List.Item
                 key={item.symbol}
-                extra={<Price symbol={item.symbol} latestDailyPrice={item.lastDailyPrice}
-                  most_recent={item.most_recent} date={item.lastUpdated} />}
+                extra={<Price symbol={item.symbol} latestDailyPrice={item.lastdayscloseprice}
+                  most_recent={item.most_recent} date={item.dateoflastclose} />}
               >
                 <List.Item.Meta
                   avatar={<Avatar src={item.meta_data.image_url} />}
