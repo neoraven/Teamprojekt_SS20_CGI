@@ -97,14 +97,22 @@ class Stocks extends React.Component {
 
   handleChange = (e) => {
     console.log(e.target)
-    this.setState({
-      searchString: e.target.value
-    });
+    if(e.target.value == ""){
+      this.setState({
+        searchString: e.target.value
+      });
+      this.state.stocks = this.state.stocks_constant
+    }else{
+      this.setState({
+        searchString: e.target.value
+      });
+    }
+
   }
 
   render() {
     var searchString = this.state.searchString.trim().toLowerCase();
-    if (searchString.length > 0) {
+    if (searchString.length > 0) { 
       console.log("IN SEARCH")
       this.state.stocks = this.state.stocks_constant.filter((stock) => {
         let displayname = stock.symbol + ", " + stock.company_name;
