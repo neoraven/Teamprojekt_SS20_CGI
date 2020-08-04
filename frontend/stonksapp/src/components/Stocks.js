@@ -88,7 +88,8 @@ class Stocks extends React.Component {
       }
     }
     this.setState({
-      stocks: stockscopy
+      stocks: stockscopy,
+      symbollist: []
     })
   }
 
@@ -124,6 +125,7 @@ class Stocks extends React.Component {
                 this.loadPrices(page)
               },
               pageSize: 10,
+              showSizeChanger: false
             }}
             dataSource={this.state.stocks}
             footer={
