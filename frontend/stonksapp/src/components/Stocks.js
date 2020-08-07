@@ -15,13 +15,14 @@ class Stocks extends React.Component {
       lastdayscloseprices: [],
       mostrecentprices: [],
       stocks: [],
+      permstock: [],
     }
   }
 
 
   componentDidMount() {
     this.setState({
-      stocks: this.props.data
+      stocks: this.props.data,
     }, () => this.loadPrices(1))
   }
 
@@ -89,20 +90,31 @@ class Stocks extends React.Component {
     }
     this.setState({
       stocks: stockscopy,
-      symbollist: []
+      symbollist: [], //reset of symbollist so it does not bigger than ten while loading new pages
+      stocks_constant: stockscopy //this.state.stock gets changed during the search. thats why we need a constant copy for the original stocks
     })
   }
 
   handleChange = (e) => {
-    this.setState({
-      searchString: e.target.value
-    });
+    console.log(e.target)
+    if(e.target.value == ""){
+      this.setState({
+        searchString: e.target.value
+      });
+      this.state.stocks = this.state.stocks_constant
+    }else{
+      this.setState({
+        searchString: e.target.value
+      });
+    }
+
   }
 
   render() {
     var searchString = this.state.searchString.trim().toLowerCase();
-    if (searchString.length > 0) {
-      this.state.stocks = this.state.stocks.filter((stock) => {
+    if (searchString.length > 0) { 
+      console.log("IN SEARCH")
+      this.state.stocks = this.state.stocks_constant.filter((stock) => {
         let displayname = stock.symbol + ", " + stock.company_name;
         return displayname.toLowerCase().match(searchString);
       })
@@ -156,7 +168,16 @@ class Stocks extends React.Component {
         </div>
       )
     } else {
-      return (<div>No Stocks could be loaded</div>)
+      return (<div>
+        <Input
+          type="text"
+          placeholder="Search for stocks"
+          value={this.state.searchString}
+          onChange={this.handleChange}
+        />
+
+
+        No Stocks could be loaded</div>)
     }
   }
 }

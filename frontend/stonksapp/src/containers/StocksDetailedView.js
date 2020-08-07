@@ -20,8 +20,8 @@ const formatter = new Intl.NumberFormat('en-US', {
 const DescTable = (desc, industry, sector, ceo, website, sec, mcap, screensize) => {
     mcap = formatter.format(mcap)
     let tablesize = ""
-    if(screensize < 500){
-        tablesize ="small"
+    if (screensize < 500) {
+        tablesize = "small"
         console.log("rerendered table")
     }
     return (
@@ -56,11 +56,11 @@ class StocksDetail extends React.Component {
             key: 'tab2',
             prices: [],
             chart_prices: [],
-            width: 0, 
+            width: 0,
             height: 0,
         }
         this.updateWindowDimensions = this.updateWindowDimensions;
-      }
+    }
 
 
 
@@ -115,11 +115,11 @@ class StocksDetail extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateWindowDimensions);
-      }
-      
-      updateWindowDimensions= ()=> {
+    }
+
+    updateWindowDimensions = () => {
         this.setState({ width: window.innerWidth, height: window.innerHeight });
-      }
+    }
 
 
 
@@ -128,12 +128,22 @@ class StocksDetail extends React.Component {
             <div>
                 <h1>{this.state.stock.company_name}</h1>
                 <Tabs defaultActiveKey="1" onChange={callback}
-                    tabBarExtraContent={<div style={{marginLeft:0}}>
-                        <RealtimePrice
-                            price={this.state.realtime.p_close}
-                            lastprice={this.state.most_recent.p_close}
-                            date={this.state.most_recent.date}
-                        /> </div>}>
+                    tabBarExtraContent={<div style={{ marginLeft: 0 }}>
+                        {this.state.most_recent != undefined && this.state.realtime != undefined ?
+                            <RealtimePrice
+                                price={this.state.realtime.p_close}
+                                lastprice={this.state.most_recent.p_close}
+                                date={this.state.most_recent.date}
+                            />
+
+                            :
+
+                            <p> no prices found </p>
+
+                        }
+
+
+                    </div>}>
                     <TabPane tab="Overview" key="1">
                         {DescTable(this.state.stock.description, this.state.stock.industry,
                             this.state.stock.sector, this.state.stock.ceo,
