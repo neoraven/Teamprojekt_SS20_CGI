@@ -15,7 +15,7 @@ class Stocks extends React.Component {
       lastdayscloseprices: [],
       mostrecentprices: [],
       stocks: [],
-      permstock: [],
+      stocks_constant: [],
     }
   }
 
@@ -23,14 +23,21 @@ class Stocks extends React.Component {
   componentDidMount() {
     this.setState({
       stocks: this.props.data,
+      stocks_constant: this.props.data
     }, () => this.loadPrices(1))
   }
 
-  loadPrices(page) {
+  loadPrices(page, searchstocks) {
+    let stocksonpage = []
+    if (page != 0){
     let end = page * 10
     let begin = end - 10
 
-    let stocksonpage = this.state.stocks.slice(begin, end)
+    stocksonpage = this.state.stocks.slice(begin, end)
+    } else{
+      stocksonpage = searchstocks
+    }
+
     for (let stock of stocksonpage) {
       this.state.symbollist.push(stock.symbol)
     }
@@ -76,7 +83,7 @@ class Stocks extends React.Component {
     }
 
     let stockscopy = []
-    for (let stock of this.state.stocks) {
+    for (let stock of this.state.stocks_constant) {
       for (let tempstock of temp2) {
         if (stock.symbol === tempstock.symbol) {
           stock = tempstock
@@ -97,22 +104,37 @@ class Stocks extends React.Component {
 
   handleChange = (e) => {
     console.log(e.target)
-    if(e.target.value == ""){
+    if (e.target.value == "") {
+      console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
       this.setState({
         searchString: e.target.value
       });
       this.state.stocks = this.state.stocks_constant
-    }else{
+    } else {
       this.setState({
         searchString: e.target.value
-      });
+      }, () => this.loadPricesOnSearch());
     }
-
   }
+
+  loadPricesOnSearch() {
+    var searchString = this.state.searchString.trim().toLowerCase();
+    this.state.stocks = this.state.stocks_constant.filter((stock) => {
+      let displayname = stock.symbol + ", " + stock.company_name;
+      return displayname.toLowerCase().match(searchString);
+    })
+    if (this.state.stocks.length <= 10 && this.state.stocks[0] != undefined) {
+      this.loadPrices(0, this.state.stocks)
+    }
+  }
+
+ 
+
+
 
   render() {
     var searchString = this.state.searchString.trim().toLowerCase();
-    if (searchString.length > 0) { 
+    if (searchString.length > 0) {
       console.log("IN SEARCH")
       this.state.stocks = this.state.stocks_constant.filter((stock) => {
         let displayname = stock.symbol + ", " + stock.company_name;
@@ -120,6 +142,7 @@ class Stocks extends React.Component {
       })
     }
     if (this.state.stocks[0] != undefined) {
+
       return (
         <div>
           <Input
