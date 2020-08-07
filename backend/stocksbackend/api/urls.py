@@ -19,6 +19,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("stocks/", include("stocks.api.urls", namespace="api-stocks")),
     path("portfolio/", include("portfolio.api.urls", namespace="api-portfolios")),
+    path("sim/", include("simulation.api.urls", namespace="api-simulation")),
     path(
         "docs/",
         schema_view.with_ui("swagger", cache_timeout=0),
