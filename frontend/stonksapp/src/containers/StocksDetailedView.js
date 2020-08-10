@@ -2,7 +2,7 @@ import React from 'react';
 import api from '../utils/api';
 import { Tabs, Descriptions } from 'antd';
 import RealtimePrice from '../components/RealtimePrice';
-import Chart from '../components/Chart';
+import Chart from '../components/Chart/Chart';
 
 const { TabPane } = Tabs;
 
@@ -55,7 +55,8 @@ class StocksDetail extends React.Component {
             most_recent: {},
             key: 'tab2',
             prices: [],
-            chart_prices: [],
+            ohlc : [],
+            volume : [],
             width: 0,
             height: 0,
         }
@@ -88,22 +89,34 @@ class StocksDetail extends React.Component {
                 })
                 console.log(this.state.prices)
                 this.state.prices.map(price => {
-                    price in this.state.chart_prices ?
+                    price in this.state.ohlc ?
                         void (0)
                         :
-                        this.state.chart_prices.push({
-                            date: new Date(price.date),
-                            open: price.p_open,
-                            low: price.p_low,
-                            high: price.p_high,
-                            close: price.p_close,
-                            volume: price.volume
-                        })
+                        this.state.ohlc.push([
+                            new Date(price.date),
+                            price.p_open,
+                            price.p_high,
+                            price.p_low,
+                            price.p_close,
+                        ])
+                })
+                this.state.prices.map(vol => {
+                    vol in this.state.volume ?
+                        void(0)
+                        :
+                        this.state.volume.push([
+                            new Date(vol.date),
+                            vol.volume
+                        ])
                 })
                 this.setState({
-                    chart: <Chart data={this.state.chart_prices} />
+                    chart :  <Chart ohlc={this.state.ohlc}
+                                    volume={this.state.volume}
+                                    stock={this.state.stock}
+                    />
                 })
-                console.log(this.state.chart_prices)
+                console.log(this.state.ohlc)
+                console.log(this.state.volume)
             })
         api.get(`/api/stocks/${symbol}/prices/quote/`)
             .then(res => {
