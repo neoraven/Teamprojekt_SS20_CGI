@@ -72,7 +72,7 @@ class RespoDemo extends React.Component {
                     </Menu>
                 </Sider>
                 <Layout >
-                    <Content style={{ margin: '24px 16px 0' }}>
+                    <Content style={{ margin: '24px 16px 0', minHeight:  'calc(100vh - 70px)'}}>
                         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
                             {this.props.children}
                         </div>
