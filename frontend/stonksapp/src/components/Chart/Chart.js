@@ -8,29 +8,35 @@ import AnnotationsAdvanced from "highcharts/modules/annotations-advanced.js";
 import PriceIndicator from "highcharts/modules/price-indicator.js";
 import FullScreen from "highcharts/modules/full-screen.js";
 import StockTools from "highcharts/modules/stock-tools.js";
-import Boost from "highcharts/modules/boost-canvas"
+import Boost from "highcharts/modules/boost"
 import "./style.css";
 
-// init the module
-
-Indicators(HighStock);
-DragPanes(HighStock);
-AnnotationsAdvanced(HighStock);
-PriceIndicator(HighStock);
-FullScreen(HighStock);
-StockTools(HighStock);
-Boost(HighStock)
-
 function Chart(props) {
-	console.log(props.ohlc)
+	Indicators(HighStock);
+	DragPanes(HighStock);
+	AnnotationsAdvanced(HighStock);
+	PriceIndicator(HighStock);
+	FullScreen(HighStock);
+	StockTools(HighStock);
+	Boost(HighStock)
+
 	return (
 		<HighchartsReact
 			highcharts={HighStock}
-			constructorType={"stockChart"}
+			constructorType="stockChart"
 			options={
 				{	
-					xAxis: {
-						endOnTick : true
+					chart : {
+						renderTo : 'container', 
+					},
+					boost : {
+						enabled : true
+					},
+					title : {
+						text : props.stock.company_name
+					},
+					rangeSelector : {
+						x : 20 
 					},
 					yAxis: [{
 						labels: {
@@ -40,72 +46,76 @@ function Chart(props) {
 						resize: {
 							enabled: true
 						}
-					}, {
+						}, {
 						labels: {
 							align: 'left'
 						},
 						top: '80%',
 						height: '20%',
 						offset: 0
-					}],
-					tooltip: {
+						}],
+						tooltip: {
 						shape: 'square',
 						headerShape: 'callout',
 						borderWidth: 0,
 						shadow: false,
 						positioner: function (width, height, point) {
 							var chart = this.chart,
-								position;
-			
+							position;
+					
 							if (point.isHeader) {
-								position = {
-									x: Math.max(
-										// Left side limit
-										chart.plotLeft,
-										Math.min(
-											point.plotX + chart.plotLeft - width / 2,
-											// Right side limit
-											chart.chartWidth - width - chart.marginRight
-										)
-									),
-									y: point.plotY
-								};
+							position = {
+								x: Math.max(
+								// Left side limit
+								chart.plotLeft,
+								Math.min(
+									point.plotX + chart.plotLeft - width / 2,
+									// Right side limit
+									chart.chartWidth - width - chart.marginRight
+								)
+								),
+								y: point.plotY
+							};
 							} else {
-								position = {
-									x: point.series.chart.plotLeft,
-									y: point.series.yAxis.top - chart.plotTop
-								};
+							position = {
+								x: point.series.chart.plotLeft,
+								y: point.series.yAxis.top - chart.plotTop
+							};
 							}
-			
+					
 							return position;
 						}
+					},
+					plotOptions : {
 					},
 					series: [
 						{
 							type: "ohlc",
 							id: props.stock.symbol.toLowerCase()+"-stock-price",
 							name: props.stock.symbol + " Stock Price",
-							data: props.ohlc,	
+							data: props.ohlc,
 							dataGrouping : {
+								forced : true,
 								units : [
 									['day', [1]],
 									['week', [1]],
-									['month', [1,3,6]]
-								] 
-							}
+									['month',[1, 3, 6]]
+								]
+							},
 						},
 						{
 							type: "column",
 							id: props.stock.symbol.toLowerCase()+"-volume",
 							name: props.stock.symbol + " Volume",
 							data: props.volume,
-							yAxis: 1
+							yAxis: 1,
+							
 						}
 					],
 					responsive: {
 						rules: [{
 							condition: {
-								maxWidth: 700
+								maxWidth: 800
 							},
 							chartOptions: {
 								rangeSelector: {

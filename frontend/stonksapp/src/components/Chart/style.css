@@ -1,2 +1,12 @@
 @import "https://code.highcharts.com/css/stocktools/gui.css";
 @import "https://code.highcharts.com/css/annotations/popup.css";
+
+#container {
+    max-height: 800px;
+    height: 75vh;
+}
+
+/* Conflict with Bootstrap, not needed after v7.0.1 */
+.highcharts-bindings-wrapper * {
+    box-sizing: content-box;
+}

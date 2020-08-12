@@ -163,7 +163,7 @@ class StocksDetail extends React.Component {
                             this.state.stock.website_url, this.state.stock.symbol,
                             this.state.stock.market_cap, this.state.width)}
                     </TabPane>
-                    <TabPane tab="Chart" key="2">
+                    <TabPane tab="Chart" key="2" id="container" className="chart">
                         {this.state.chart}
                     </TabPane>
                 </Tabs>
