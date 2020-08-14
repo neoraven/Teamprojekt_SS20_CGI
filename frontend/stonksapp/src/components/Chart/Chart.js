@@ -24,6 +24,7 @@ function Chart(props) {
 		<HighchartsReact
 			highcharts={HighStock}
 			constructorType="stockChart"
+			containerProps = {{style : {height : '400px'}}}
 			options={
 				{	
 					chart : {
@@ -31,9 +32,6 @@ function Chart(props) {
 					},
 					boost : {
 						enabled : true
-					},
-					title : {
-						text : props.stock.company_name
 					},
 					rangeSelector : {
 						x : 20 
