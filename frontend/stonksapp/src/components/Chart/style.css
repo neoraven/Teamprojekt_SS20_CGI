@@ -10,3 +10,7 @@
 .highcharts-bindings-wrapper * {
     box-sizing: content-box;
 }
+
+.highcharts-stocktools-toolbar li {
+   width : 80% !important; 
+}

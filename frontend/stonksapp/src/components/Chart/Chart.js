@@ -80,7 +80,7 @@ function Chart(props) {
 								y: point.series.yAxis.top - chart.plotTop
 							};
 							}
-					
+
 							return position;
 						}
 					},
@@ -107,7 +107,6 @@ function Chart(props) {
 							name: props.stock.symbol + " Volume",
 							data: props.volume,
 							yAxis: 1,
-							
 						}
 					],
 					responsive: {
