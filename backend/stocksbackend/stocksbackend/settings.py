@@ -135,7 +135,7 @@ USE_TZ = True
 STATIC_ROOT = os.path.join("/srv/www/stockmarketapp/build/static/")
 STATIC_URL = "/static/"
 
-STATICFILES_DIRS = [STATIC_ROOT]
+# STATICFILES_DIRS = [STATIC_ROOT]
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
