@@ -88,7 +88,7 @@ function Chart(props) {
 					},
 					series: [
 						{
-							type: "ohlc",
+							type: "candlestick",
 							id: props.stock.symbol.toLowerCase()+"-stock-price",
 							name: props.stock.symbol + " Stock Price",
 							data: props.ohlc,
@@ -120,6 +120,16 @@ function Chart(props) {
 								}
 							}
 						}]
+					},
+					stockTools : {
+						gui : {
+							buttons : [
+								'indicators',
+								'typeChange', 
+								'currentPriceIndicator', 
+								'fullScreen'
+							]
+						}
 					}
 				}
 			}
