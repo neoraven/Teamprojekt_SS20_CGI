@@ -219,7 +219,7 @@ class PriceListNoPaginationView(generics.ListAPIView):
 
 
 class MostRecentPriceView(generics.ListAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = (AllowAny,)
     lookup_field = "symbol"
     serializer_class = PricesSerializer
 
