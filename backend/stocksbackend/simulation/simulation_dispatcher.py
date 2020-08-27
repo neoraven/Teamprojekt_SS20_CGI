@@ -1,31 +1,56 @@
 from typing import Dict, Any
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import json
+import time
+
 from django.core.serializers.json import DjangoJSONEncoder
 
 from .classes.agent import Agent
 from .classes.market import Market
 from .classes import strategies
 
+from .models import Simulation, Preferences
+
 
 def start(
+    user,
     strategy_name: str,
     starting_year: int,
     end_year: int,
     agent_starting_capital: float,
-    market_name: str,
+    risk_affinity: int,
+    diversification: int,
+    placeholder: int,
 ):
-    market = Market(starting_year=starting_year, end_year=end_year, name=market_name)
+    simulation = Simulation(
+        user=user,
+        strategy=strategy_name,
+        starting_year=starting_year,
+        end_year=end_year,
+        agent_starting_capital=agent_starting_capital,
+    )
+    simulation.save()
+
+    preferences = Preferences(
+        simulation=simulation,
+        risk_affinity=risk_affinity,
+        diversification=diversification,
+        placeholder=placeholder,
+    )
+    preferences.save()
+
+    market = Market(starting_year=starting_year, end_year=end_year)
     strategy_class = strategies.get_strategy(strategy_name=strategy_name)
     strategy = strategy_class()
     agent = Agent(
-        starting_capital=agent_starting_capital,
-        market=market,
-        strategy=strategy,
-        name="default",
+        starting_capital=agent_starting_capital, market=market, strategy=strategy,
     )
+    started_simulation_at = time.time()
     agent.run_simulation()
+    simulation.time_elapsed = timedelta(seconds=time.time() - started_simulation_at)
+    simulation.save()
+
     return get_response_object(agent)
 
 

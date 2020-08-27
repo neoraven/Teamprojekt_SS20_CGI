@@ -13,15 +13,12 @@ Transaction = namedtuple(
 
 
 class Agent:
-    def __init__(
-        self, starting_capital: float, market: Market, strategy: BaseStrategy, name: str
-    ):
+    def __init__(self, starting_capital: float, market: Market, strategy: BaseStrategy):
         # TODO(jonas): implement agent getting new cash every [x interval]
         self.starting_capital = starting_capital
         self.cash = starting_capital
         self.market = market
         self.strategy = strategy
-        self.name = name
         self.state = None
         self.portfolio = {}
         self.trading_history = []

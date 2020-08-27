@@ -3,7 +3,8 @@ from .defined_strategies.dogs_of_the_stocks import DogsOfTheStocks
 
 
 def verify_strategy(strategy_name: str) -> bool:
-
+    if not isinstance(strategy_name, str):
+        return False
     try:
         current_module = sys.modules[__name__]
         strategy = getattr(current_module, strategy_name)
