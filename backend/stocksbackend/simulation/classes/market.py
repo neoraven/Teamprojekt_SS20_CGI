@@ -24,7 +24,8 @@ class Market:
             prices[col] = prices[col].apply(lambda x: float(x))
         prices.sort_values(by=["date", "symbol"], inplace=True, ascending=[True, False])
         self.prices = prices
-
+        print("===========MARKET LOADED===========")
+        print(f"Market lowest date: {self.prices.date.min()}")
         self.name = name or "default_market"
         self.max_date = None
 
@@ -68,9 +69,11 @@ class Market:
         if self.curr < len(self.prices.date.unique()):
 
             self.max_date = self.prices.date.sort_values().unique()[self.curr - 1]
-            state = self.prices.loc[self.prices.date <= self.max_date]
+            # state = self.prices.loc[self.prices.date <= self.max_date]
+            mask = self.prices.date <= self.max_date
             self.curr += 1
-            return state
+            # return state
+            return mask
         #  we are on the last date of the prices > exit the iteration
         raise StopIteration
 

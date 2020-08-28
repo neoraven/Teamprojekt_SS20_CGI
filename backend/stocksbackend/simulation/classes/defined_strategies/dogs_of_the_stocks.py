@@ -83,7 +83,6 @@ class DogsOfTheStocks(BaseStrategy):
 
         # rebalancing
         weights = self.rebalance(current_portfolio=agent_portfolio, weights=weights)
-
         return weights
 
     @staticmethod

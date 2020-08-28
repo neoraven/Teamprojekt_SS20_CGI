@@ -9,6 +9,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from .classes.agent import Agent
 from .classes.market import Market
 from .classes import strategies
+from .classes.evaluator import TotalValueEvaluator, MovingValueChangeEvaluator
 
 from .models import Simulation, Preferences
 
@@ -23,6 +24,9 @@ def start(
     diversification: int,
     placeholder: int,
 ):
+    if strategy_name == "DogsOfTheStocks":
+        starting_year -= 1
+
     simulation = Simulation(
         user=user,
         strategy=strategy_name,
@@ -44,7 +48,10 @@ def start(
     strategy_class = strategies.get_strategy(strategy_name=strategy_name)
     strategy = strategy_class(top_n_stocks=10)
     agent = Agent(
-        starting_capital=agent_starting_capital, market=market, strategy=strategy,
+        starting_capital=agent_starting_capital,
+        market=market,
+        strategy=strategy,
+        evaluator=TotalValueEvaluator(),
     )
     started_simulation_at = time.time()
     agent.run_simulation()
@@ -69,4 +76,5 @@ def get_response_object(agent: Agent) -> Dict[Any, Any]:
         "percent_change": current_portfolio_value / starting_capital - 1,
     }
     results["recommendation"] = agent.recommend()
+    results["evaluation_history"] = agent.evaluation_history
     return json.dumps(results, sort_keys=True, default=str)

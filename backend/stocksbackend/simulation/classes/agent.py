@@ -4,6 +4,7 @@ from collections import namedtuple
 import pprint
 
 from .market import Market
+from .evaluator import BaseEvaluator
 from .base_strategy import BaseStrategy
 
 Transaction = namedtuple(
@@ -13,24 +14,32 @@ Transaction = namedtuple(
 
 
 class Agent:
-    def __init__(self, starting_capital: float, market: Market, strategy: BaseStrategy):
+    def __init__(
+        self,
+        starting_capital: float,
+        market: Market,
+        strategy: BaseStrategy,
+        evaluator: BaseEvaluator,
+    ):
         # TODO(jonas): implement agent getting new cash every [x interval]
         self.starting_capital = starting_capital
         self.cash = starting_capital
         self.market = market
         self.strategy = strategy
-        self.state = None
+        self.evaluator = evaluator
+        self.mask = None
         self.portfolio = {}
         self.trading_history = []
+        self.evaluation_history = []  # list of Dicts
 
     def run_simulation(self):
-        for state in self.market:
+        for mask in self.market:
             dragging_balance = 0
-            self.state = state
+            self.mask = mask
             # agent gets dividends paid out accd. to his portfolio
             self.cash += self.market.pay_dividends(stock_portfolio=self.portfolio)
             weights = self.strategy.weight(
-                market_state=self.state, agent_portfolio=self.portfolio
+                market_state=self.market.prices[mask], agent_portfolio=self.portfolio,
             )
             if any([weight != 0 for weight in weights.values()]):
                 # any non-0 weights? > evaluate
@@ -73,6 +82,7 @@ class Agent:
                     )
                     print(f"Making purchase transaction: {purchase_transaction}")
                     self.buy(purchase_transaction)
+            self.evaluate()
 
     @staticmethod
     def build_transaction(
@@ -128,6 +138,10 @@ class Agent:
         return total_value
 
     def evaluate(self):
+        evaluation_result = self.evaluator.evaluate(self)
+        self.evaluation_history.append({str(self.market.max_date): evaluation_result})
+
+    def misc_evaluate(self):
         gains_or_losses_percentage = (
             self.get_own_total_value() / self.starting_capital - 1
         )
@@ -140,4 +154,10 @@ class Agent:
         return evaluation_sentence
 
     def recommend(self):
-        return self.strategy.recommend(market_state=self.state)
+        recommendations = self.strategy.recommend(
+            market_state=self.market.prices[self.mask]
+        )
+        non_zero_recommendations = {
+            stock: weight for (stock, weight) in recommendations.items() if weight != 0
+        }
+        return non_zero_recommendations
