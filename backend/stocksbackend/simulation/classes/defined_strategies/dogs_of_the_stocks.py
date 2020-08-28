@@ -101,4 +101,3 @@ class DogsOfTheStocks(BaseStrategy):
         return self.weight(
             market_state=market_state, agent_portfolio={}, is_recommendation=True
         )
-

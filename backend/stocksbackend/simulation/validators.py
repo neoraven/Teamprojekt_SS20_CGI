@@ -24,7 +24,7 @@ class AgentValidator:
 
 class MarketValidator:
     @staticmethod
-    def validate_date_range(starting_year, end_year):
+    def validate_date_range(starting_year: int, end_year: int):
         if not isinstance(starting_year, int) or not isinstance(end_year, int):
             raise ValidationError("Year range needs to be int!")
         queryset = Price.objects.filter(
@@ -47,4 +47,3 @@ class PreferencesValidator:
             raise ValidationError(
                 f"Preferences need to be in range [{lower}, {upper}]! (not: {value})"
             )
-

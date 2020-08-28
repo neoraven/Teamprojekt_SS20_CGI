@@ -25,6 +25,7 @@ class Agent:
 
     def run_simulation(self):
         for state in self.market:
+            dragging_balance = 0
             self.state = state
             # agent gets dividends paid out accd. to his portfolio
             self.cash += self.market.pay_dividends(stock_portfolio=self.portfolio)
@@ -33,6 +34,7 @@ class Agent:
             )
             if any([weight != 0 for weight in weights.values()]):
                 # any non-0 weights? > evaluate
+                print(weights)
                 for symbol, weight in filter(lambda x: x[1] < 0, weights.items()):
                     # First: look at negative weights := sell recommendations
                     current_stock_price = self.market.get_most_recent_price(
@@ -46,16 +48,23 @@ class Agent:
                     )
                     print(f"Making sell transaction: {sell_transaction}")
                     self.sell(sell_transaction)
-                amount_to_spend_for_each = (1 / self.strategy.top_n_stocks) * self.cash
+                total_cash_before_transactions = self.cash
                 for symbol, weight in filter(lambda x: x[1] > 0, weights.items()):
                     current_stock_price = self.market.get_most_recent_price(
                         symbol=symbol
                     )
-                    amount_of_stocks_to_buy = (
-                        amount_to_spend_for_each // current_stock_price
+                    amount_to_spend = min(
+                        (weight * total_cash_before_transactions + dragging_balance),
+                        self.cash,
                     )
+                    amount_of_stocks_to_buy = amount_to_spend // current_stock_price
                     if amount_of_stocks_to_buy == 0:
+                        print(
+                            f"Cant buy {symbol} for {current_stock_price}, I want to spend {amount_to_spend}"
+                        )
+                        dragging_balance += amount_to_spend
                         continue
+                    dragging_balance = 0
                     purchase_transaction = self.build_transaction(
                         stock_symbol=symbol,
                         stock_price=current_stock_price,

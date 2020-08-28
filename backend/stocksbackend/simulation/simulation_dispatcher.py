@@ -42,7 +42,7 @@ def start(
 
     market = Market(starting_year=starting_year, end_year=end_year)
     strategy_class = strategies.get_strategy(strategy_name=strategy_name)
-    strategy = strategy_class()
+    strategy = strategy_class(top_n_stocks=10)
     agent = Agent(
         starting_capital=agent_starting_capital, market=market, strategy=strategy,
     )
@@ -68,4 +68,5 @@ def get_response_object(agent: Agent) -> Dict[Any, Any]:
         "current_portfolio_value": current_portfolio_value,
         "percent_change": current_portfolio_value / starting_capital - 1,
     }
+    results["recommendation"] = agent.recommend()
     return json.dumps(results, sort_keys=True, default=str)

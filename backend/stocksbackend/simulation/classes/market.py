@@ -71,9 +71,8 @@ class Market:
             state = self.prices.loc[self.prices.date <= self.max_date]
             self.curr += 1
             return state
-        else:
-            #  we are on the last date of the prices > exit the iteration
-            raise StopIteration
+        #  we are on the last date of the prices > exit the iteration
+        raise StopIteration
 
     def __str__(self):
         return f"Market [{self.name}] (current market_date: {self.max_date})"
