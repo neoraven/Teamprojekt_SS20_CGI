@@ -142,7 +142,9 @@ class Agent:
 
     def evaluate(self):
         evaluation_result = self.evaluator.evaluate(self)
-        self.evaluation_history.append({str(self.market.max_date): evaluation_result})
+        self.evaluation_history.append(
+            {"date": str(self.market.max_date), "score": evaluation_result}
+        )
 
     def misc_evaluate(self):
         gains_or_losses_percentage = (
