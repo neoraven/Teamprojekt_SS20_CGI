@@ -64,7 +64,9 @@ def start(
     simulation.time_elapsed = timedelta(seconds=time.time() - started_simulation_at)
     simulation.save()
 
-    return get_response_object(agent)
+    return get_response_object(
+        agent=agent, simulation=simulation, preferences=preferences
+    )
 
 
 def write_agent_trades_to_db(agent: Agent, user, simulation: Simulation):
@@ -82,7 +84,9 @@ def write_agent_trades_to_db(agent: Agent, user, simulation: Simulation):
         instance.save()
 
 
-def get_response_object(agent: Agent) -> Dict[Any, Any]:
+def get_response_object(
+    agent: Agent, simulation: Simulation, preferences: Preferences
+) -> Dict[Any, Any]:
     results = {}
     results["transactions"] = [trade._asdict() for trade in agent.trading_history]
     results["current_portfolio"] = agent.portfolio
@@ -98,4 +102,14 @@ def get_response_object(agent: Agent) -> Dict[Any, Any]:
     }
     results["recommendation"] = agent.recommend()
     results["evaluation_history"] = agent.evaluation_history
+    results["input"] = {
+        "strategy": simulation.strategy,
+        "dates": {"from": simulation.starting_year, "to": simulation.end_year},
+        "preferences": {
+            "risk_affinity": preferences.risk_affinity,
+            "diversification": preferences.diversification,
+            "placeholder": preferences.placeholder,
+        },
+    }
+    results["sim_id"] = simulation.id
     return json.dumps(results, sort_keys=True, default=str)

@@ -45,6 +45,8 @@ class StartSimulationView(APIView):
         # 5. cash: (float)
         current_year = datetime.today().year
         request.user = User.objects.filter(is_superuser=True).first()
+        if request.user.is_superuser:
+            debug_subset = payload.get("subset_stocks", None)
         simulation_results = simulation_dispatcher.start(
             user=request.user,
             strategy_name=payload["strategy"],
@@ -57,7 +59,7 @@ class StartSimulationView(APIView):
             risk_affinity=payload["risk_affinity"],
             diversification=payload["diversification"],
             placeholder=payload["placeholder"],
-            debug_subset=20,
+            debug_subset=debug_subset,
         )
         return JsonResponse(data=simulation_results, safe=False)
 
