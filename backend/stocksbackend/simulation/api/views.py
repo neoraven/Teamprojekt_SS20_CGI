@@ -57,6 +57,7 @@ class StartSimulationView(APIView):
             risk_affinity=payload["risk_affinity"],
             diversification=payload["diversification"],
             placeholder=payload["placeholder"],
+            debug_subset=20,
         )
         return JsonResponse(data=simulation_results, safe=False)
 

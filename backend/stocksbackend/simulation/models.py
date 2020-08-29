@@ -32,7 +32,8 @@ class Simulation(models.Model):
         AgentValidator.validate_starting_capital(self.agent_starting_capital)
 
     def __str__(self):
-        return f"{self.user}@{self.created_at}, {self.strategy}, starting_capital={self.agent_starting_capital} | prefs = {self.preferences}"
+        #  | prefs = {self.preferences}
+        return f"{self.user}@{self.created_at}, {self.strategy}, starting_capital={self.agent_starting_capital}"
 
 
 class Preferences(models.Model):

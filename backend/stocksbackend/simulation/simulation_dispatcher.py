@@ -11,6 +11,8 @@ from .classes.market import Market
 from .classes import strategies
 from .classes.evaluator import TotalValueEvaluator, MovingValueChangeEvaluator
 
+from portfolio.models import Transaction
+from stocks.models import Stock
 from .models import Simulation, Preferences
 
 
@@ -23,6 +25,7 @@ def start(
     risk_affinity: int,
     diversification: int,
     placeholder: int,
+    debug_subset: int = None,
 ):
     if strategy_name == "DogsOfTheStocks":
         starting_year -= 1
@@ -44,7 +47,9 @@ def start(
     )
     preferences.save()
 
-    market = Market(starting_year=starting_year, end_year=end_year)
+    market = Market(
+        starting_year=starting_year, end_year=end_year, debug_subset=debug_subset
+    )
     strategy_class = strategies.get_strategy(strategy_name=strategy_name)
     strategy = strategy_class(top_n_stocks=10)
     agent = Agent(
@@ -55,10 +60,26 @@ def start(
     )
     started_simulation_at = time.time()
     agent.run_simulation()
+    write_agent_trades_to_db(agent=agent, user=user, simulation=simulation)
     simulation.time_elapsed = timedelta(seconds=time.time() - started_simulation_at)
     simulation.save()
 
     return get_response_object(agent)
+
+
+def write_agent_trades_to_db(agent: Agent, user, simulation: Simulation):
+    for transaction in agent.trading_history:
+        transaction_dict = transaction._asdict()
+        stock_instance = Stock.objects.get(symbol__iexact=transaction_dict["symbol"])
+        instance = Transaction(
+            user=user,
+            symbol=stock_instance,
+            amount=transaction_dict["amount"],
+            date_posted=transaction_dict["date"],
+            price_at=transaction_dict["stock_price"],
+            simulation=simulation,
+        )
+        instance.save()
 
 
 def get_response_object(agent: Agent) -> Dict[Any, Any]:

@@ -7,6 +7,8 @@ from .market import Market
 from .evaluator import BaseEvaluator
 from .base_strategy import BaseStrategy
 
+from portfolio.models import Transaction as TransactionModel
+
 Transaction = namedtuple(
     typename="Transaction",
     field_names=["symbol", "amount", "date", "stock_price", "total_value"],
@@ -116,6 +118,7 @@ class Agent:
         )
         if self.portfolio.get(transaction.symbol) == 0:
             self.portfolio.pop(transaction.symbol, None)
+
         self.trading_history.append(transaction)
 
     def print_stats(self):

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from stocks.models import Stock, Price
+from simulation.models import Simulation
 from django.core.validators import ValidationError
 
 
@@ -8,12 +9,15 @@ class Portfolio(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     symbol = models.ForeignKey(Stock, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField()
+    simulation = models.ForeignKey(
+        to=Simulation, on_delete=models.CASCADE, blank=True, null=True, default=None
+    )
 
     def __str__(self):
         return f"{self.user} > {self.amount} of {self.symbol.symbol}"
 
     class Meta:
-        unique_together = (("user", "symbol"),)
+        unique_together = (("user", "symbol", "simulation"),)
 
 
 class Transaction(models.Model):
@@ -22,6 +26,9 @@ class Transaction(models.Model):
     amount = models.IntegerField()
     date_posted = models.DateTimeField(auto_now=True)
     price_at = models.DecimalField(max_digits=8, decimal_places=3)
+    simulation = models.ForeignKey(
+        to=Simulation, on_delete=models.CASCADE, blank=True, null=True, default=None
+    )
 
     def __str__(self):
         purchase_type = "sold" if self.amount < 0 else "bought"
@@ -53,7 +60,9 @@ class Transaction(models.Model):
 
         super(Transaction, self).save(*args, **kwargs)
         try:
-            portfolio = Portfolio.objects.get(user=self.user, symbol=self.symbol)
+            portfolio = Portfolio.objects.get(
+                user=self.user, symbol=self.symbol, simulation=self.simulation
+            )
             portfolio.amount += self.amount
         except Portfolio.DoesNotExist:
             portfolio = Portfolio(
@@ -70,5 +79,10 @@ class Transaction(models.Model):
             # The user sold all his stocks > delete the portfolio
             portfolio.delete()
         else:
+            portfolio.simulation = self.simulation
             # Positive amount: save the model
             portfolio.save()
+
+    @property
+    def total_value(self):
+        return self.amount * self.price_at

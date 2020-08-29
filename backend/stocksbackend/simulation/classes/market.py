@@ -1,19 +1,32 @@
 from typing import Dict
 
 import pandas as pd
-from stocks.models import Price
+import random
+
+from stocks.models import Stock, Price
 
 _DJANGO_TO_PD_FIELDS = {"p_adjusted_close": "adjusted_close"}
 _DJANGO_DECIMAL_COLS = ["adjusted_close", "dividend_amount"]
 
 
 class Market:
-    def __init__(self, starting_year: int, end_year: int, name: str = None):
+    def __init__(
+        self,
+        starting_year: int,
+        end_year: int,
+        name: str = None,
+        debug_subset: int = None,
+    ):
         queryset = Price.objects.filter(
             date__year__gte=starting_year,
             date__year__lte=end_year,
             interval__iexact="1d",
         )
+        if debug_subset:
+            all_symbols = [stock.symbol for stock in Stock.objects.all()]
+            choices = random.choices(all_symbols, k=debug_subset)
+            queryset = queryset.filter(symbol__symbol__in=choices)
+
         list_of_columns = ["symbol", "date", "p_adjusted_close", "dividend_amount"]
         prices = pd.DataFrame.from_records(queryset.values_list(*list_of_columns))
         prices.columns = list_of_columns
@@ -21,7 +34,7 @@ class Market:
         # sort by date ascending, then by symbol descending
         prices.date = pd.to_datetime(prices.date)
         for col in _DJANGO_DECIMAL_COLS:
-            prices[col] = prices[col].apply(lambda x: float(x))
+            prices[col] = prices[col].apply(float)
         prices.sort_values(by=["date", "symbol"], inplace=True, ascending=[True, False])
         self.prices = prices
         print("===========MARKET LOADED===========")
