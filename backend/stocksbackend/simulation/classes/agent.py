@@ -1,6 +1,8 @@
+import pandas as pd
 from pandas._libs.tslibs.timestamps import Timestamp
 
 from collections import namedtuple
+import datetime
 import pprint
 
 from .market import Market
@@ -143,7 +145,10 @@ class Agent:
     def evaluate(self):
         evaluation_result = self.evaluator.evaluate(self)
         self.evaluation_history.append(
-            {"date": str(self.market.max_date), "score": evaluation_result}
+            {
+                "date": pd.to_datetime(self.market.max_date).strftime("%Y-%m-%d"),
+                "score": evaluation_result,
+            }
         )
 
     def misc_evaluate(self):

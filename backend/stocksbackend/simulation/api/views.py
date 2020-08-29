@@ -1,15 +1,16 @@
-from typing import Dict, Union
-
 from datetime import datetime
 
 from django.core.exceptions import ValidationError
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework import generics
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.throttling import UserRateThrottle
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 
+from .serializers import SimulationSerializer
 from .. import simulation_dispatcher
+from ..models import Simulation
 from ..classes import strategies
 
 
@@ -68,3 +69,22 @@ class StartSimulationView(APIView):
         for arg_name in _REQUEST_MANDATORY_ARGS:
             if arg_name not in payload:
                 raise ValidationError(f"{arg_name} has to be part of the payload!")
+
+
+class RetrieveSimulationView(APIView):
+    def get(self, request, sim_id):
+        try:
+            simulation = Simulation.objects.get(id=sim_id)
+            response = simulation.to_results_dict()
+        except Simulation.DoesNotExist:
+            response = {"error": f"Simulation id <{sim_id}> does not exist!"}
+
+        return JsonResponse(data=response, safe=False)
+
+
+class SimulationListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = SimulationSerializer
+
+    def get_queryset(self):
+        return Simulation.objects.filter(user=self.request.user)

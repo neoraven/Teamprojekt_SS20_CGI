@@ -5,6 +5,7 @@ import json
 import time
 
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import dateparse, timezone
 
 from .classes.agent import Agent
 from .classes.market import Market
@@ -13,7 +14,7 @@ from .classes.evaluator import TotalValueEvaluator, MovingValueChangeEvaluator
 
 from portfolio.models import Transaction
 from stocks.models import Stock
-from .models import Simulation, Preferences
+from .models import Simulation, Preferences, Evaluation, Recommendation
 
 
 def start(
@@ -36,6 +37,7 @@ def start(
         starting_year=starting_year,
         end_year=end_year,
         agent_starting_capital=agent_starting_capital,
+        agent_cash_left=agent_starting_capital,
     )
     simulation.save()
 
@@ -61,7 +63,11 @@ def start(
     started_simulation_at = time.time()
     agent.run_simulation()
     write_agent_trades_to_db(agent=agent, user=user, simulation=simulation)
+    write_evaluation_results_to_db(agent=agent, simulation=simulation)
+    write_recommendations_to_db(agent=agent, simulation=simulation)
     simulation.time_elapsed = timedelta(seconds=time.time() - started_simulation_at)
+    simulation.agent_cash_left = agent.cash
+    simulation.agent_end_portfolio_value = agent.get_own_total_value()
     simulation.save()
 
     return get_response_object(
@@ -73,14 +79,35 @@ def write_agent_trades_to_db(agent: Agent, user, simulation: Simulation):
     for transaction in agent.trading_history:
         transaction_dict = transaction._asdict()
         stock_instance = Stock.objects.get(symbol__iexact=transaction_dict["symbol"])
+        t_date = datetime.utcfromtimestamp(
+            transaction_dict["date"].astype(datetime) / 1e9
+        )
+        t_date = timezone.make_aware(value=t_date)
         instance = Transaction(
             user=user,
             symbol=stock_instance,
             amount=transaction_dict["amount"],
-            date_posted=transaction_dict["date"],
+            date_posted=t_date,
             price_at=transaction_dict["stock_price"],
             simulation=simulation,
         )
+        instance.save(is_simulation=True)
+
+
+def write_evaluation_results_to_db(agent: Agent, simulation: Simulation):
+    for evaluation_result in agent.evaluation_history:
+        instance = Evaluation(
+            date=evaluation_result["date"],
+            score=evaluation_result["score"],
+            simulation=simulation,
+        )
+        instance.save()
+
+
+def write_recommendations_to_db(agent: Agent, simulation: Simulation):
+    recommendations = agent.recommend()
+    for symbol, weight in recommendations.items():
+        instance = Recommendation(symbol=symbol, weight=weight, simulation=simulation)
         instance.save()
 
 
