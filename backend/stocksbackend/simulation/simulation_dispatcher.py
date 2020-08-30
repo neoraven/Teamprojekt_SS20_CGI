@@ -31,8 +31,6 @@ def start(
     placeholder: int,
     debug_subset: int = None,
 ):
-    if strategy_name == "DogsOfTheStocks":
-        starting_year -= 1
 
     simulation = Simulation(
         user=user,
@@ -52,9 +50,9 @@ def start(
     )
     preferences.save()
 
-    market = Market(
-        starting_year=starting_year, end_year=end_year, debug_subset=debug_subset
-    )
+    if strategy_name == "DogsOfTheStocks":
+        starting_year -= 1
+
     strategy_class = strategies.get_strategy(strategy_name=strategy_name)
     if strategy_kwargs:
         for kwarg in strategy_kwargs:
@@ -75,6 +73,16 @@ def start(
             return {
                 "error": f"Missing kwarg for strategy {strategy_name}: {missing_kwargs}"
             }
+
+    market_increments = (
+        getattr(strategy, "increments") if hasattr(strategy, "increments") else "1days"
+    )
+    market = Market(
+        starting_year=starting_year,
+        end_year=end_year,
+        debug_subset=debug_subset,
+        increments=market_increments,
+    )
 
     agent = Agent(
         starting_capital=agent_starting_capital,
@@ -101,15 +109,15 @@ def write_agent_trades_to_db(agent: Agent, user, simulation: Simulation):
     for transaction in agent.trading_history:
         transaction_dict = transaction._asdict()
         stock_instance = Stock.objects.get(symbol__iexact=transaction_dict["symbol"])
-        t_date = datetime.utcfromtimestamp(
-            transaction_dict["date"].astype(datetime) / 1e9
-        )
-        t_date = timezone.make_aware(value=t_date)
+        # t_date = datetime.utcfromtimestamp(
+        #     transaction_dict["date"].astype(datetime) / 1e9
+        # )
+        # t_date = timezone.make_aware(value=t_date)
         instance = Transaction(
             user=user,
             symbol=stock_instance,
             amount=transaction_dict["amount"],
-            date_posted=t_date,
+            date_posted=timezone.make_aware(transaction_dict["date"]),  # t_date
             price_at=transaction_dict["stock_price"],
             simulation=simulation,
         )
@@ -128,8 +136,12 @@ def write_evaluation_results_to_db(agent: Agent, simulation: Simulation):
 
 def write_recommendations_to_db(agent: Agent, simulation: Simulation):
     recommendations = agent.recommend()
-    for symbol, weight in recommendations.items():
-        instance = Recommendation(symbol=symbol, weight=weight, simulation=simulation)
+    for recommendation in recommendations:
+        instance = Recommendation(
+            symbol=recommendation["symbol"],
+            weight=recommendation["weight"],
+            simulation=simulation,
+        )
         instance.save()
 
 
@@ -138,9 +150,6 @@ def get_response_object(
 ) -> Dict[Any, Any]:
     results = {}
     transactions = [trade._asdict() for trade in agent.trading_history]
-    for transaction in transactions:
-        t_date = datetime.utcfromtimestamp(transaction["date"].astype(datetime) / 1e9)
-        transaction["date"] = timezone.make_aware(value=t_date)
     results["transactions"] = transactions
     results["current_portfolio"] = agent.portfolio
     starting_capital, current_portfolio_value = (

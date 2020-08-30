@@ -38,6 +38,7 @@ class Agent:
 
     def run_simulation(self):
         for mask in self.market:
+            # print(self.market.max_date)
             dragging_balance = 0
             self.mask = mask
             # agent gets dividends paid out accd. to his portfolio
@@ -71,6 +72,7 @@ class Agent:
                         self.cash,
                     )
                     amount_of_stocks_to_buy = amount_to_spend // current_stock_price
+                    dragging_balance += amount_to_spend % current_stock_price
                     if amount_of_stocks_to_buy == 0:
                         print(
                             f"Cant buy {symbol} for {current_stock_price}, I want to spend {amount_to_spend}"
@@ -170,4 +172,7 @@ class Agent:
         non_zero_recommendations = {
             stock: weight for (stock, weight) in recommendations.items() if weight != 0
         }
-        return non_zero_recommendations
+        formatted_recommendations = [
+            {"symbol": s, "weight": w} for (s, w) in non_zero_recommendations.items()
+        ]
+        return formatted_recommendations

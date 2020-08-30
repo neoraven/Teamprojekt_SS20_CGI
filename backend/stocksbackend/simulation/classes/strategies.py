@@ -8,7 +8,9 @@ def verify_strategy(strategy_name: str) -> bool:
     try:
         current_module = sys.modules[__name__]
         strategy = getattr(current_module, strategy_name)
-        return hasattr(strategy, "weight")
+        return hasattr(strategy, "weight") and hasattr(
+            getattr(strategy, "weight"), "__call__"
+        )
     except AttributeError:
         return False
 

@@ -66,13 +66,15 @@ class Simulation(models.Model):
     def fetch_my_recommendations(self):
         return Recommendation.objects.filter(simulation=self)
 
-    def load_recommendations_to_single_dict(self):
-        recommendations_dict = {}
+    def load_recommendations_to_list(self):
+        recommendations_list = []
         recommendation_models = self.fetch_my_recommendations()
 
         for recommendation in recommendation_models:
-            recommendations_dict[recommendation.symbol] = recommendation.weight
-        return recommendations_dict
+            recommendations_list.append(
+                {"symbol": recommendation.symbol, "weight": recommendation.weight}
+            )
+        return recommendations_list
 
     def fetch_my_evaluations(self):
         return Evaluation.objects.filter(simulation=self)
@@ -107,7 +109,7 @@ class Simulation(models.Model):
         response["current_portfolio"] = self.load_portfolios_to_single_dict()
         response["evaluation_history"] = self.load_all_evaluations_to_list()
         response["transactions"] = self.load_all_transactions_to_list()
-        response["recommendations"] = self.load_recommendations_to_single_dict()
+        response["recommendations"] = self.load_recommendations_to_list()
         response["performance"] = {
             "current_portfolio_value": float(self.agent_end_portfolio_value),
             "percent_change": float(

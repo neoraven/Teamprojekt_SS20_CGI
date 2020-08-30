@@ -5,9 +5,25 @@ from ..base_strategy import BaseStrategy
 
 
 class DogsOfTheStocks(BaseStrategy):
-    def __init__(self, top_n_stocks: int = 10, *args, **kwargs):
+    def __init__(self, top_n_stocks: int = 10, increments="1years", *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.top_n_stocks = top_n_stocks
+        self.increments = increments
+        self.last_date = None
+
+    def did_skip(self, current_date, market_state: pd.DataFrame):
+        if self.last_date is None:
+            return market_state.date.max().year - market_state.date.min().year == 1
+
+        did_we_skip = (
+            self.last_date
+            <= market_state.loc[
+                market_state.date.dt.year == current_date.year
+            ].date.min()
+            <= current_date
+        )
+        # print(f"{current_date}: did we skip? => {did_we_skip}")
+        return did_we_skip
 
     def weight(
         self,
@@ -24,14 +40,15 @@ class DogsOfTheStocks(BaseStrategy):
         current_date = market_state.date.max()
         if current_date.year == market_state.date.min().year:
             # there is no previous year
+            self.last_date = current_date
             return weights
         if not is_recommendation:
-            if (
-                current_date
-                != market_state.loc[
-                    market_state.date.dt.year == current_date.year
-                ].date.min()
+            if current_date != market_state.loc[
+                market_state.date.dt.year == current_date.year
+            ].date.min() and not self.did_skip(
+                current_date=current_date, market_state=market_state
             ):
+                self.last_date = current_date
                 # it's not the first trading day of the current year
                 return weights
 
@@ -83,6 +100,7 @@ class DogsOfTheStocks(BaseStrategy):
 
         # rebalancing
         weights = self.rebalance(current_portfolio=agent_portfolio, weights=weights)
+        self.last_date = current_date
         return weights
 
     @staticmethod
