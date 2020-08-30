@@ -89,4 +89,4 @@ class SimulationListView(generics.ListAPIView):
     serializer_class = SimulationSerializer
 
     def get_queryset(self):
-        return Simulation.objects.filter(user=self.request.user)
+        return Simulation.objects.filter(user=self.request.user).order_by("-id")
