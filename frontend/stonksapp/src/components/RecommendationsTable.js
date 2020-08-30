@@ -18,6 +18,7 @@ const fame = [
 ];
 
 class RecommendationsTable extends React.Component {
+
     render() {
         return (
             <List

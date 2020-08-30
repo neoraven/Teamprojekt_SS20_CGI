@@ -86,7 +86,7 @@ class RecommendationView extends React.Component {
                 subset_stocks: 20
             }).then(result => this.setState({
                 loading: false,
-                data: [result.data],
+                data: result.data,
             },
             console.log(result.data)))
 
