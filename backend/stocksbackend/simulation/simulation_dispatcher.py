@@ -5,6 +5,8 @@ import json
 import time
 
 from django.core.serializers.json import DjangoJSONEncoder
+from rest_framework.response import Response
+from rest_framework import status
 from django.utils import dateparse, timezone
 
 from .classes.agent import Agent
@@ -163,5 +165,4 @@ def get_response_object(
         },
     }
     results["sim_id"] = simulation.id
-    return results
-    return json.dumps(results, sort_keys=True, cls=DjangoJSONEncoder)
+    return Response(data=results, status=status.HTTP_200_OK)
