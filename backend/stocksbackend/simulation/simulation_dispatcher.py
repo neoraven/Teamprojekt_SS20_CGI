@@ -50,9 +50,6 @@ def start(
     )
     preferences.save()
 
-    if strategy_name == "DogsOfTheStocks":
-        starting_year -= 1
-
     strategy_class = strategies.get_strategy(strategy_name=strategy_name)
     if strategy_kwargs:
         for kwarg in strategy_kwargs:
@@ -73,6 +70,11 @@ def start(
             return {
                 "error": f"Missing kwarg for strategy {strategy_name}: {missing_kwargs}"
             }
+    starting_year_offset, end_year_offset = (
+        strategy.year_offsets if hasattr(strategy, "year_offsets") else (0, 0)
+    )
+    starting_year += starting_year_offset
+    end_year += end_year_offset
 
     market_increments = (
         getattr(strategy, "increments") if hasattr(strategy, "increments") else "1days"

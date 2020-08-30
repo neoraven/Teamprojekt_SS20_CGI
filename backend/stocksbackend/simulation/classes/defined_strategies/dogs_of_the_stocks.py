@@ -10,6 +10,7 @@ class DogsOfTheStocks(BaseStrategy):
         self.top_n_stocks = top_n_stocks
         self.increments = increments
         self.last_date = None
+        self.year_offsets = (-1, 0)
 
     def did_skip(self, current_date, market_state: pd.DataFrame):
         if current_date.month != 1:
