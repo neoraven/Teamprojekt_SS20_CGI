@@ -14,6 +14,7 @@ class SimulationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Simulation
         fields = (
+            "id",
             "created_at",
             "strategy",
             "starting_year",
