@@ -1,31 +1,27 @@
 import React from 'react'
+import api from '../utils/api';
 
 import { List, Avatar, Button } from 'antd';
 
-const fame = [
-    {
-        title: 'Ant Design Title 1',
-    },
-    {
-        title: 'Ant Design Title 2',
-    },
-    {
-        title: 'Ant Design Title 3',
-    },
-    {
-        title: 'Ant Design Title 4',
-    },
-];
+const companyicon = entry => {
+ /*  const data = []
+    api.get(`/api/stocks/${entry}/details/`)
+        .then(res => {
+            data.push(res)
+        })
+    console.log(data)
+    return <Avatar src={data.meta_data.image_url} />*/
+}
 
 class RecommendationsTable extends React.Component {
-    state={
-        recs: []
+    state = {
+        recs: [],
+        details: [],
+        symbols: []
     }
 
-    componentDidMount(){
-        this.setState({
-            recs: this.props.data
-        })
+    componentDidMount() {
+
     }
 
     render() {
@@ -40,10 +36,10 @@ class RecommendationsTable extends React.Component {
                             actions={[<Button type="primary" > Add to Portfolio </Button>]}>
 
                             <List.Item.Meta
-                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                                avatar={companyicon(item.symbol)}
                                 title={<a href="https://ant.design">{item.symbol}</a>}
                             />
-                            <div>content</div>
+                            <div>{item.weight}</div>
                         </List.Item>
                     )}
                 />
