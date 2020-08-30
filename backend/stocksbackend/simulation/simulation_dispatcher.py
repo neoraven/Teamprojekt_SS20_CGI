@@ -20,6 +20,7 @@ from .models import Simulation, Preferences, Evaluation, Recommendation
 def start(
     user,
     strategy_name: str,
+    strategy_kwargs: Dict[str, Any],
     starting_year: int,
     end_year: int,
     agent_starting_capital: float,
@@ -53,7 +54,26 @@ def start(
         starting_year=starting_year, end_year=end_year, debug_subset=debug_subset
     )
     strategy_class = strategies.get_strategy(strategy_name=strategy_name)
-    strategy = strategy_class(top_n_stocks=10)
+    if strategy_kwargs:
+        for kwarg in strategy_kwargs:
+            if kwarg not in strategy_class.__init__.__code__.co_varnames:
+                return {
+                    "error": f"{kwarg} is not a valid input for strategy {strategy_name}"
+                }
+        strategy = strategy_class(**strategy_kwargs)
+    else:
+        try:
+            strategy = strategy_class()
+        except TypeError as e:
+            missing_kwargs = [
+                arg
+                for arg in strategy_class.__init__.__code__.co_varnames
+                if arg not in ["self", "args", "kwargs"]
+            ]
+            return {
+                "error": f"Missing kwarg for strategy {strategy_name}: {missing_kwargs}"
+            }
+
     agent = Agent(
         starting_capital=agent_starting_capital,
         market=market,
@@ -143,4 +163,5 @@ def get_response_object(
         },
     }
     results["sim_id"] = simulation.id
-    return json.dumps(results, sort_keys=True, default=str)
+    return results
+    return json.dumps(results, sort_keys=True, cls=DjangoJSONEncoder)

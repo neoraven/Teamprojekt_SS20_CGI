@@ -51,6 +51,7 @@ class StartSimulationView(APIView):
         simulation_results = simulation_dispatcher.start(
             user=request.user,
             strategy_name=payload["strategy"],
+            strategy_kwargs=payload.get("strategy_kwargs", {}),
             starting_year=payload.get(
                 "starting_year",
                 payload.get("end_year", current_year) - DEFAULT_AMNT_YEARS_TO_RUN,
@@ -62,7 +63,8 @@ class StartSimulationView(APIView):
             placeholder=payload["placeholder"],
             debug_subset=debug_subset,
         )
-        return JsonResponse(data=simulation_results, safe=False)
+        # return JsonResponse(data=simulation_results, safe=False)
+        return simulation_results
 
     @staticmethod
     def _verify_payload(payload):
