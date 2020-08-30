@@ -18,25 +18,37 @@ const fame = [
 ];
 
 class RecommendationsTable extends React.Component {
+    state={
+        recs: []
+    }
+
+    componentDidMount(){
+        this.setState({
+            recs: this.props.data
+        })
+    }
 
     render() {
-        return (
-            <List
-                itemLayout="horizontal"
-                dataSource={fame}
-                renderItem={item => (
-                    <List.Item
-                        actions={[<Button type="primary" > Add to Portfolio </Button>]}>
+        if (this.props.data != undefined) {
 
-                        <List.Item.Meta
-                            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                            title={<a href="https://ant.design">{item.title}</a>}
-                        />
-                        <div>content</div>
-                    </List.Item>
-                )}
-            />
-        )
+            return (
+                <List
+                    itemLayout="horizontal"
+                    dataSource={this.props.data}
+                    renderItem={item => (
+                        <List.Item
+                            actions={[<Button type="primary" > Add to Portfolio </Button>]}>
+
+                            <List.Item.Meta
+                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                                title={<a href="https://ant.design">{item.symbol}</a>}
+                            />
+                            <div>content</div>
+                        </List.Item>
+                    )}
+                />
+            )
+        }
     }
 }
 
