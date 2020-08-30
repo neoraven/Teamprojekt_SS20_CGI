@@ -115,7 +115,11 @@ def get_response_object(
     agent: Agent, simulation: Simulation, preferences: Preferences
 ) -> Dict[Any, Any]:
     results = {}
-    results["transactions"] = [trade._asdict() for trade in agent.trading_history]
+    transactions = [trade._asdict() for trade in agent.trading_history]
+    for transaction in transactions:
+        t_date = datetime.utcfromtimestamp(transaction["date"].astype(datetime) / 1e9)
+        transaction["date"] = timezone.make_aware(value=t_date)
+    results["transactions"] = transactions
     results["current_portfolio"] = agent.portfolio
     starting_capital, current_portfolio_value = (
         agent.starting_capital,
