@@ -8,7 +8,7 @@ import './CustomSlider.css';
 class CustomRangeSlider extends React.Component {
 
     state = {
-        value: [2017,2019],
+        value: [2019,2019],
     };
 
 

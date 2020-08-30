@@ -7,6 +7,7 @@ import Recommendations from '../components/Recommendations';
 import './RecommendationView.css';
 import api from '../utils/api';
 import Loadingpage from '../components/Loadingpage'
+import Resultspage from '../components/Resultspage'
 
 const { Step } = Steps;
 //ToDo:
@@ -24,7 +25,7 @@ class RecommendationView extends React.Component {
             risk: 0,
             diversification: 0,
             slider3: 0,
-            years: [2017, 2019],
+            years: [2019, 2019],
             starting_capital: 10000,
             strategy: "",
         };
@@ -85,8 +86,9 @@ class RecommendationView extends React.Component {
                 subset_stocks: 20
             }).then(result => this.setState({
                 loading: false,
-                data: { ...result.data },
-            }))
+                data: [result.data],
+            },
+            console.log(result.data)))
 
 
 
@@ -95,7 +97,7 @@ class RecommendationView extends React.Component {
     }
 
     render() {
-        const { current, loading, lastpage } = this.state;
+        const { current, loading, lastpage, data } = this.state;
         return (
             <>
                 {
@@ -120,7 +122,7 @@ class RecommendationView extends React.Component {
                                 :
                                 <div>
                                     {lastpage ?
-                                        <div> results will be shown here </div>
+                                        <Resultspage data={data}/>
                                         :
 
                                         <div></div>
