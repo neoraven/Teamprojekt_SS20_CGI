@@ -35,7 +35,7 @@ urlpatterns = [
     path("", StockAllView.as_view(), name="all-stocks"),
     path("list/details/", StockAllDetailView.as_view(), name="all-stocks-with-details"),
     path(
-        "<symbols>/details/",
+        "list/<symbols>/details/",
         StockBatchDetailView.as_view(),
         name="batch-stocks-with-details",
     ),
