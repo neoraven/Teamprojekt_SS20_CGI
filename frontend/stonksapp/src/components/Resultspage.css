@@ -1,0 +1,17 @@
+/**.parent .SimulationParameters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .parent .test {
+    flex: 1 1 150px; 
+    flex: 0 1 150px; 
+    margin: 5px;
+  }
+  .parent .PreferencesTable {
+    flex: 1 1 150px; 
+    flex: 0 1 150px; 
+    margin: 5px;
+  }*/
+
