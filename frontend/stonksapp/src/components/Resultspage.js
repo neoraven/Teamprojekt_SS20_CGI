@@ -13,8 +13,8 @@ import PreferencesTable from './PreferencesTable'
 
 
 
-const Preftable = entry =>{
-   const columns = [
+const Preftable = entry => {
+    const columns = [
         {
             title: 'Preference',
             dataIndex: 'preference',
@@ -25,7 +25,7 @@ const Preftable = entry =>{
         },
     ]
 
-   const data = [
+    const data = [
         {
             key: '1',
             preference: "Risk Affinity",
@@ -45,16 +45,37 @@ const Preftable = entry =>{
     return <Table pagination={false} columns={columns} dataSource={data} size="small" />;
 }
 
+/*const RecsTable = entry => {
+    console.log(entry)
+    return (
+        <List
+            itemLayout="horizontal"
+            dataSource={entry}
+            renderItem={item => (
+                <List.Item
+                    actions={[<Button type="primary" > Add to Portfolio </Button>]}>
+
+                    <List.Item.Meta
+                        avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                        title={<a href="https://ant.design">{item.symbol}</a>}
+                    />
+                    <div>content</div>
+                </List.Item>
+            )}
+        />
+    )
+}*/
+
 
 class Resultspage extends React.Component {
     state = {
         data: {}, //current cash/sim_id 
         strategy: {},
         dates: {},
-        preferences:{},
-        evaluation_history:{},
-        performance:{},
-        recommendation:{}
+        preferences: {},
+        evaluation_history: {},
+        performance: {},
+        recommendation: []
     }
     componentDidMount() {
         this.setState({
@@ -69,35 +90,36 @@ class Resultspage extends React.Component {
 
 
     render() {
-        if(this.state.data == {} || this.state.preferences.diversification =={}){
-            return(<div></div>)
-        }else{
-        return (
-            <div className="parent">
-                <center><h2>Results</h2></center>
-                <h1>Simulation Parameters</h1>
-                <div className="SimulationParameters">
-                    <div className="years">
-                        <p>Strategy: {this.state.strategy.strategy}</p>
-                        <p > {this.state.dates.from} <RightSquareTwoTone style={{ fontSize: 22 }}  /> {this.state.dates.to}</p>
+        if (this.state.data == {} || this.state.preferences.diversification == {} || this.state.recommendation == undefined) {
+            return (<div></div>)
+        } else {
+            return (
+                <div className="parent">
+                    <center><h2>Results</h2></center>
+                    <h1>Simulation Parameters</h1>
+                    <div className="SimulationParameters">
+                        <div className="years">
+                            <p>Strategy: {this.state.strategy.strategy}</p>
+                            <p > {this.state.dates.from} <RightSquareTwoTone style={{ fontSize: 22 }} /> {this.state.dates.to}</p>
+                        </div>
+                        <div className="PreferencesTable">
+                            {Preftable(this.state.preferences)}
+                        </div>
                     </div>
-                    <div className="PreferencesTable">
-                        {Preftable(this.state.preferences)}
+                    <div className="Gains">
+                        <p style={{ textAlign: "center" }}>Starting Capital: ${this.state.performance.starting_capital} <FundTwoTone style={{ fontSize: 22 }} twoToneColor="#52c41a" /> Current Portfolio vaule: ${this.state.performance.current_portfolio_value}</p>
+                    </div>
+                    <h1>Evaluation History</h1>
+                    <div className='Evaluation' style={{ textAlign: "justify" }}>
+                        <center><p><b>-------GRAPH HERE---------</b></p></center>
+                    </div>
+                    <h1>Recommendations</h1>
+                    <div className="Recommendations">
+                        <RecommendationsTabel data={this.state.recommendation}/>
                     </div>
                 </div>
-                <div className="Gains">
-                    <p style={{ textAlign: "center" }}>Starting Capital: ${this.state.performance.starting_capital} <FundTwoTone style={{ fontSize: 22 }} twoToneColor="#52c41a" /> Current Portfolio vaule: ${this.state.performance.current_portfolio_value}</p>
-                </div>
-                <h1>Evaluation History</h1>
-                <div className='Evaluation' style={{ textAlign: "justify" }}>
-                    <center><p><b>-------GRAPH HERE---------</b></p></center>
-                </div>
-                <h1>Recommendations</h1>
-                <div className="Recommendations">
-                    <RecommendationsTabel data={this.state.recommendation} cash={this.state.performance.starting_capital} />
-                </div>
-            </div>
-        )}
+            )
+        }
     }
 }
 export default Resultspage;
