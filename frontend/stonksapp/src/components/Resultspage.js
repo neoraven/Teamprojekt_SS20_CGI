@@ -13,6 +13,38 @@ import PreferencesTable from './PreferencesTable'
 
 
 
+const Preftable = entry =>{
+   const columns = [
+        {
+            title: 'Preference',
+            dataIndex: 'preference',
+        },
+        {
+            title: 'Value',
+            dataIndex: 'value',
+        },
+    ]
+
+   const data = [
+        {
+            key: '1',
+            preference: "Risk Affinity",
+            value: entry.risk_affinity,
+        },
+        {
+            key: '2',
+            preference: 'Diversification',
+            value: entry.diversification,
+        },
+        {
+            key: '3',
+            preference: 'Placeholder',
+            value: entry.placeholder,
+        },
+    ]
+    return <Table pagination={false} columns={columns} dataSource={data} size="small" />;
+}
+
 
 class Resultspage extends React.Component {
     state = {
@@ -25,17 +57,6 @@ class Resultspage extends React.Component {
         recommendation:{}
     }
     componentDidMount() {
-   /*     api.get('/api/sim/15/')
-            .then(res => {
-                this.setState({
-                    data: res.data,
-                    strategy: res.data.input,
-                    dates: res.data.input.dates,
-                    preferences: res.data.input.preferences,
-
-                })
-            })*/
-
         this.setState({
             strategy: this.props.data.input,
             dates: this.props.data.input.dates,
@@ -46,8 +67,9 @@ class Resultspage extends React.Component {
         })
     }
 
+
     render() {
-        if(this.state.data == {}){
+        if(this.state.data == {} || this.state.preferences.diversification =={}){
             return(<div></div>)
         }else{
         return (
@@ -60,7 +82,7 @@ class Resultspage extends React.Component {
                         <p > {this.state.dates.from} <RightSquareTwoTone style={{ fontSize: 22 }}  /> {this.state.dates.to}</p>
                     </div>
                     <div className="PreferencesTable">
-                        <PreferencesTable data={this.state.preferences}/>
+                        {Preftable(this.state.preferences)}
                     </div>
                 </div>
                 <div className="Gains">
