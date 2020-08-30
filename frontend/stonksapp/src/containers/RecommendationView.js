@@ -6,10 +6,11 @@ import Strategies from '../components/Strategies';
 import Recommendations from '../components/Recommendations';
 import './RecommendationView.css';
 import api from '../utils/api';
+import Loadingpage from '../components/Loadingpage'
 
 const { Step } = Steps;
- //ToDo:
- // Slider start & end year; field for starting capital
+//ToDo:
+// Slider start & end year; field for starting capital
 
 
 class RecommendationView extends React.Component {
@@ -19,10 +20,11 @@ class RecommendationView extends React.Component {
         this.strategiesRef = React.createRef();
         this.state = {
             current: 0,
+
             risk: 0,
             diversification: 0,
             slider3: 0,
-            years: [2017,2019],
+            years: [2017, 2019],
             starting_capital: 10000,
             strategy: "",
         };
@@ -35,24 +37,25 @@ class RecommendationView extends React.Component {
         },
         {
             title: 'Strategies',
-            content: <Strategies/>,
+            content: <Strategies />,
         },
         {
             title: 'Recommendations',
-            content: <Recommendations/>,
+            content: <Recommendations />,
         },
     ];
 
     next() {
-        if(this.state.current === 0){
+        if (this.state.current === 0) {
             this.setState({
+                starting_capital: this.preferencesRef.current.state.starting_capital,
                 risk: this.preferencesRef.current.state.risk,
                 diversification: this.preferencesRef.current.state.diversification,
                 slider3: this.preferencesRef.current.state.slider3,
                 years: this.preferencesRef.current.state.years,
             })
         }
-        if(this.state.current === 1){
+        if (this.state.current === 1) {
             this.setState({
                 strategy: this.strategiesRef.current.state.strategy,
             })
@@ -65,32 +68,39 @@ class RecommendationView extends React.Component {
         const current = this.state.current - 1;
         this.setState({ current });
     }
-    oc(){
+    oc() {
         console.log(this.testRef)
     }
 
-    onDone(){
-        console.log("startSim")
-        api.post('/api/sim/start/', {
-            risk_affinity: this.state.risk,
-            diversification: this.state.diversification,
-            placeholder: this.state.slider3,
-            strategy: this.state.strategy,
-            starting_capital: this.state.starting_capital,
-            end_year: this.state.years[1],
-            starting_year: this.state.years[0],
-            subset_stocks: 20
-        }).then(function (response) {
-            console.log(response);
-          })
+    onDone() {
+        this.setState({ loading: true, lastpage: true }, () => {
+            api.post('/api/sim/start/', {
+                risk_affinity: this.state.risk,
+                diversification: this.state.diversification,
+                placeholder: this.state.slider3,
+                strategy: this.state.strategy,
+                starting_capital: this.state.starting_capital,
+                end_year: this.state.years[1],
+                starting_year: this.state.years[0],
+                subset_stocks: 20
+            }).then(result => this.setState({
+                loading: false,
+                data: { ...result.data },
+            }))
+
+
+
+        })
+
     }
 
     render() {
-        const { current } = this.state;
+        const { current, loading, lastpage } = this.state;
         return (
             <>
                 {
                     this.props.isAuthenticated ?
+
 
 
                         <div>
@@ -101,37 +111,59 @@ class RecommendationView extends React.Component {
                                     ))}
                                 </Steps>
                             </div>
-                            <div className="steps-content">
-                                { current === 0 &&(
-                                <Preferences ref={this.preferencesRef}/>
-                                )}
-                                { current === 1 &&(
-                                <Strategies ref={this.strategiesRef}/>
-                                )}
-                                { current === 2 &&(
-                                <Recommendations ref={this.preferencesRef}/>
-                                )}
-                                
-                                
+
+
+                            {loading ?
+
+                                <Loadingpage />
+
+                                :
+                                <div>
+                                    {lastpage ?
+                                        <div> results will be shown here </div>
+                                        :
+
+                                        <div></div>
+                                    }
+
+                                    <div className="steps-content">
+                                        {current === 0 && (
+                                            <Preferences ref={this.preferencesRef} />
+                                        )}
+                                        {current === 1 && (
+                                            <Strategies ref={this.strategiesRef} />
+                                        )}
+                                        {current === 2 && (
+                                            <Recommendations ref={this.preferencesRef} />
+                                        )}
+
+
+                                    </div>
+
+
+                                    <div className="steps-action">
+                                        {current < this.steps.length - 1 && (
+                                            <Button type="primary" onClick={() => this.next()}>
+                                                Next
+                                            </Button>
+                                        )}
+                                        {current === this.steps.length - 1 && (
+                                            <Button type="primary" onClick={() => this.onDone()}>
+                                                Done
+                                            </Button>
+                                        )}
+                                        {current > 0 && (
+                                            <Button style={{ margin: '0 8px' }} onClick={() => this.prev()}>
+                                                Previous
+                                            </Button>
+                                        )}
+                                    </div>
                                 </div>
-                            <div className="steps-action">
-                                {current < this.steps.length - 1 && (
-                                    <Button type="primary" onClick={() => this.next()}>
-                                        Next
-                                    </Button>
-                                )}
-                                {current === this.steps.length - 1 && (
-                                    <Button type="primary" onClick={() => this.onDone()}>
-                                        Done
-                                    </Button>
-                                )}
-                                {current > 0 && (
-                                    <Button style={{ margin: '0 8px' }} onClick={() => this.prev()}>
-                                        Previous
-                                    </Button>
-                                )}
-                            </div>
-                            
+
+
+
+                            }
+
                         </div>
 
                         :
