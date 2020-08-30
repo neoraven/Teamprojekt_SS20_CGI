@@ -59,8 +59,9 @@ class Market:
     def current_date(self):
         return self.max_date or "Market has not yet started!"
 
-    def get_most_recent_price(self, symbol: str) -> float:
-        most_recent_date_mask = (self.prices.date <= self.max_date) & (
+    def get_most_recent_price(self, symbol: str, for_date=None) -> float:
+        for_date = for_date or self.max_date
+        most_recent_date_mask = (self.prices.date <= for_date) & (
             self.prices.symbol == symbol
         )
         most_recent_date = self.prices.loc[most_recent_date_mask].date.max()

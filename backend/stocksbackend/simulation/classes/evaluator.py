@@ -9,8 +9,8 @@ class BaseEvaluator:
 
 # ---------- V IMPLEMENTATIONS V --------------------
 class TotalValueEvaluator(BaseEvaluator):
-    def evaluate(self, agent) -> Dict[Timestamp, float]:
-        return agent.get_own_total_value()
+    def evaluate(self, agent, **kwargs) -> Dict[Timestamp, float]:
+        return agent.get_own_total_value(**kwargs)
 
 
 class MovingValueChangeEvaluator(BaseEvaluator):

@@ -1,6 +1,7 @@
 import pandas as pd
 from pandas._libs.tslibs.timestamps import Timestamp
 
+from datetime import timedelta
 from collections import namedtuple
 import datetime
 import pprint
@@ -63,6 +64,12 @@ class Agent:
                     print(f"Making sell transaction: {sell_transaction}")
                     self.sell(sell_transaction)
                 total_cash_before_transactions = self.cash
+                weights = {
+                    s: w
+                    for (s, w) in sorted(
+                        weights.items(), key=lambda item: item[1], reverse=True
+                    )
+                }
                 for symbol, weight in filter(lambda x: x[1] > 0, weights.items()):
                     current_stock_price = self.market.get_most_recent_price(
                         symbol=symbol
@@ -137,21 +144,41 @@ class Agent:
         print("Performance verdict:\n")
         print(self.evaluate())
 
-    def get_own_total_value(self):
+    def get_own_total_value(self, **kwargs):
         total_value = self.cash
         for stock, amount in self.portfolio.items():
-            total_value += self.market.get_most_recent_price(symbol=stock) * amount
+            total_value += (
+                self.market.get_most_recent_price(symbol=stock, **kwargs) * amount
+            )
 
         return total_value
 
+    @staticmethod
+    def iterate_dates(start_date, end_date, step_size):
+        curr_date = start_date
+        while curr_date <= end_date:
+            yield curr_date
+            curr_date += step_size
+
     def evaluate(self):
-        evaluation_result = self.evaluator.evaluate(self)
-        self.evaluation_history.append(
-            {
-                "date": pd.to_datetime(self.market.max_date).strftime("%Y-%m-%d"),
-                "score": evaluation_result,
-            }
+        daily_delta = timedelta(days=1)
+        last_eval_date = (
+            self.evaluation_history[-1].get("date")
+            if self.evaluation_history
+            else self.market.prices.date.min()
         )
+        for date in self.iterate_dates(
+            start_date=last_eval_date,
+            end_date=self.market.max_date,
+            step_size=daily_delta,
+        ):
+            evaluation_result = self.evaluator.evaluate(self, for_date=date)
+            self.evaluation_history.append(
+                {
+                    "date": date,  # pd.to_datetime(date).strftime("%Y-%m-%d")
+                    "score": evaluation_result,
+                }
+            )
 
     def misc_evaluate(self):
         gains_or_losses_percentage = (

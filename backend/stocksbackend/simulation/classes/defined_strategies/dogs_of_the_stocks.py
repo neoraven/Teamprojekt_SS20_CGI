@@ -12,8 +12,13 @@ class DogsOfTheStocks(BaseStrategy):
         self.last_date = None
 
     def did_skip(self, current_date, market_state: pd.DataFrame):
+        if current_date.month != 1:
+            return False
         if self.last_date is None:
-            return market_state.date.max().year - market_state.date.min().year == 1
+            return (
+                market_state.date.max().year - market_state.date.min().year == 1
+                and self.increments == "1years"
+            )
 
         did_we_skip = (
             self.last_date
