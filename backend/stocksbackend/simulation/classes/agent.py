@@ -52,17 +52,19 @@ class Agent:
                 print(weights)
                 for symbol, weight in filter(lambda x: x[1] < 0, weights.items()):
                     # First: look at negative weights := sell recommendations
-                    current_stock_price = self.market.get_most_recent_price(
-                        symbol=symbol
-                    )
-                    sell_transaction = self.build_transaction(
-                        stock_symbol=symbol,
-                        stock_price=current_stock_price,
-                        amount=int(weight * self.portfolio.get(symbol)),
-                        date=self.market.max_date,
-                    )
-                    print(f"Making sell transaction: {sell_transaction}")
-                    self.sell(sell_transaction)
+                    amount_to_sell = int(weight * self.portfolio.get(symbol))
+                    if amount_to_sell != 0:
+                        current_stock_price = self.market.get_most_recent_price(
+                            symbol=symbol
+                        )
+                        sell_transaction = self.build_transaction(
+                            stock_symbol=symbol,
+                            stock_price=current_stock_price,
+                            amount=amount_to_sell,
+                            date=self.market.max_date,
+                        )
+                        print(f"Making sell transaction: {sell_transaction}")
+                        self.sell(sell_transaction)
                 total_cash_before_transactions = self.cash
                 weights = {
                     s: w
