@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import Strategies from '../components/Strategies';
 import Recommendations from '../components/Recommendations';
 import './RecommendationView.css';
+import api from '../utils/api';
 
 const { Step } = Steps;
-
+ //ToDo:
+ // Slider start & end year; field for starting capital
 
 
 class RecommendationView extends React.Component {
@@ -20,9 +22,9 @@ class RecommendationView extends React.Component {
             risk: 0,
             diversification: 0,
             slider3: 0,
-            strategy1: false,
-            strategy2: false,
-            strategy3: false,
+            years: [2017,2019],
+            starting_capital: 10000,
+            strategy: "",
         };
     }
 
@@ -47,13 +49,12 @@ class RecommendationView extends React.Component {
                 risk: this.preferencesRef.current.state.risk,
                 diversification: this.preferencesRef.current.state.diversification,
                 slider3: this.preferencesRef.current.state.slider3,
+                years: this.preferencesRef.current.state.years,
             })
         }
         if(this.state.current === 1){
             this.setState({
-                strategy1: this.strategiesRef.current.state.checkbox1,
-                strategy2: this.strategiesRef.current.state.checkbox2,
-                strategy3: this.strategiesRef.current.state.checkbox3,
+                strategy: this.strategiesRef.current.state.strategy,
             })
         }
         const current = this.state.current + 1;
@@ -68,10 +69,25 @@ class RecommendationView extends React.Component {
         console.log(this.testRef)
     }
 
+    onDone(){
+        console.log("startSim")
+        api.post('/api/sim/start/', {
+            risk_affinity: this.state.risk,
+            diversification: this.state.diversification,
+            placeholder: this.state.slider3,
+            strategy: this.state.strategy,
+            starting_capital: this.state.starting_capital,
+            end_year: this.state.years[1],
+            starting_year: this.state.years[0],
+            subset_stocks: 20
+        }).then(function (response) {
+            console.log(response);
+          })
+    }
+
     render() {
         const { current } = this.state;
         return (
-
             <>
                 {
                     this.props.isAuthenticated ?
@@ -105,7 +121,7 @@ class RecommendationView extends React.Component {
                                     </Button>
                                 )}
                                 {current === this.steps.length - 1 && (
-                                    <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                                    <Button type="primary" onClick={() => this.onDone()}>
                                         Done
                                     </Button>
                                 )}
@@ -127,5 +143,6 @@ class RecommendationView extends React.Component {
             </>
         );
     }
+    //() => message.success('Processing complete!')
 }
 export default RecommendationView

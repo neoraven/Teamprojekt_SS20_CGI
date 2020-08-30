@@ -8,16 +8,9 @@ const { Panel } = Collapse;
 
 
 
-function callback(key) {
-    console.log(key);
-}
-
-
 class Strategies extends React.Component {
     state={
-        checkbox1: true,
-        checkbox2: false,
-        checkbox3: false,
+        strategy: "DogsOfTheStocks",
     }
 
     onChange = (e) => {
@@ -28,18 +21,18 @@ class Strategies extends React.Component {
         switch (e.target.id) {
             case 1:
                 this.setState({
-                    checkbox1 : e.target.checked
+                    strategy: "DogsOfTheStocks"
                 })
                 break;
             case 2:
                 this.setState({
-                    checkbox2 : e.target.checked
+                    strategy: "EMA"
                 })
                 break;
 
             case 3:
                 this.setState({
-                    checkbox3 : e.target.checked
+                    strategy: "Markowitz"
                 })
                 break;
 

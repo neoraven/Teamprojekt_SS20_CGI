@@ -1,5 +1,6 @@
 import React from 'react'
 import CustomSlider from './CustomSlider';
+import CustomRangeSlider from './CustomRangeSlider';
 import './Preferences.css';
 
 
@@ -10,6 +11,7 @@ class Preferences extends React.Component {
         risk: 0,
         diversification: 0,
         slider3: 0,
+        years: [2017,2019],
     }
 
     render() {
@@ -35,6 +37,12 @@ class Preferences extends React.Component {
                         <p>I will think about something</p>
                         <CustomSlider onUserAction={(slider3) => (this.setState({ slider3 }))} />
                         <p> <b>Note: </b> and give it a cool description</p>
+                    </div>
+                    <div className="slider-content">
+                        <p>Which years would you like us to backtest?</p>
+                        <CustomRangeSlider min={2005} max={2020} onUserAction={(years) => (this.setState({ years }))} />
+                        <p> <b>Note: </b> If you want results for your current investing then you should set the end year to 2020. If however you want to see how your preferences would have performed in an earlier timeframe just select that.</p>
+                        <p style={{color:"red"}}> <b>Important</b>: The bigger the timeframe is that you select the longer the simulaten will take. Big simulations will show you the performance over a longer term and through many different market conditions but they will take <b>over 10 minutes </b>to calculate.</p>
                     </div>
                 </div>
 
