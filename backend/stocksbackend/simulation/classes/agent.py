@@ -60,7 +60,7 @@ class Agent:
                         sell_transaction = self.build_transaction(
                             stock_symbol=symbol,
                             stock_price=current_stock_price,
-                            amount=,
+                            amount=amount_to_sell,
                             date=self.market.max_date,
                         )
                         print(f"Making sell transaction: {sell_transaction}")
