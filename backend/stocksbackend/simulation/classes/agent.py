@@ -63,7 +63,7 @@ class Agent:
                             amount=amount_to_sell,
                             date=self.market.max_date,
                         )
-                        print(f"Making sell transaction: {sell_transaction}")
+                        # print(f"Making sell transaction: {sell_transaction}")
                         self.sell(sell_transaction)
                 total_cash_before_transactions = self.cash
                 weights = {
