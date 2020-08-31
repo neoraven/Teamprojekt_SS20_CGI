@@ -124,6 +124,9 @@ class Resultspage extends React.Component {
                         <center><p><b>-------GRAPH HERE---------</b></p></center>
                     </div>
                     <h1>Recommendations</h1>
+                    <p>The recommendations are being displayed as a combination of the symbol of the stock and the percentage allocation of your starting capital in that stock that the simulation recommends. 
+                        The 'Add to portfolio' button will instantly add the recommended amount of the stock to your portfolio. <br></br>
+                        If you click it multiple times, the amount will be added multiple times. </p>
                     <div className="Recommendations">
                         <RecommendationsTabel data={this.state.recommendation} capital={this.state.performance.starting_capital} />
                     </div>
