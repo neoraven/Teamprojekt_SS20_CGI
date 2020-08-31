@@ -125,7 +125,7 @@ class Resultspage extends React.Component {
                     </div>
                     <h1>Recommendations</h1>
                     <div className="Recommendations">
-                        <RecommendationsTabel data={this.state.recommendation} />
+                        <RecommendationsTabel data={this.state.recommendation} capital={this.state.performance.starting_capital} />
                     </div>
                 </div>
             )

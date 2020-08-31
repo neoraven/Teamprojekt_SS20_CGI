@@ -4,13 +4,19 @@ import api from '../utils/api';
 import { List, Avatar, Button } from 'antd';
 
 const companyicon = entry => {
- /*  const data = []
+    /*let data = []
     api.get(`/api/stocks/${entry}/details/`)
         .then(res => {
             data.push(res)
         })
     console.log(data)
-    return <Avatar src={data.meta_data.image_url} />*/
+    return <Avatar src={data[0].image_url} />*/
+}
+
+const weights = entry =>{
+    entry = entry *100
+    var roundedString = entry.toFixed(2);
+    return roundedString
 }
 
 class RecommendationsTable extends React.Component {
@@ -21,7 +27,7 @@ class RecommendationsTable extends React.Component {
     }
 
     componentDidMount() {
-
+        console.log(this.props.data)
     }
 
     render() {
@@ -37,9 +43,9 @@ class RecommendationsTable extends React.Component {
 
                             <List.Item.Meta
                                 avatar={companyicon(item.symbol)}
-                                title={<a href="https://ant.design">{item.symbol}</a>}
+                                title={<a href={`/company/${item.symbol}/`}>{item.symbol}</a>}
                             />
-                            <div>{item.weight}</div>
+                            <div>{weights(item.weight)} %</div>
                         </List.Item>
                     )}
                 />
