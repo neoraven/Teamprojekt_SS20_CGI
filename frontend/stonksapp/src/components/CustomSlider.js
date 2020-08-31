@@ -18,6 +18,7 @@ class CustomSlider extends React.Component {
 
     render() {
         const { max, min } = this.props;
+        
         const { value } = this.state;
         const mid = ((max - min) / 2).toFixed(5);
         const preColorCls = value >= mid ? '' : 'icon-wrapper-active';
@@ -25,7 +26,7 @@ class CustomSlider extends React.Component {
         return (
             <div className="icon-wrapper">
                 <FrownOutlined className={preColorCls} />
-                <Slider {...this.props} onChange={this.handleChange} value={value} />
+                <Slider {...this.props} onChange={this.handleChange} value={value} step="10" max={max} min={min} />
                 <SmileOutlined className={nextColorCls} />
             </div>
         );

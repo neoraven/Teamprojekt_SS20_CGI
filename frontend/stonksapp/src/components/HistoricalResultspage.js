@@ -128,7 +128,7 @@ class HistoricalResultspage extends React.Component {
                     <div className='Evaluation' style={{ textAlign: "justify" }}>
                         <center><p><b>-------GRAPH HERE---------</b></p></center>
                     </div>
-                    <h1>Recommendations</h1>
+                    <h1>Recommendations in percentage of your capital</h1>
                     <div className="Recommendations">
                         <RecommendationsTabel data={this.state.recommendation} capital={this.state.performance.starting_capital} />
                     </div>

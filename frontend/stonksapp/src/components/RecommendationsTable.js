@@ -4,18 +4,29 @@ import api from '../utils/api';
 import { List, Avatar, Button } from 'antd';
 
 const companyicon = entry => {
-    /*let data = []
-    api.get(`/api/stocks/${entry}/details/`)
-        .then(res => {
-            data.push(res)
-        })
-    console.log(data)
-    return <Avatar src={data[0].image_url} />*/
+      
+
 }
 
-const weights = entry =>{
-    entry = entry *100
+function weights(entry, capital, symbol) {
+    entry = entry * 100
     var roundedString = entry.toFixed(2);
+    console.log(capital)
+    return roundedString
+}
+
+function second(entry, capital, price) {
+    let stockcount = capital * entry
+    var roundedAmountOfCapitalForStock = stockcount.toFixed(0);
+    var amountOfStocks = roundedAmountOfCapitalForStock / price
+    amountOfStocks = amountOfStocks.toFixed(0)
+    console.log("amoun" + amountOfStocks)
+    console.log("capital" + roundedAmountOfCapitalForStock)
+    console.log("stockprice" + price)
+
+    entry = entry * 100
+    var roundedString = entry.toFixed(2);
+    console.log(capital)
     return roundedString
 }
 
@@ -23,12 +34,15 @@ class RecommendationsTable extends React.Component {
     state = {
         recs: [],
         details: [],
-        symbols: []
+        symbols: [],
     }
 
     componentDidMount() {
         console.log(this.props.data)
+
     }
+
+
 
     render() {
         if (this.props.data != undefined) {
@@ -45,7 +59,7 @@ class RecommendationsTable extends React.Component {
                                 avatar={companyicon(item.symbol)}
                                 title={<a href={`/company/${item.symbol}/`}>{item.symbol}</a>}
                             />
-                            <div>{weights(item.weight)} %</div>
+                            <div>{weights(item.weight, this.props.capital, item.symbol)} %</div>
                         </List.Item>
                     )}
                 />

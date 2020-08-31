@@ -31,7 +31,7 @@ class Preferences extends React.Component {
                 </div>
                 <div className="page-layout">
                     <div className="slider-content">
-                        <p>How much capital do you have in you Portfolio</p>
+                        <p>How much capital do you have in your Portfolio</p>
                         <InputNumber
                             defaultValue={value}
                             formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -42,7 +42,7 @@ class Preferences extends React.Component {
                     </div>
                     <div className="slider-content">
                         <p>Do you like risk?</p>
-                        <CustomSlider onUserAction={(risk) => (this.setState({ risk }))} />
+                        <CustomSlider onUserAction={(risk) => (this.setState({ risk }))}   />
                         <p> <b>Note: </b>Liking risk means that you prioritize the potential for a high return over preservation of capital. More risk means more and bigger swings in your Capital.</p>
                     </div>
                     <div className="slider-content">
