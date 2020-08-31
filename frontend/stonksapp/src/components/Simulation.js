@@ -1,6 +1,21 @@
 import React from 'react';
 import { List, Avatar, Input, Typography } from 'antd';
 
+const creationdate = date => {
+    return new Date(date).toDateString()
+}
+
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+})
+
+const geld = entry => {
+    entry = formatter.format(entry)
+    return entry
+}
+
 class Simulation extends React.Component {
     render() {
         return (
@@ -26,8 +41,8 @@ class Simulation extends React.Component {
                             key={item.id}
                         >
                             <List.Item.Meta
-                                title={<a href={`/simulations/${item.id}/`}>{item.created_at}</a>}
-                                description={`Strategy: ${item.strategy}; Risk: ${item.preferences.risk_affinity}; Diversification: ${item.preferences.risk_affinity}; Capital Allocation: ${item.preferences.risk_affinity}`}
+                                title={<a href={`/simulations/${item.id}/`}>Simulation from {`${creationdate(item.created_at)}`}</a>}
+                                description={`Strategy: ${item.strategy}; Capital: ${geld(item.agent_starting_capital)}; Risk: ${item.preferences.risk_affinity}; Diversification: ${item.preferences.risk_affinity}; Capital Allocation: ${item.preferences.risk_affinity}`}
                             />
 
                         </List.Item>
