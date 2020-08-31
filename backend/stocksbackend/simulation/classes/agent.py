@@ -247,10 +247,8 @@ class Agent:
         recommendations = self.strategy.recommend(
             market_state=self.market.prices[self.mask]
         )
-        if hasattr(self.strategy, "give_reasons"):
-            reasons = self.strategy.give_reasons(weights=recommendations)
-        else:
-            reasons = {}
+        reasons = self.strategy.give_reasons(weights=recommendations) or {}
+
         recommendations, reasons = self.apply_preferences(
             weights=recommendations,
             market_mask=self.mask,
