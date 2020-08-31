@@ -68,6 +68,9 @@ class RespoDemo extends React.Component {
                         <Menu.Item key="4" >
                             <Link to='/recommendations/' >Recommendations</Link>
                         </Menu.Item>
+                        <Menu.Item key="5" >
+                            <Link to='/simulations/' >Simulations</Link>
+                        </Menu.Item>
                     </Menu>
                 </Sider>
                 <Layout >

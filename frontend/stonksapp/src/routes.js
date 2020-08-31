@@ -8,7 +8,8 @@ import PortfolioList from './containers/PortfolioListView';
 import Impressum from './containers/Impressum';
 import RecommendationView from './containers/RecommendationView';
 import Landingpage from './containers/Landinpage';
-import Results from './components/Resultspage'
+import Simulations from './containers/Simulations'
+import Results from './components/HistoricalResultspage'
 
 const BaseRouter = (props) =>(
   <div>
@@ -22,7 +23,8 @@ const BaseRouter = (props) =>(
     <Route exact path ='/impressum/' component = {Impressum} />
 
 
-    <Route exact path ='/res/' component = {Results} />
+    <Route exact path ='/simulations/' component = {Simulations} />
+    <Route exact path ='/simulations/:simId' component = {Results} />
   </div>
 );
 
