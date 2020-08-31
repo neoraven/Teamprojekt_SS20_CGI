@@ -44,6 +44,7 @@ class Agent:
         self.evaluation_history = []  # list of Dicts
 
     def run_simulation(self):
+        print(self.preferences)
         for mask in self.market:
             # print(self.market.max_date)
             self.mask = mask
@@ -63,7 +64,7 @@ class Agent:
                 )
                 for symbol, weight in filter(lambda x: x[1] < 0, weights.items()):
                     # First: look at negative weights := sell recommendations
-                    amount_to_sell = int(weight * self.portfolio.get(symbol))
+                    amount_to_sell = int(weight * self.portfolio.get(symbol, 0))
                     if amount_to_sell != 0:
                         current_stock_price = self.market.get_most_recent_price(
                             symbol=symbol
@@ -174,7 +175,7 @@ class Agent:
 
     @staticmethod
     def iterate_dates(start_date, end_date, step_size):
-        curr_date = start_date
+        curr_date = start_date + step_size
         while curr_date <= end_date:
             yield curr_date
             curr_date += step_size
@@ -199,14 +200,38 @@ class Agent:
                 }
             )
 
-    def apply_preferences(self, weights: Dict[str, float], market_mask):
+    def apply_preferences(
+        self,
+        weights: Dict[str, float],
+        market_mask,
+        also_give_reasons: bool = False,
+        prev_reasons: Dict[str, str] = {},
+    ):
         for preference in self.preferences:
-            weights = preference.apply(
-                weights,
-                market_state=self.market.prices[market_mask],
-                current_date=self.market.max_date,
-            )
-        return weights
+            print(preference.__class__.__name__)
+            if also_give_reasons:
+                weights, reasons = preference.apply(
+                    old_weights=weights,
+                    market_state=self.market.prices[market_mask],
+                    current_date=self.market.max_date,
+                    also_give_reasons=also_give_reasons,
+                )
+                for symbol, reason in reasons.items():
+                    prev_reasons[symbol] = " ".join(
+                        [prev_reasons.get(symbol, ""), reason]
+                    )
+            else:
+                weights = preference.apply(
+                    old_weights=weights,
+                    market_state=self.market.prices[market_mask],
+                    current_date=self.market.max_date,
+                    also_give_reasons=also_give_reasons,
+                )
+
+        if also_give_reasons:
+            return weights, prev_reasons
+        else:
+            return weights
 
     def misc_evaluate(self):
         gains_or_losses_percentage = (
@@ -224,13 +249,19 @@ class Agent:
         recommendations = self.strategy.recommend(
             market_state=self.market.prices[self.mask]
         )
-        recommendations = self.apply_preferences(
-            weights=recommendations, market_mask=self.mask
+        reasons = self.strategy.give_reasons(weights=recommendations)
+        recommendations, reasons = self.apply_preferences(
+            weights=recommendations,
+            market_mask=self.mask,
+            also_give_reasons=True,
+            prev_reasons=reasons,
         )
         non_zero_recommendations = {
             stock: weight for (stock, weight) in recommendations.items() if weight != 0
         }
+
         formatted_recommendations = [
-            {"symbol": s, "weight": w} for (s, w) in non_zero_recommendations.items()
+            {"symbol": s, "weight": w, "reason": reasons.get(s, "No reason specified")}
+            for (s, w) in non_zero_recommendations.items()
         ]
         return formatted_recommendations

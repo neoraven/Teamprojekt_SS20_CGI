@@ -97,10 +97,8 @@ def start(
         starting_capital=agent_starting_capital,
         market=market,
         strategy=strategy,
-        preferences=[
-            volatility_pref,
-            cash_allocation_pref,
-        ],  # [placeholder_pref, volatility_pref, diversity_pref]
+        preferences=[volatility_pref, cash_allocation_pref,],
+        # [placeholder_pref, volatility_pref, diversity_pref]
         evaluator=TotalValueEvaluator(),
     )
     started_simulation_at = time.time()
@@ -187,4 +185,5 @@ def get_response_object(
         },
     }
     results["sim_id"] = simulation.id
+    print(results)
     return Response(data=results, status=status.HTTP_200_OK)

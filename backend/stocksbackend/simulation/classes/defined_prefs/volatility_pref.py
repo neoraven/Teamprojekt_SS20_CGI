@@ -81,8 +81,13 @@ class VolatilityPreference(BasePreference):
         return rel_std_shares
 
     def apply(
-        self, old_weights: Dict[str, float], market_state: pd.DataFrame, current_date
+        self,
+        old_weights: Dict[str, float],
+        market_state: pd.DataFrame,
+        current_date,
+        also_give_reasons: bool = False,
     ) -> Dict[str, float]:
+        original_weights = old_weights.copy()
         rel_std_shares = self.get_weighted_rel_std_shares(
             old_weights=old_weights,
             market_state=market_state,
@@ -97,4 +102,45 @@ class VolatilityPreference(BasePreference):
                 old_weights[symbol] = weight - change
             else:
                 old_weights[symbol] = 0
-        return super().rebalance(old_weights=old_weights)
+
+        new_weights = super().rebalance(old_weights=old_weights)
+
+        if also_give_reasons:
+
+            return (
+                new_weights,
+                self.give_reasons(
+                    old_weights=original_weights, new_weights=new_weights
+                ),
+            )
+
+        return new_weights
+
+    def give_reasons(
+        self, old_weights: Dict[str, float], new_weights: Dict[str, float]
+    ) -> Dict[str, str]:
+        reasons = {}
+        for symbol, old_weight in old_weights.items():
+            change = new_weights[symbol] - old_weight
+            reasons[symbol] = self.prepare_reason_string(change=change)
+
+        return reasons
+
+    def prepare_reason_string(self, change: float) -> str:
+        increased_or_decreased = "increased" if change > 0 else "decreased"
+        user_prefers = "volatility" if self.value > 0 else "invariability"
+        prefers_by = f"{abs(self.value * 100)}%"
+        if change == 0:
+            local_or_global = (
+                "all stocks available in the stock pool"
+                if self.global_over_local
+                else "the stocks in this recommendation set"
+            )
+            reason_why_not = (
+                "a neutral value was selected for this preference"
+                if self.value == 0
+                else f"the volatility of the stock was neutral compared to {local_or_global}."
+            )
+            return f"The {self.__class__.__name__} preference did not change this weight because {reason_why_not}"
+
+        return f"The {self.__class__.__name__} preference {increased_or_decreased} this weight by {round(change * 100, 2)}% because the user prefers this stock's {user_prefers} by {prefers_by}!"

@@ -5,12 +5,28 @@ from ..base_strategy import BaseStrategy
 
 
 class DogsOfTheStocks(BaseStrategy):
-    def __init__(self, top_n_stocks: int = 10, increments="1years", *args, **kwargs):
+    def __init__(self, top_n_stocks: int = 10, increments="1days", *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.top_n_stocks = top_n_stocks
         self.increments = increments
         self.last_date = None
         self.year_offsets = (-1, 0)
+        self.template_str = (
+            "User selected strategy {} recommends {} with {}% confidence"
+            " because it is within the top {} (relative) dividend yielding stocks"
+            " of the previous calendar year."
+        )
+
+    def give_reasons(self, weights: Dict[str, float]) -> Dict[str, str]:
+        reasons = {}
+        for symbol, weight in weights.items():
+            reasons[symbol] = self.template_str.format(
+                self.__class__.__name__,
+                symbol,
+                round(weight * 100, 2),
+                self.top_n_stocks,
+            )
+        return reasons
 
     def did_skip(self, current_date, market_state: pd.DataFrame):
         if current_date.month != 1:

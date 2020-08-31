@@ -35,6 +35,9 @@ class BasePreference:
         return old_weights
 
     def apply(
-        self, old_weights: Dict[str, float], market_state: pd.DataFrame
+        self,
+        old_weights: Dict[str, float],
+        market_state: pd.DataFrame,
+        also_give_reasons: bool = False,
     ) -> Dict[str, float]:
         pass
