@@ -1,10 +1,11 @@
 import sys
 from .defined_prefs.volatility_pref import VolatilityPreference
+from .defined_prefs.cash_allocation_pref import CashAllocationPreference
 
 _REQUEST_PARAM_TO_CLASS_MAP = {
     "risk_affinity": "VolatilityPreference",
     "diversification": "DiversityPreference",
-    "placeholder": "PlaceholderPreference",
+    "placeholder": "CashAllocationPreference",
 }
 
 

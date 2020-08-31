@@ -15,6 +15,7 @@ class VolatilityPreference(BasePreference):
         # 91 days := 1 quarter
         super().__init__()
         self.value = super().rescale_pref_value(value=value)
+        self.neutral_value = 0
         self.number, self.unit = self.parse_increments(length_of_period)
         self.global_over_local = global_over_local
 
@@ -27,6 +28,8 @@ class VolatilityPreference(BasePreference):
     def get_weighted_rel_std_shares(
         self, old_weights: Dict[str, float], market_state: pd.DataFrame, current_date
     ) -> float:
+        if self.value == self.neutral_value:
+            return old_weights
         from_date = current_date - relativedelta(**{self.unit: self.number},)
         if self.global_over_local:
             mean_vals = (

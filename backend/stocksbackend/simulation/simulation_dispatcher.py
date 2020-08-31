@@ -88,17 +88,18 @@ def start(
 
     risk_affinity_class = prefs.get_preference("risk_affinity")
     volatility_pref = risk_affinity_class(value=risk_affinity)
-    # diversification_class = preferences.get_preference("diversification")
+    # diversification_class = prefs.get_preference("diversification")
     # diversity_pref = diversification_class(value=diversification)
-    # placeholder_class = preferences.get_preference("placeholder")
-    # placeholder_pref = placeholder_class(value=placeholder)
+    cash_allocation_class = prefs.get_preference("placeholder")
+    cash_allocation_pref = cash_allocation_class(value=placeholder)
 
     agent = Agent(
         starting_capital=agent_starting_capital,
         market=market,
         strategy=strategy,
         preferences=[
-            volatility_pref
+            volatility_pref,
+            cash_allocation_pref,
         ],  # [placeholder_pref, volatility_pref, diversity_pref]
         evaluator=TotalValueEvaluator(),
     )
