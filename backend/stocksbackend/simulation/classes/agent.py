@@ -29,6 +29,7 @@ class Agent:
         # TODO(jonas): implement agent getting new cash every [x interval]
         self.starting_capital = starting_capital
         self.cash = starting_capital
+        self.dragging_balance = 0
         self.market = market
         self.strategy = strategy
         self.evaluator = evaluator
@@ -40,7 +41,6 @@ class Agent:
     def run_simulation(self):
         for mask in self.market:
             # print(self.market.max_date)
-            dragging_balance = 0
             self.mask = mask
             # agent gets dividends paid out accd. to his portfolio
             self.cash += self.market.pay_dividends(stock_portfolio=self.portfolio)
@@ -49,7 +49,7 @@ class Agent:
             )
             if any([weight != 0 for weight in weights.values()]):
                 # any non-0 weights? > evaluate
-                print(weights)
+                # print(weights)
                 for symbol, weight in filter(lambda x: x[1] < 0, weights.items()):
                     # First: look at negative weights := sell recommendations
                     amount_to_sell = int(weight * self.portfolio.get(symbol))
@@ -63,7 +63,7 @@ class Agent:
                             amount=amount_to_sell,
                             date=self.market.max_date,
                         )
-                        print(f"Making sell transaction: {sell_transaction}")
+                        # print(f"Making sell transaction: {sell_transaction}")
                         self.sell(sell_transaction)
                 total_cash_before_transactions = self.cash
                 weights = {
@@ -77,25 +77,26 @@ class Agent:
                         symbol=symbol
                     )
                     amount_to_spend = min(
-                        (weight * total_cash_before_transactions + dragging_balance),
+                        (
+                            weight * total_cash_before_transactions
+                            + self.dragging_balance
+                        ),
                         self.cash,
                     )
                     amount_of_stocks_to_buy = amount_to_spend // current_stock_price
-                    dragging_balance += amount_to_spend % current_stock_price
+                    self.dragging_balance += amount_to_spend % current_stock_price
                     if amount_of_stocks_to_buy == 0:
-                        print(
-                            f"Cant buy {symbol} for {current_stock_price}, I want to spend {amount_to_spend}"
-                        )
-                        dragging_balance += amount_to_spend
+                        # print(
+                        #     f"Cant buy {symbol} for {current_stock_price}, I want to spend {amount_to_spend}"
+                        # )
                         continue
-                    dragging_balance = 0
                     purchase_transaction = self.build_transaction(
                         stock_symbol=symbol,
                         stock_price=current_stock_price,
                         amount=amount_of_stocks_to_buy,
                         date=self.market.max_date,
                     )
-                    print(f"Making purchase transaction: {purchase_transaction}")
+                    # print(f"Making purchase transaction: {purchase_transaction}")
                     self.buy(purchase_transaction)
             self.evaluate()
 
@@ -114,8 +115,13 @@ class Agent:
 
     def buy(self, transaction: Transaction):
         total_price = transaction.amount * transaction.stock_price
-        assert self.cash - total_price >= 0, "Can't spend more than you have!"
-        self.cash -= total_price
+        assert (
+            self.cash + self.dragging_balance - total_price >= 0
+        ), "Can't spend more than you have!"
+        deducted_from_dragging_balance = min(total_price, self.dragging_balance)
+        remaining_amount_to_pay = total_price - deducted_from_dragging_balance
+        self.dragging_balance -= deducted_from_dragging_balance
+        self.cash -= remaining_amount_to_pay
         self.portfolio[transaction.symbol] = (
             self.portfolio.get(transaction.symbol, 0) + transaction.amount
         )
