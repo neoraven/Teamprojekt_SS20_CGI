@@ -65,6 +65,16 @@ const Preftable = entry => {
         />
     )
 }*/
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+})
+
+const geld = entry => {
+    entry = formatter.format(entry)
+    return entry
+}
 
 
 class Resultspage extends React.Component {
@@ -107,7 +117,7 @@ class Resultspage extends React.Component {
                         </div>
                     </div>
                     <div className="Gains">
-                        <p style={{ textAlign: "center" }}>Starting Capital: ${this.state.performance.starting_capital} <FundTwoTone style={{ fontSize: 22 }} twoToneColor="#52c41a" /> Current Portfolio vaule: ${this.state.performance.current_portfolio_value}</p>
+                        <p style={{ textAlign: "center" }}>Starting Capital: {geld(this.state.performance.starting_capital)} <FundTwoTone style={{ fontSize: 22 }} twoToneColor="#52c41a" /> Current Portfolio vaule: {geld(this.state.performance.current_portfolio_value)}</p>
                     </div>
                     <h1>Evaluation History</h1>
                     <div className='Evaluation' style={{ textAlign: "justify" }}>
@@ -115,7 +125,7 @@ class Resultspage extends React.Component {
                     </div>
                     <h1>Recommendations</h1>
                     <div className="Recommendations">
-                        <RecommendationsTabel data={this.state.recommendation}/>
+                        <RecommendationsTabel data={this.state.recommendation} />
                     </div>
                 </div>
             )
