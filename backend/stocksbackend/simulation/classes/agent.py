@@ -1,3 +1,5 @@
+from typing import List, Dict
+
 import pandas as pd
 from pandas._libs.tslibs.timestamps import Timestamp
 
@@ -9,6 +11,7 @@ import pprint
 from .market import Market
 from .evaluator import BaseEvaluator
 from .base_strategy import BaseStrategy
+from .base_pref import BasePreference
 
 from portfolio.models import Transaction as TransactionModel
 
@@ -25,6 +28,7 @@ class Agent:
         market: Market,
         strategy: BaseStrategy,
         evaluator: BaseEvaluator,
+        preferences: List[BasePreference],
     ):
         # TODO(jonas): implement agent getting new cash every [x interval]
         self.starting_capital = starting_capital
@@ -33,6 +37,7 @@ class Agent:
         self.market = market
         self.strategy = strategy
         self.evaluator = evaluator
+        self.preferences = preferences
         self.mask = None
         self.portfolio = {}
         self.trading_history = []
@@ -49,7 +54,11 @@ class Agent:
             )
             if any([weight != 0 for weight in weights.values()]):
                 # any non-0 weights? > evaluate
-                # print(weights)
+                # First, apply my preferences in order
+                print(f"weights before weighting: {weights}")
+                weights = self.apply_preferences(weights=weights, market_mask=mask)
+                print("=" * 50)
+                print(f"weights after weighting: {weights}")
                 for symbol, weight in filter(lambda x: x[1] < 0, weights.items()):
                     # First: look at negative weights := sell recommendations
                     amount_to_sell = int(weight * self.portfolio.get(symbol))
@@ -188,6 +197,15 @@ class Agent:
                 }
             )
 
+    def apply_preferences(self, weights: Dict[str, float], market_mask):
+        for preference in self.preferences:
+            weights = preference.apply(
+                weights,
+                market_state=self.market.prices[market_mask],
+                current_date=self.market.max_date,
+            )
+        return weights
+
     def misc_evaluate(self):
         gains_or_losses_percentage = (
             self.get_own_total_value() / self.starting_capital - 1
@@ -203,6 +221,9 @@ class Agent:
     def recommend(self):
         recommendations = self.strategy.recommend(
             market_state=self.market.prices[self.mask]
+        )
+        recommendations = self.apply_preferences(
+            weights=recommendations, market_mask=self.mask
         )
         non_zero_recommendations = {
             stock: weight for (stock, weight) in recommendations.items() if weight != 0

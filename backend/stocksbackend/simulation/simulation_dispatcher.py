@@ -11,7 +11,7 @@ from django.utils import dateparse, timezone
 
 from .classes.agent import Agent
 from .classes.market import Market
-from .classes import strategies
+from .classes import strategies, prefs
 from .classes.evaluator import TotalValueEvaluator, MovingValueChangeEvaluator
 
 from portfolio.models import Transaction
@@ -86,10 +86,20 @@ def start(
         increments=market_increments,
     )
 
+    risk_affinity_class = prefs.get_preference("risk_affinity")
+    volatility_pref = risk_affinity_class(value=risk_affinity)
+    # diversification_class = preferences.get_preference("diversification")
+    # diversity_pref = diversification_class(value=diversification)
+    # placeholder_class = preferences.get_preference("placeholder")
+    # placeholder_pref = placeholder_class(value=placeholder)
+
     agent = Agent(
         starting_capital=agent_starting_capital,
         market=market,
         strategy=strategy,
+        preferences=[
+            volatility_pref
+        ],  # [placeholder_pref, volatility_pref, diversity_pref]
         evaluator=TotalValueEvaluator(),
     )
     started_simulation_at = time.time()
