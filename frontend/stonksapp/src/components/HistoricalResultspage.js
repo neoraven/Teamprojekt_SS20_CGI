@@ -7,6 +7,7 @@ import RecommendationsTabel from './RecommendationsTable'
 import './Resultspage.css'
 import api from '../utils/api'
 import PreferencesTable from './PreferencesTable'
+import ResultsChart from './ResultsChart/ResultsChart'
 
 
 
@@ -63,9 +64,10 @@ class HistoricalResultspage extends React.Component {
         strategy: {},
         dates: {},
         preferences: {},
-        evaluation_history: {},
+        evaluation_history: [],
         performance: {},
-        recommendation: []
+        recommendation: [],
+        evaluation_array: []
     }
     componentDidMount() {
         const simid = this.props.match.params.simId
@@ -80,6 +82,14 @@ class HistoricalResultspage extends React.Component {
                     performance: res.data.performance,
                     recommendation: res.data.recommendations
                 })
+                console.log(this.state.evaluation_history)
+                this.state.evaluation_history.map(score => {
+                    this.state.evaluation_array.push([
+                        score.date,
+                        score.score
+                    ])
+                })
+                console.log(this.state.evaluation_array)
             })
     }
 
@@ -105,8 +115,7 @@ class HistoricalResultspage extends React.Component {
                         <p style={{ textAlign: "center" }}>Starting Capital: {geld(this.state.performance.starting_capital)} <FundTwoTone style={{ fontSize: 22 }} twoToneColor="#52c41a" /> Current Portfolio vaule: {geld(this.state.performance.current_portfolio_value)}</p>
                     </div>
                     <h1>Evaluation History</h1>
-                    <div className='Evaluation' style={{ textAlign: "justify" }}>
-                        <center><p><b>-------GRAPH HERE---------</b></p></center>
+                    <div className='Evaluation' id="results-chart-container">
                     </div>
                     <h1>Recommendations</h1>
                     <p>The recommendations are being displayed as a combination of the symbol of the stock and the percentage allocation of your starting capital in that stock that the simulation recommends. 

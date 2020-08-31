@@ -30,9 +30,6 @@ function Chart(props) {
 					chart : {
 						renderTo : 'container', 
 					},
-					boost : {
-						enabled : true
-					},
 					rangeSelector : {
 						x : 20 
 					},
@@ -83,8 +80,6 @@ function Chart(props) {
 
 							return position;
 						}
-					},
-					plotOptions : {
 					},
 					series: [
 						{
