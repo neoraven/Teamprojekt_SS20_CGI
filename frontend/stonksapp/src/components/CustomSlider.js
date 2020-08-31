@@ -26,7 +26,7 @@ class CustomSlider extends React.Component {
         return (
             <div className="icon-wrapper">
                 <FrownOutlined className={preColorCls} />
-                <Slider {...this.props} onChange={this.handleChange} value={value} step="10" max={max} min={min} />
+                <Slider {...this.props} onChange={this.handleChange} value={value} step="10" />
                 <SmileOutlined className={nextColorCls} />
             </div>
         );

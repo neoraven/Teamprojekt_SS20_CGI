@@ -43,7 +43,7 @@ class Preferences extends React.Component {
                     <div className="slider-content">
                         <p>Do you like risk?</p>
                         <CustomSlider onUserAction={(risk) => (this.setState({ risk }))}   />
-                        <p> <b>Note: </b>Liking risk means that you prioritize the potential for a high return over preservation of capital. More risk means more and bigger swings in your Capital.</p>
+                        <p> <b>Note: </b>Liking risk means that you prioritize the potential for a high return over preservation of capital. More risk means more and bigger swings in your Capital. 50 is neutral.</p>
                     </div>
                     <div className="slider-content">
                         <p>Do you want many stocks or just a few?</p>
@@ -51,12 +51,12 @@ class Preferences extends React.Component {
                         <p><b>Note: </b>More companies in your Portfolio means less potentially less swings in your capital but also again usally a little less gains.</p>
                     </div>
                     <div className="slider-content">
-                        <p>I will think about something</p>
+                        <p>Capital allocation</p>
                         <CustomSlider onUserAction={(slider3) => (this.setState({ slider3 }))} />
-                        <p> <b>Note: </b> and give it a cool description</p>
+                        <p> <b>Note: </b> How much of your capital do you actually want to use to trade? This is percentage based, we don't recommend going under 50.</p>
                     </div>
                     <div className="slider-content">
-                        <p>Which years would you like us to backtest?</p>
+                        <p>Which timeframe would you like us to backtest?</p>
                         <CustomRangeSlider min={2005} max={2020} onUserAction={(years) => (this.setState({ years }))} />
                         <p> <b>Note: </b> If you want results for your current investing then you should set the end year to 2020. If however you want to see how your preferences would have performed in an earlier timeframe just select that.</p>
                         <p style={{ textAlign: "justify", color: "red" }}> <b>Important</b>: The bigger the timeframe is that you select, the longer the simulaten will take. Big simulations will show you the performance over a longer term and through many different market conditions but they will take <b>over 10 minutes </b>to calculate.</p>

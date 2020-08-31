@@ -27,7 +27,7 @@ class Simulation extends React.Component {
                         >
                             <List.Item.Meta
                                 title={<a href={`/simulations/${item.id}/`}>{item.created_at}</a>}
-                                description={item.strategy}
+                                description={`Strategy: ${item.strategy}; Risk: ${item.preferences.risk_affinity}; Diversification: ${item.preferences.risk_affinity}; Capital Allocation: ${item.preferences.risk_affinity}`}
                             />
 
                         </List.Item>
