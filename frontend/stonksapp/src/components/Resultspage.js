@@ -96,6 +96,7 @@ class Resultspage extends React.Component {
             performance: this.props.data.performance,
             recommendation: this.props.data.recommendation
         })
+
     }
 
 
@@ -110,7 +111,7 @@ class Resultspage extends React.Component {
                     <div className="SimulationParameters">
                         <div className="years">
                             <p>Strategy: {this.state.strategy.strategy}</p>
-                            <p > {this.state.dates.from} <RightSquareTwoTone style={{ fontSize: 22 }} /> {this.state.dates.to}</p>
+                            <p >Timeframe: {this.state.dates.from} <RightSquareTwoTone style={{ fontSize: 22 }} /> {this.state.dates.to}</p>
                         </div>
                         <div className="PreferencesTable">
                             {Preftable(this.state.preferences)}

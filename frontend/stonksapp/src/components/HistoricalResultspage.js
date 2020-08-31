@@ -45,26 +45,6 @@ const Preftable = entry => {
     return <Table pagination={false} columns={columns} dataSource={data} size="small" />;
 }
 
-/*const RecsTable = entry => {
-    console.log(entry)
-    return (
-        <List
-            itemLayout="horizontal"
-            dataSource={entry}
-            renderItem={item => (
-                <List.Item
-                    actions={[<Button type="primary" > Add to Portfolio </Button>]}>
-
-                    <List.Item.Meta
-                        avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                        title={<a href="https://ant.design">{item.symbol}</a>}
-                    />
-                    <div>content</div>
-                </List.Item>
-            )}
-        />
-    )
-}*/
 const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -115,7 +95,7 @@ class HistoricalResultspage extends React.Component {
                     <div className="SimulationParameters">
                         <div className="years">
                             <p>Strategy: {this.state.strategy.strategy}</p>
-                            <p > {this.state.dates.from} <RightSquareTwoTone style={{ fontSize: 22 }} /> {this.state.dates.to}</p>
+                            <p >Timeframe: {this.state.dates.from} <RightSquareTwoTone style={{ fontSize: 22 }} /> {this.state.dates.to}</p>
                         </div>
                         <div className="PreferencesTable">
                             {Preftable(this.state.preferences)}
