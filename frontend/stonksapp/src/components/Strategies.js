@@ -1,5 +1,5 @@
 import React from 'react'
-import { Collapse, Checkbox } from 'antd';
+import { Collapse, Checkbox, InputNumber } from 'antd';
 import './Strategies.css';
 
 
@@ -9,12 +9,13 @@ const { Panel } = Collapse;
 
 
 class Strategies extends React.Component {
-    state={
+    state = {
         strategy: "DogsOfTheStocks",
+        topnstocks: 10
     }
 
     onChange = (e) => {
-        if(e===undefined){
+        if (e === undefined) {
             return
         }
         console.log(typeof e.target.id)
@@ -40,6 +41,12 @@ class Strategies extends React.Component {
                 console.log("default")
                 break;
         }
+    }
+    onNumber= value =>{
+        
+        this.setState({
+            topnstocks: value
+        })
     }
 
     render() {
@@ -68,7 +75,14 @@ class Strategies extends React.Component {
                             Investors are thereby hoping to benefit from both above-average stock-price gains as well as a relatively high quarterly dividend.
                      </p>
 
-
+                        <InputNumber
+                            id={1}
+                            style={{ width: 220 }}
+                            placeholder="Top N different stocks to buy"
+                            min={0}
+                            max={25}
+                            onChange={this.onNumber}
+                        />
 
 
                     </Panel>

@@ -28,6 +28,7 @@ class RecommendationView extends React.Component {
             years: [2019, 2019],
             starting_capital: 10000,
             strategy: "",
+            topnstocks: 10
         };
     }
 
@@ -59,6 +60,7 @@ class RecommendationView extends React.Component {
         if (this.state.current === 1) {
             this.setState({
                 strategy: this.strategiesRef.current.state.strategy,
+                topnstocks: this.strategiesRef.current.state.topnstocks
             })
         }
         const current = this.state.current + 1;
@@ -83,6 +85,9 @@ class RecommendationView extends React.Component {
                 starting_capital: this.state.starting_capital,
                 end_year: this.state.years[1],
                 starting_year: this.state.years[0],
+                strategy_kwargs: {
+                    top_n_stocks: this.state.topnstocks
+                },
                 subset_stocks: 20
             }).then(result => this.setState({
                 loading: false,
