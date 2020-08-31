@@ -11,6 +11,9 @@ from ..base_strategy import BaseStrategy
 class Markowitz(BaseStrategy):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.all_dates = pd.DataFrame(Price.objects.values("date"), columns=["date"])
+        self.all_dates.date = pd.to_datetime(self.all_dates.date)
+        self.all_dates.drop_duplicates(ignore_index=True, inplace=True)
 
     def weight(
             self,
@@ -35,14 +38,10 @@ class Markowitz(BaseStrategy):
                 market_state.date.dt.year == current_date.year
             ].date.min():
 
-                all_dates = pd.DataFrame(Price.objects.values("date"), columns=["date"])
-                all_dates.date = pd.to_datetime(all_dates.date)
-                all_dates.drop_duplicates(ignore_index=True, inplace=True)
-
                 # it's not the first trading day of the current year
-                if current_date == all_dates[
-                    (all_dates.date.dt.year == current_date.year) &
-                    (all_dates.date.dt.month == 12)
+                if current_date == self.all_dates[
+                    (self.all_dates.date.dt.year == current_date.year) &
+                    (self.all_dates.date.dt.month == 12)
                 ].date.max():
                     for stock in agent_portfolio.keys():
                         weights[stock] = -1
