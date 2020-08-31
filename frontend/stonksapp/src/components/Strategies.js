@@ -11,29 +11,41 @@ const { Panel } = Collapse;
 class Strategies extends React.Component {
     state = {
         strategy: "DogsOfTheStocks",
-        topnstocks: 10
+        topnstocks: 10,
+        checked1: true,
+        checked2: false,
+        checked3: false,
     }
 
     onChange = (e) => {
         if (e === undefined) {
             return
         }
-        console.log(typeof e.target.id)
+        console.log(e.target)
         switch (e.target.id) {
             case 1:
                 this.setState({
-                    strategy: "DogsOfTheStocks"
+                    strategy: "DogsOfTheStocks",
+                    checked1: true,
+                    checked2: false,
+                    checked3: false,
                 })
                 break;
             case 2:
                 this.setState({
-                    strategy: "EMA"
+                    strategy: "EMA",
+                    checked1: false,
+                    checked2: true,
+                    checked3: false,
                 })
                 break;
 
             case 3:
                 this.setState({
-                    strategy: "Markowitz"
+                    strategy: "Markowitz",
+                    checked1: false,
+                    checked2: false,
+                    checked3: true,
                 })
                 break;
 
@@ -42,8 +54,8 @@ class Strategies extends React.Component {
                 break;
         }
     }
-    onNumber= value =>{
-        
+    onNumber = value => {
+
         this.setState({
             topnstocks: value
         })
@@ -63,7 +75,7 @@ class Strategies extends React.Component {
                 <Collapse defaultActiveKey={['1']} style={{ textAlign: "justify" }}>
                     <Panel header="Dogs of the Stocks" key="1"
                         extra={
-                            <Checkbox id={1} onChange={this.onChange} defaultChecked="true">Use this! (recommended)</Checkbox>
+                            <Checkbox id={1} onChange={this.onChange} checked={this.state.checked1} defaultChecked="true">Use this! (recommended)</Checkbox>
                         }
                     >
                         <p>
@@ -88,13 +100,13 @@ class Strategies extends React.Component {
                     </Panel>
                     <Panel header="Exponential moving averages" key="2"
                         extra={
-                            <Checkbox id={2} onChange={this.onChange}>Use this!</Checkbox>
+                            <Checkbox id={2} checked={this.state.checked2} onChange={this.onChange}>Use this!</Checkbox>
                         }
                     >
                         <p>can i has cheezburger?</p>
                     </Panel>
                     <Panel header="Markowitz Diversification" key="3" extra={
-                        <Checkbox id={3} onChange={this.onChange}>Use this!</Checkbox>
+                        <Checkbox id={3} checked={this.state.checked3} onChange={this.onChange}>Use this!</Checkbox>
                     }
                     >
                         <p></p>
