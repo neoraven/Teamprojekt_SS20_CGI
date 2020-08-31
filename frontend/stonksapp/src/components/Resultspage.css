@@ -15,3 +15,15 @@
     margin: 5px;
   }*/
 
+.Gains{
+  border-bottom: 2px solid #000000;
+  border-top: 2px solid #000000;
+  color: #000000;
+  display: grid;
+  line-height: 50px;
+  list-style-type: none;
+  margin: 10px 0;
+  text-decoration: none;
+  place-items: center;
+
+}
