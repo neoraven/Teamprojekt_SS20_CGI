@@ -15,7 +15,7 @@ class PortfolioListView(generics.ListAPIView):
 
     def get_queryset(self):
         current_user = self.request.user
-        queryset = Portfolio.objects.filter(user=current_user)
+        queryset = Portfolio.objects.filter(user=current_user, simulation=None)
 
         symbol = self.request.query_params.get("symbol")
         if symbol is not None:
@@ -29,7 +29,7 @@ class AllPortfoliosAdminListView(generics.ListAPIView):
     serializer_class = PortfolioSerializer
 
     def get_queryset(self):
-        queryset = Portfolio.objects.all()
+        queryset = Portfolio.objects.filter(simulation=None)
 
         symbol = self.request.query_params.get("symbol")
         if symbol is not None:
@@ -48,7 +48,7 @@ class AllTransactionsAdminListView(generics.ListAPIView):
     serializer_class = TransactionGetSerializer
 
     def get_queryset(self):
-        queryset = Transaction.objects.all()
+        queryset = Transaction.objects.filter(simulation=None)
 
         symbol = self.request.query_params.get("symbol")
         if symbol is not None:
@@ -63,7 +63,7 @@ class TransactionsListView(generics.ListAPIView):
 
     def get_queryset(self):
         current_user = self.request.user
-        queryset = Transaction.objects.filter(user=current_user)
+        queryset = Transaction.objects.filter(user=current_user, simulation=None)
 
         symbol, date_from, date_to = (
             self.request.query_params.get("symbol"),

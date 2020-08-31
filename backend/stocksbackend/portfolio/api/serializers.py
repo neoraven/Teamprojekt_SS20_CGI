@@ -50,6 +50,7 @@ class TransactionPutSerializer(serializers.ModelSerializer):
             symbol=validated_data["symbol"],
             amount=validated_data["amount"],
             date_posted=validated_data["date_posted"],
+            simulation=None,
         )
         # this automatically adds to / substracts from
         # the user's Portfolio for given <symbol>
@@ -57,7 +58,9 @@ class TransactionPutSerializer(serializers.ModelSerializer):
         transaction.save()
         try:
             portfolio = Portfolio.objects.get(
-                user=validated_data["user"], symbol=validated_data["symbol"]
+                user=validated_data["user"],
+                symbol=validated_data["symbol"],
+                simulation=None,
             )
             return portfolio
         except Portfolio.DoesNotExist:
