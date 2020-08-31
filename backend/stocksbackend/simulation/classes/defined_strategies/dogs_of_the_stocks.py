@@ -5,7 +5,7 @@ from ..base_strategy import BaseStrategy
 
 
 class DogsOfTheStocks(BaseStrategy):
-    def __init__(self, top_n_stocks: int = 10, increments="1days", *args, **kwargs):
+    def __init__(self, top_n_stocks: int = 10, increments="1years", *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.top_n_stocks = top_n_stocks
         self.increments = increments

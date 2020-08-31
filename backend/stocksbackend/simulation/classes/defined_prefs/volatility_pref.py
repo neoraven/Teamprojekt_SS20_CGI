@@ -88,6 +88,16 @@ class VolatilityPreference(BasePreference):
         also_give_reasons: bool = False,
     ) -> Dict[str, float]:
         original_weights = old_weights.copy()
+        if self.value == self.neutral_value:
+            if also_give_reasons:
+                return (
+                    super().rebalance(old_weights=old_weights),
+                    self.give_reasons(
+                        old_weights=original_weights, new_weights=original_weights
+                    ),
+                )
+            else:
+                return super().rebalance(old_weights=old_weights)
         rel_std_shares = self.get_weighted_rel_std_shares(
             old_weights=old_weights,
             market_state=market_state,

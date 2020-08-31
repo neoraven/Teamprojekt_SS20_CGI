@@ -9,12 +9,16 @@ class CashAllocationPreference(BasePreference):
         super().__init__()
         self.value = value / 100
 
-    def apply(
-        self, old_weights: Dict[str, float], also_give_reasons: bool = False, **kwargs
-    ) -> Dict[str, float]:
+    def apply(self, old_weights: Dict[str, float], **kwargs) -> Dict[str, float]:
         total_planned_cash_allocation = sum([v for v in old_weights.values() if v > 0])
         if total_planned_cash_allocation <= self.value:
-            return old_weights
+            if kwargs.get("also_give_reasons", False):
+                return (
+                    old_weights,
+                    self.give_reasons(old_weights=old_weights, new_weights=old_weights),
+                )
+            else:
+                return old_weights
         multiply_with = self.value / total_planned_cash_allocation
         for symbol, weight in old_weights.items():
             if weight > 0:
@@ -22,7 +26,7 @@ class CashAllocationPreference(BasePreference):
 
         new_weights = super().rebalance(old_weights=old_weights)
 
-        if also_give_reasons:
+        if kwargs.get("also_give_reasons", False):
             return (
                 new_weights,
                 self.give_reasons(old_weights=old_weights, new_weights=new_weights),

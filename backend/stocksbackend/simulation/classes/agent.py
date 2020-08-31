@@ -44,7 +44,6 @@ class Agent:
         self.evaluation_history = []  # list of Dicts
 
     def run_simulation(self):
-        print(self.preferences)
         for mask in self.market:
             # print(self.market.max_date)
             self.mask = mask
@@ -208,7 +207,6 @@ class Agent:
         prev_reasons: Dict[str, str] = {},
     ):
         for preference in self.preferences:
-            print(preference.__class__.__name__)
             if also_give_reasons:
                 weights, reasons = preference.apply(
                     old_weights=weights,
@@ -249,7 +247,10 @@ class Agent:
         recommendations = self.strategy.recommend(
             market_state=self.market.prices[self.mask]
         )
-        reasons = self.strategy.give_reasons(weights=recommendations)
+        if hasattr(self.strategy, "give_reasons"):
+            reasons = self.strategy.give_reasons(weights=recommendations)
+        else:
+            reasons = {}
         recommendations, reasons = self.apply_preferences(
             weights=recommendations,
             market_mask=self.mask,

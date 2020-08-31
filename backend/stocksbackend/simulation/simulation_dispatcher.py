@@ -185,5 +185,4 @@ def get_response_object(
         },
     }
     results["sim_id"] = simulation.id
-    print(results)
     return Response(data=results, status=status.HTTP_200_OK)
