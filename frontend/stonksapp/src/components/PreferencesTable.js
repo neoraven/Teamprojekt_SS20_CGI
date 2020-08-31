@@ -33,7 +33,7 @@ class PreferencesTable extends React.Component {
         },
         {
             key: '3',
-            preference: 'Placeholder',
+            preference: 'Capital allocation',
             value: this.props.data.placeholder,
         },
     ]

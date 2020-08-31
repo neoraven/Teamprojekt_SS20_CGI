@@ -7,9 +7,9 @@ import { InputNumber } from 'antd';
 
 class Preferences extends React.Component {
     state = {
-        risk: 0,
+        risk: 50,
         diversification: 0,
-        slider3: 0,
+        slider3: 100,
         years: [2019, 2019],
         starting_capital: 10000,
     }
@@ -42,7 +42,7 @@ class Preferences extends React.Component {
                     </div>
                     <div className="slider-content">
                         <p>Do you like risk?</p>
-                        <CustomSlider onUserAction={(risk) => (this.setState({ risk }))}   />
+                        <CustomSlider onUserAction={(risk) => (this.setState({ risk }))} defaultValue={50} />
                         <p> <b>Note: </b>Liking risk means that you prioritize the potential for a high return over preservation of capital. More risk means more and bigger swings in your Capital. 50 is neutral.</p>
                     </div>
                     <div className="slider-content">
@@ -52,8 +52,8 @@ class Preferences extends React.Component {
                     </div>
                     <div className="slider-content">
                         <p>Capital allocation</p>
-                        <CustomSlider onUserAction={(slider3) => (this.setState({ slider3 }))} />
-                        <p> <b>Note: </b> How much of your capital do you actually want to use to trade? This is percentage based, we don't recommend going under 50.</p>
+                        <CustomSlider min={50} defaultValue={100} onUserAction={(slider3) => (this.setState({ slider3 }))} />
+                        <p> <b>Note: </b> How much of your capital do you actually want to use to trade? This is percentage based.</p>
                     </div>
                     <div className="slider-content">
                         <p>Which timeframe would you like us to backtest?</p>

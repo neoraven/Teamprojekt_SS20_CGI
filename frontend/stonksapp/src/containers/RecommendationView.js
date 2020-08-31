@@ -22,9 +22,9 @@ class RecommendationView extends React.Component {
         this.state = {
             current: 0,
 
-            risk: 0,
+            risk: 50,
             diversification: 0,
-            slider3: 0,
+            slider3: 100,
             years: [2019, 2019],
             starting_capital: 10000,
             strategy: "",
