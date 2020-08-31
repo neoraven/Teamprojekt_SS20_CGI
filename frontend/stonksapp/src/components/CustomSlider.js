@@ -18,6 +18,7 @@ class CustomSlider extends React.Component {
 
     render() {
         const { max, min } = this.props;
+        const deffo = this.props.defaultValue;
         
         const { value } = this.state;
         const mid = ((max - min) / 2).toFixed(5);
@@ -26,7 +27,7 @@ class CustomSlider extends React.Component {
         return (
             <div className="icon-wrapper">
                 <FrownOutlined className={preColorCls} />
-                <Slider {...this.props} onChange={this.handleChange} value={value} step="10" />
+                <Slider {...this.props} onChange={this.handleChange} defaultValue={deffo} step="10" />
                 <SmileOutlined className={nextColorCls} />
             </div>
         );
