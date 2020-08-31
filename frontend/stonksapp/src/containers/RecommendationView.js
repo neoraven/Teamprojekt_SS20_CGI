@@ -88,7 +88,7 @@ class RecommendationView extends React.Component {
                 loading: false,
                 data: result.data,
             },
-            console.log(result.data)))
+                console.log(result.data)))
 
 
 
@@ -122,13 +122,10 @@ class RecommendationView extends React.Component {
                                 :
                                 <div>
                                     {lastpage ?
-                                        <Resultspage data={data}/>
+                                        <Resultspage data={data} />
                                         :
 
-                                        <div></div>
-                                    }
-
-                                    <div className="steps-content">
+                                        <div><div className="steps-content">
                                         {current === 0 && (
                                             <Preferences ref={this.preferencesRef} />
                                         )}
@@ -151,7 +148,7 @@ class RecommendationView extends React.Component {
                                         )}
                                         {current === this.steps.length - 1 && (
                                             <Button type="primary" onClick={() => this.onDone()}>
-                                                Done
+                                                Simulate!
                                             </Button>
                                         )}
                                         {current > 0 && (
@@ -159,7 +156,10 @@ class RecommendationView extends React.Component {
                                                 Previous
                                             </Button>
                                         )}
-                                    </div>
+                                    </div></div>
+                                    }
+
+                                    
                                 </div>
 
 
