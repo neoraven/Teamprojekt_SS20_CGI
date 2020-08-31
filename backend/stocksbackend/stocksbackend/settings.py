@@ -26,7 +26,7 @@ SECRET_KEY = "4&5w%aqsjc4jt$d9vsf*q&3mkq(n3uld_*c06f$_!2kz1r3$hr"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["tubstp.englich.eu", "172.104.234.63", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["172.104.234.63"]
 
 
 # Application definition
@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     "drf_yasg",
     "stocks",
     "portfolio",
-    "django_celery_beat"
+    "simulation",
+    "django_celery_beat",
 ]
 
 SITE_ID = 1
@@ -132,23 +133,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = os.path.join("/srv/www/stockmarketapp/build/static/")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 
-# STATICFILES_DIRS = [STATIC_ROOT]
+STATICFILES_DIR = [STATIC_ROOT]
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
-        # "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
         # "rest_framework.authentication.BasicAuthentication",
     ),
     "EXCEPTION_HANDLER": "stocksbackend.exceptions.exception_handler",
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_EMAIL_REQUIRED = False

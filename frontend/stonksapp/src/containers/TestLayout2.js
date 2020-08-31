@@ -1,6 +1,5 @@
 import { Layout, Menu, Typography, Button } from 'antd';
 import React from 'react';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import './TestLayout2.css';
 import logo from '../stonks_logo_whateveriwant.svg'
 import { Link } from 'react-router-dom';

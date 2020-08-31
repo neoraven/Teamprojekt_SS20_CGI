@@ -94,6 +94,17 @@ class StockAllDetailView(generics.ListAPIView):
     serializer_class = StockMetaDataSerializer
 
 
+class StockBatchDetailView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = StockMetaDataSerializer
+
+    def get_queryset(self):
+        symbols = [
+            s.upper() for s in self.kwargs.get("symbols").split(_DEFAULT_JOIN_CHAR)
+        ]
+        return Company.objects.filter(symbol__symbol__in=symbols).order_by("symbol")
+
+
 class StockDetailView(generics.RetrieveAPIView):
     queryset = Company.objects.all()
     permission_classes = [AllowAny]
@@ -219,7 +230,7 @@ class PriceListNoPaginationView(generics.ListAPIView):
 
 
 class MostRecentPriceView(generics.ListAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = (AllowAny,)
     lookup_field = "symbol"
     serializer_class = PricesSerializer
 

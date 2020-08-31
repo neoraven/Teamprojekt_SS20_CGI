@@ -13,7 +13,7 @@ class Landingpage extends React.Component {
             <div className='content'>
                 <div style={{ marginBottom: 20 }}>
                     <center>
-                        <img src={logo} width="20%" height="20%" />
+                        <img alt="logo" src={logo} width="20%" height="20%" />
                     </center>
                 </div>
                 <div className='text' style={{ textAlign: "justify" }}>

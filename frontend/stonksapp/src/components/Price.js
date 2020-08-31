@@ -1,7 +1,6 @@
 import React from 'react';
 import { Popover, Statistic, Row, Col } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import api from '../utils/api';
 
 
 class Price extends React.Component {
