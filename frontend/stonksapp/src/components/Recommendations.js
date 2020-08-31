@@ -6,7 +6,7 @@ class Recommendations extends React.Component {
     render() {
         return (
             <div>
-                <img src={logo}></img>
+                
             </div>
         )
     }

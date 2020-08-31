@@ -101,14 +101,6 @@ class HistoricalResultspage extends React.Component {
                     recommendation: res.data.recommendations
                 })
             })
-        /*        this.setState({
-                    strategy: this.props.data.input,
-                    dates: this.props.data.input.dates,
-                    preferences: this.props.data.input.preferences,
-                    evaluation_history: this.props.data.evaluation_history,
-                    performance: this.props.data.performance,
-                    recommendation: this.props.data.recommendation
-                })*/
     }
 
 
