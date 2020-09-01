@@ -109,10 +109,11 @@ class Yolo(BaseStrategy):
 
         abs_sum_of_rel_changes = abs(sum([v for k, v in rel_changes]))
         for symbol, change in rel_changes:
-            weights[symbol] = change / abs_sum_of_rel_changes
-            if pd.isna(change / abs_sum_of_rel_changes):
-                # Division by zero > prices didnt change at all!
+            if abs_sum_of_rel_changes == 0.0:
+                # we are not looking at an active trading period
                 weights[symbol] = 0
+            else:
+                weights[symbol] = change / abs_sum_of_rel_changes
 
         return self.rebalance(current_portfolio=agent_portfolio, weights=weights)
 
