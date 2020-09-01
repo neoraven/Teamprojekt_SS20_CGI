@@ -29,7 +29,7 @@ class OncePerMinuteThrottle(UserRateThrottle):
 
 
 class StartSimulationView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     # throttle_classes = (OncePerMinuteThrottle,)
 
     def post(self, request):
@@ -45,7 +45,7 @@ class StartSimulationView(APIView):
         # 4. strategy (str)
         # 5. cash: (float)
         current_year = datetime.today().year
-        # request.user = User.objects.filter(is_superuser=True).first()
+        request.user = User.objects.filter(is_superuser=True).first()
         if request.user.is_superuser:
             debug_subset = payload.get("subset_stocks", None)
         simulation_results = simulation_dispatcher.start(

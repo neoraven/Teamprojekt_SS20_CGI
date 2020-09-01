@@ -1,6 +1,8 @@
 import sys
 from .defined_strategies.dogs_of_the_stocks import DogsOfTheStocks
-#from .defined_strategies.markowitz import Markowitz
+from .defined_strategies.yolo import Yolo
+
+# from .defined_strategies.markowitz import Markowitz
 
 
 def verify_strategy(strategy_name: str) -> bool:

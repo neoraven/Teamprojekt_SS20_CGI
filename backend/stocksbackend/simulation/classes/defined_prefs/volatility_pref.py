@@ -153,4 +153,4 @@ class VolatilityPreference(BasePreference):
             )
             return f"The {self.__class__.__name__} preference did not change this weight because {reason_why_not}"
 
-        return f"The {self.__class__.__name__} preference {increased_or_decreased} this weight by {round(change * 100, 2)}% because the user prefers this stock's {user_prefers} by {prefers_by}!"
+        return f"The {self.__class__.__name__} preference {increased_or_decreased} this weight by {round(change * 100, 2)}% because the user prefers more {user_prefers} stocks!"

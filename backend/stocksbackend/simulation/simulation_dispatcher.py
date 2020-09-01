@@ -8,6 +8,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from rest_framework.response import Response
 from rest_framework import status
 from django.utils import dateparse, timezone
+from rest_framework.exceptions import ValidationError
 
 from .classes.agent import Agent
 from .classes.market import Market
@@ -54,9 +55,9 @@ def start(
     if strategy_kwargs:
         for kwarg in strategy_kwargs:
             if kwarg not in strategy_class.__init__.__code__.co_varnames:
-                return {
-                    "error": f"{kwarg} is not a valid input for strategy {strategy_name}"
-                }
+                raise ValidationError(
+                    f"{kwarg} is not a valid input for strategy {strategy_name}"
+                )
         strategy = strategy_class(**strategy_kwargs)
     else:
         try:
@@ -67,9 +68,9 @@ def start(
                 for arg in strategy_class.__init__.__code__.co_varnames
                 if arg not in ["self", "args", "kwargs"]
             ]
-            return {
-                "error": f"Missing kwarg for strategy {strategy_name}: {missing_kwargs}"
-            }
+            raise ValidationError(
+                f"Missing kwarg for strategy {strategy_name}: {missing_kwargs}"
+            )
     starting_year_offset, end_year_offset = (
         strategy.year_offsets if hasattr(strategy, "year_offsets") else (0, 0)
     )

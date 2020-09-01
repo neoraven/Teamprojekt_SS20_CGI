@@ -247,7 +247,10 @@ class Agent:
         recommendations = self.strategy.recommend(
             market_state=self.market.prices[self.mask]
         )
-        reasons = self.strategy.give_reasons(weights=recommendations) or {}
+        if "give_reasons" in self.strategy.__class__.__dict__:
+            reasons = self.strategy.give_reasons(weights=recommendations)
+        else:
+            reasons = {}
 
         recommendations, reasons = self.apply_preferences(
             weights=recommendations,
