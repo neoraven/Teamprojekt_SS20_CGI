@@ -87,8 +87,7 @@ class RecommendationView extends React.Component {
                 starting_year: this.state.years[0],
                 strategy_kwargs: {
                     top_n_stocks: this.state.topnstocks,
-                },
-                subset_stocks: 20
+                }
             }).then(result => this.setState({
                 loading: false,
                 data: result.data,

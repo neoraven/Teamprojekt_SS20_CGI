@@ -109,7 +109,10 @@ class Strategies extends React.Component {
                         <Checkbox id={3} checked={this.state.checked3} onChange={this.onChange}>Use this!</Checkbox>
                     }
                     >
-                        <p></p>
+                        <p>Diversification of a portfolio with appropriate regard for the mathematical formulas in Markowitz portfolio theory. 
+                            That is, Markowitz diversification occurs when one uses mathematical models to find the securities to place in a portfolio such that the portfolio has 
+                            the highest possible return for its level of risk. One may engage in Markowitz diversification when one wishes to increase or decrease one's portfolio's risk, 
+                            or when the portfolio was previously not diversified.</p>
                     </Panel>
                 </Collapse>
             </div>

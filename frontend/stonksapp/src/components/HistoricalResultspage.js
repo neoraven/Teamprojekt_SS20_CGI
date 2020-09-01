@@ -39,7 +39,7 @@ const Preftable = entry => {
         },
         {
             key: '3',
-            preference: 'Placeholder',
+            preference: 'Capital allocation',
             value: entry.placeholder,
         },
     ]
@@ -82,14 +82,17 @@ class HistoricalResultspage extends React.Component {
                     performance: res.data.performance,
                     recommendation: res.data.recommendations
                 })
-                console.log(this.state.evaluation_history)
                 this.state.evaluation_history.map(score => {
                     this.state.evaluation_array.push([
                         new Date(score.date).getTime(),
                         score.score
                     ])
                 })
-                console.log(this.state.evaluation_array)
+                this.setState({
+                    chart :  <ResultsChart  strategy={this.state.strategy}
+                                            evaluation_history={this.state.evaluation_array} 
+                    />
+                })
             })
     }
 
@@ -112,13 +115,11 @@ class HistoricalResultspage extends React.Component {
                         </div>
                     </div>
                     <div className="Gains">
-                        <p style={{ textAlign: "center" }}>Starting Capital: {geld(this.state.performance.starting_capital)} <FundTwoTone style={{ fontSize: 22 }} twoToneColor="#52c41a" /> Current Portfolio vaule: {geld(this.state.performance.current_portfolio_value)}</p>
+                        <p style={{ textAlign: "center" }}>Starting Capital: {geld(this.state.performance.starting_capital)} <FundTwoTone style={{ fontSize: 22 }} twoToneColor="#52c41a" /> Current Portfolio value: {geld(this.state.performance.current_portfolio_value)}</p>
                     </div>
                     <h1>Evaluation History</h1>
-                    <div className='Evaluation' id="results-chart-container">
-                        <ResultsChart strategy={this.state.strategy}
-                                      evaluation_history={this.state.evaluation_array} 
-                        />
+                    <div className="Evaluation" id="results-chart-container">
+                        {this.state.chart}
                     </div>
                     <h1>Recommendations</h1>
                     <p>The recommendations are being displayed as a combination of the symbol of the stock and the percentage allocation of your starting capital in that stock that the simulation recommends. 

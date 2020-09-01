@@ -11,6 +11,7 @@ from ..base_strategy import BaseStrategy
 class Markowitz(BaseStrategy):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.year_offsets = (-1, 0)
         self.all_dates = pd.DataFrame(Price.objects.values("date"), columns=["date"])
         self.all_dates.date = pd.to_datetime(self.all_dates.date)
         self.all_dates.drop_duplicates(ignore_index=True, inplace=True)
