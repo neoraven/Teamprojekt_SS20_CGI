@@ -65,15 +65,21 @@ class Yolo(BaseStrategy):
                 end_of_period_market.symbol == symbol
             ].adjusted_close.values[0]
 
-            rel_changes.append((symbol, price_at_end / price_at_start - 1))
+            rel_change = price_at_end / price_at_start - 1
+            rel_changes.append((symbol, rel_change))
 
         rel_changes = sorted(rel_changes, key=lambda v: v[1], reverse=self.is_rising)[
             : self.top_n_stocks
         ]
+        if any([pd.isna(v) for k, v in rel_changes]):
+            print(rel_changes)
 
         abs_sum_of_rel_changes = abs(sum([v for k, v in rel_changes]))
         for symbol, change in rel_changes:
             weights[symbol] = change / abs_sum_of_rel_changes
+            if pd.isna(change / abs_sum_of_rel_changes):
+                # Division by zero
+                weights[symbol] = 0
 
         return self.rebalance(current_portfolio=agent_portfolio, weights=weights)
 
