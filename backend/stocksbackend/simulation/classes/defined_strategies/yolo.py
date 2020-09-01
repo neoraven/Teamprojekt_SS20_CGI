@@ -59,6 +59,7 @@ class Yolo(BaseStrategy):
                 ].adjusted_close.values[0]
             except IndexError:
                 rel_changes.append((symbol, 0))
+                continue
 
             price_at_end = end_of_period_market.loc[
                 end_of_period_market.symbol == symbol
