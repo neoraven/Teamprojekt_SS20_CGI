@@ -33,7 +33,7 @@ class Strategies extends React.Component {
                 break;
             case 2:
                 this.setState({
-                    strategy: "EMA",
+                    strategy: "Yolo",
                     checked1: false,
                     checked2: true,
                     checked3: false,
@@ -98,12 +98,12 @@ class Strategies extends React.Component {
 
 
                     </Panel>
-                    <Panel header="Exponential moving averages" key="2"
+                    <Panel header="Trigger happy" key="2"
                         extra={
                             <Checkbox id={2} checked={this.state.checked2} onChange={this.onChange}>Use this!</Checkbox>
                         }
                     >
-                        <p>can i has cheezburger?</p>
+                        <p>This strategy trades on a very high frequency and trys to outperform the market by buying stocks that are rising at the moment.</p>
                     </Panel>
                     <Panel header="Markowitz Diversification" key="3" extra={
                         <Checkbox id={3} checked={this.state.checked3} onChange={this.onChange}>Use this!</Checkbox>
