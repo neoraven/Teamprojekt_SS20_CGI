@@ -35,7 +35,7 @@ const Preftable = entry => {
         },
         {
             key: '3',
-            preference: 'Placeholder',
+            preference: 'Capital allocation',
             value: entry.placeholder,
         },
     ]
