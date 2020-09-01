@@ -33,7 +33,7 @@ class Strategies extends React.Component {
                 break;
             case 2:
                 this.setState({
-                    strategy: "EMA",
+                    strategy: "Yolo",
                     checked1: false,
                     checked2: true,
                     checked3: false,

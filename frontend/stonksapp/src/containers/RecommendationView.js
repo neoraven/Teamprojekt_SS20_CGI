@@ -86,7 +86,7 @@ class RecommendationView extends React.Component {
                 end_year: this.state.years[1],
                 starting_year: this.state.years[0],
                 strategy_kwargs: {
-                    top_n_stocks: this.state.topnstocks
+                    top_n_stocks: this.state.topnstocks,
                 },
                 subset_stocks: 20
             }).then(result => this.setState({
@@ -131,40 +131,40 @@ class RecommendationView extends React.Component {
                                         :
 
                                         <div><div className="steps-content">
-                                        {current === 0 && (
-                                            <Preferences ref={this.preferencesRef} />
-                                        )}
-                                        {current === 1 && (
-                                            <Strategies ref={this.strategiesRef} />
-                                        )}
-                                        {current === 2 && (
-                                            <Recommendations ref={this.preferencesRef} />
-                                        )}
+                                            {current === 0 && (
+                                                <Preferences ref={this.preferencesRef} />
+                                            )}
+                                            {current === 1 && (
+                                                <Strategies ref={this.strategiesRef} />
+                                            )}
+                                            {current === 2 && (
+                                                <Recommendations ref={this.preferencesRef} />
+                                            )}
 
 
-                                    </div>
+                                        </div>
 
 
-                                    <div className="steps-action">
-                                        {current < this.steps.length - 1 && (
-                                            <Button type="primary" onClick={() => this.next()}>
-                                                Next
-                                            </Button>
-                                        )}
-                                        {current === this.steps.length - 1 && (
-                                            <Button type="primary" onClick={() => this.onDone()}>
-                                                Simulate!
-                                            </Button>
-                                        )}
-                                        {current > 0 && (
-                                            <Button style={{ margin: '0 8px' }} onClick={() => this.prev()}>
-                                                Previous
-                                            </Button>
-                                        )}
-                                    </div></div>
+                                            <div className="steps-action">
+                                                {current < this.steps.length - 1 && (
+                                                    <Button type="primary" onClick={() => this.next()}>
+                                                        Next
+                                                    </Button>
+                                                )}
+                                                {current === this.steps.length - 1 && (
+                                                    <Button type="primary" onClick={() => this.onDone()}>
+                                                        Simulate!
+                                                    </Button>
+                                                )}
+                                                {current > 0 && (
+                                                    <Button style={{ margin: '0 8px' }} onClick={() => this.prev()}>
+                                                        Previous
+                                                    </Button>
+                                                )}
+                                            </div></div>
                                     }
 
-                                    
+
                                 </div>
 
 
