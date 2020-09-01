@@ -72,7 +72,11 @@ class Simulation(models.Model):
 
         for recommendation in recommendation_models:
             recommendations_list.append(
-                {"symbol": recommendation.symbol, "weight": recommendation.weight}
+                {
+                    "symbol": recommendation.symbol,
+                    "weight": recommendation.weight,
+                    "reason": recommendation.reason,
+                }
             )
         return recommendations_list
 
@@ -160,4 +164,5 @@ class Evaluation(models.Model):
 class Recommendation(models.Model):
     symbol = models.CharField(max_length=5)
     weight = models.FloatField()
+    reason = models.CharField(max_length=1024, blank=True, null=True, default=0)
     simulation = models.ForeignKey(to=Simulation, on_delete=models.CASCADE)

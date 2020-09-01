@@ -152,6 +152,7 @@ def write_recommendations_to_db(agent: Agent, simulation: Simulation):
         instance = Recommendation(
             symbol=recommendation["symbol"],
             weight=recommendation["weight"],
+            reason=recommendation["reason"],
             simulation=simulation,
         )
         instance.save()

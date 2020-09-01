@@ -57,7 +57,7 @@ class Agent:
                 # First, apply my preferences in order
                 # print(f"weights before weighting: {weights}")
                 weights = self.apply_preferences(weights=weights, market_mask=mask)
-                print("=" * 50)
+                # print("=" * 50)
                 # print(
                 #     f"weights after weighting: {weights}, sum: {sum([v for v in weights.values()])}"
                 # )
