@@ -85,7 +85,7 @@ class HistoricalResultspage extends React.Component {
                 console.log(this.state.evaluation_history)
                 this.state.evaluation_history.map(score => {
                     this.state.evaluation_array.push([
-                        score.date,
+                        new Date(score.date).getTime(),
                         score.score
                     ])
                 })
@@ -116,6 +116,9 @@ class HistoricalResultspage extends React.Component {
                     </div>
                     <h1>Evaluation History</h1>
                     <div className='Evaluation' id="results-chart-container">
+                        <ResultsChart strategy={this.state.strategy}
+                                      evaluation_history={this.state.evaluation_array} 
+                        />
                     </div>
                     <h1>Recommendations</h1>
                     <p>The recommendations are being displayed as a combination of the symbol of the stock and the percentage allocation of your starting capital in that stock that the simulation recommends. 
