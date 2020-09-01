@@ -19,9 +19,6 @@ function ResultsChart(props) {
             constructorType="stockChart"
             containerProps = {{style : {height : '400px'}}} 
             options = {{
-                chart : {
-                    renderTo : "results-chart-container"
-                },
                 rangeSelector: {
                     selected: 1
                 },
@@ -33,6 +30,14 @@ function ResultsChart(props) {
                     type : "line",
                     data: props.evaluation_history,
                 }],
+                exporting : {
+                    buttons : {
+                        contextButton: {
+                            menuItems: 
+                            ["viewFullscreen", "printChart", "separator", "downloadPNG", "downloadJPEG", "downloadPDF", "downloadSVG"]
+                        }
+                    }
+                }
             }}
         />   
     )

@@ -82,7 +82,8 @@ class Resultspage extends React.Component {
         preferences: {},
         evaluation_history: {},
         performance: {},
-        recommendation: []
+        recommendation: [],
+        evaluation_array: []
     }
     componentDidMount() {
         this.setState({
@@ -92,8 +93,19 @@ class Resultspage extends React.Component {
             evaluation_history: this.props.data.evaluation_history,
             performance: this.props.data.performance,
             recommendation: this.props.data.recommendation
+        }, () => {
+            this.state.evaluation_history.map(score => {
+                this.state.evaluation_array.push([
+                    new Date(score.date).getTime(),
+                    score.score
+                ])
+            })
+            this.setState({
+                chart :  <ResultsChart  strategy={this.state.strategy}
+                                        evaluation_history={this.state.evaluation_array} 
+                />
+            })
         })
-
     }
 
 
@@ -119,10 +131,7 @@ class Resultspage extends React.Component {
                     </div>
                     <h1>Evaluation History</h1>
                     <div className='Evaluation'>
-                        <ResultsChart 
-                            strategy={this.state.strategy}
-                            evaluation_history={this.state.evaluation_history}
-                        />
+                        {this.state.chart}
                     </div>
                     <h1>Recommendations</h1>
                     <p>The recommendations are being displayed as a combination of the symbol of the stock and the percentage allocation of your starting capital in that stock that the simulation recommends. 
