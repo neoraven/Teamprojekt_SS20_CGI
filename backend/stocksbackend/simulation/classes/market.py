@@ -99,6 +99,9 @@ class Market:
     def __next__(self) -> pd.DataFrame:
 
         if self.max_date < self.prices.date.max():
+            if self.last_date:
+                if self.max_date.year - self.last_date.year == 1:
+                    print("=" * 20, f"new year: {self.max_date}")
             self.last_date = self.max_date
             self.max_date += relativedelta(**{self.unit: self.number})
             self.max_date = min(self.max_date, self.prices.date.max())

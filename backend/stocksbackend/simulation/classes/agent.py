@@ -126,13 +126,10 @@ class Agent:
 
     def buy(self, transaction: Transaction):
         total_price = transaction.amount * transaction.stock_price
-        assert (
-            self.cash + self.dragging_balance - total_price >= 0
-        ), "Can't spend more than you have!"
+        assert self.cash - total_price >= 0, "Can't spend more than you have!"
         deducted_from_dragging_balance = min(total_price, self.dragging_balance)
-        remaining_amount_to_pay = total_price - deducted_from_dragging_balance
         self.dragging_balance -= deducted_from_dragging_balance
-        self.cash -= remaining_amount_to_pay
+        self.cash -= total_price
         self.portfolio[transaction.symbol] = (
             self.portfolio.get(transaction.symbol, 0) + transaction.amount
         )

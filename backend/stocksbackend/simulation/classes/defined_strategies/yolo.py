@@ -9,7 +9,7 @@ from ..base_strategy import BaseStrategy
 class Yolo(BaseStrategy):
     def __init__(
         self,
-        increments: str = "2days",
+        increments: str = "1weeks",
         top_n_stocks: int = 10,
         is_rising: bool = True,
         *args,
