@@ -1,7 +1,7 @@
 import React from 'react'
 import api from '../utils/api';
 
-import { List, Avatar, Button } from 'antd';
+import { List, Avatar, Button,Popover } from 'antd';
 
 const companyicon = entry => {
       
@@ -80,6 +80,7 @@ class RecommendationsTable extends React.Component {
                     itemLayout="horizontal"
                     dataSource={this.props.data}
                     renderItem={item => (
+                        <Popover content={item.reason} title="Reason for recommendation"> 
                         <List.Item
                             actions={[<Button type="primary" onClick={() => this.test(item.symbol, item.weight, this.props.capital)} > Add to Portfolio </Button>]}>
                             <List.Item.Meta
@@ -88,6 +89,7 @@ class RecommendationsTable extends React.Component {
                             />
                             <div>{weights(item.weight, this.props.capital, item.symbol)} %</div>
                         </List.Item>
+                        </Popover>
                     )}
                 />
             )
