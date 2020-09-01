@@ -115,7 +115,7 @@ class Resultspage extends React.Component {
                         </div>
                     </div>
                     <div className="Gains">
-                        <p style={{ textAlign: "center" }}>Starting Capital: {geld(this.state.performance.starting_capital)} <FundTwoTone style={{ fontSize: 22 }} twoToneColor="#52c41a" /> Current Portfolio vaule: {geld(this.state.performance.current_portfolio_value)}</p>
+                        <p style={{ textAlign: "center" }}>Starting Capital: {geld(this.state.performance.starting_capital)} <FundTwoTone style={{ fontSize: 22 }} twoToneColor="#52c41a" /> Current Portfolio value: {geld(this.state.performance.current_portfolio_value)}</p>
                     </div>
                     <h1>Evaluation History</h1>
                     <div className='Evaluation'>
