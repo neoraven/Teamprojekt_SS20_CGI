@@ -138,8 +138,8 @@ class VolatilityPreference(BasePreference):
 
     def prepare_reason_string(self, change: float) -> str:
         increased_or_decreased = "increased" if change > 0 else "decreased"
-        user_prefers = "volatility" if self.value > 0 else "invariability"
-        prefers_by = f"{abs(self.value * 100)}%"
+        user_prefers = "volatile" if self.value > 0 else "invariable"
+        # prefers_by = f"{abs(self.value * 100)}%"
         if change == 0:
             local_or_global = (
                 "all stocks available in the stock pool"

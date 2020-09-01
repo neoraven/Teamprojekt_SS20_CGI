@@ -20,6 +20,26 @@ class Yolo(BaseStrategy):
         self.number, self.unit = self.parse_increments(increments)
         self.top_n_stocks = top_n_stocks
         self.is_rising = is_rising
+        self.template_str = (
+            "User selected strategy {} recommends {} with {}% confidence"
+            " because it is within the top {} highest % {} stocks"
+            " of the past {} {}."
+        )
+
+    def give_reasons(self, weights: Dict[str, float]) -> Dict[str, str]:
+        reasons = {}
+        for symbol, weight in weights.items():
+            reasons[symbol] = self.template_str.format(
+                self.__class__.__name__,
+                symbol,
+                round(weight * 100, 2),
+                self.top_n_stocks,
+                "rising" if self.is_rising else "falling",
+                self.number,
+                self.unit,
+            )
+
+        return reasons
 
     @staticmethod
     def parse_increments(increments) -> Tuple[int, str]:
@@ -28,7 +48,10 @@ class Yolo(BaseStrategy):
         return number, unit
 
     def weight(
-        self, market_state: pd.DataFrame, agent_portfolio: Dict[str, int]
+        self,
+        market_state: pd.DataFrame,
+        agent_portfolio: Dict[str, int],
+        is_recommendation: bool = False,
     ) -> Dict[str, float]:
         weights = {}
         current_date = market_state.date.max()
@@ -39,9 +62,19 @@ class Yolo(BaseStrategy):
             (period_start_date <= market_state.date)
             & (market_state.date < current_date)
         ]
-        print(len(period_market))
-        if period_market.empty:
-            return weights
+        if not is_recommendation:
+            if period_market.empty:
+                return weights
+        else:
+            while (
+                period_market.empty
+                or period_market.date.min() == period_market.date.max()
+            ):
+                period_start_date -= relativedelta(days=1)
+                period_market = market_state.loc[
+                    (period_start_date <= market_state.date)
+                    & (market_state.date < current_date)
+                ]
 
         start_of_period_market = period_market.loc[
             period_market.date == period_market.date.min()
@@ -78,7 +111,7 @@ class Yolo(BaseStrategy):
         for symbol, change in rel_changes:
             weights[symbol] = change / abs_sum_of_rel_changes
             if pd.isna(change / abs_sum_of_rel_changes):
-                # Division by zero
+                # Division by zero > prices didnt change at all!
                 weights[symbol] = 0
 
         return self.rebalance(current_portfolio=agent_portfolio, weights=weights)
@@ -93,4 +126,6 @@ class Yolo(BaseStrategy):
         return weights
 
     def recommend(self, market_state: pd.DataFrame) -> Dict[str, float]:
-        return self.weight(market_state=market_state, agent_portfolio={})
+        return self.weight(
+            market_state=market_state, agent_portfolio={}, is_recommendation=True
+        )

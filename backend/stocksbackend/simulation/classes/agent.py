@@ -55,12 +55,12 @@ class Agent:
             if any([weight != 0 for weight in weights.values()]):
                 # any non-0 weights? > evaluate
                 # First, apply my preferences in order
-                print(f"weights before weighting: {weights}")
+                # print(f"weights before weighting: {weights}")
                 weights = self.apply_preferences(weights=weights, market_mask=mask)
                 print("=" * 50)
-                print(
-                    f"weights after weighting: {weights}, sum: {sum([v for v in weights.values()])}"
-                )
+                # print(
+                #     f"weights after weighting: {weights}, sum: {sum([v for v in weights.values()])}"
+                # )
                 for symbol, weight in filter(lambda x: x[1] < 0, weights.items()):
                     # First: look at negative weights := sell recommendations
                     amount_to_sell = int(weight * self.portfolio.get(symbol, 0))
@@ -247,6 +247,7 @@ class Agent:
         recommendations = self.strategy.recommend(
             market_state=self.market.prices[self.mask]
         )
+        print(recommendations)
         if "give_reasons" in self.strategy.__class__.__dict__:
             reasons = self.strategy.give_reasons(weights=recommendations)
         else:
