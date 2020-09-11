@@ -11,7 +11,7 @@ class Yolo(BaseStrategy):
         self,
         increments: str = "1weeks",
         top_n_stocks: int = 10,
-        is_rising: bool = True,
+        is_rising: bool = False,
         *args,
         **kwargs,
     ):
@@ -117,8 +117,9 @@ class Yolo(BaseStrategy):
 
         return self.rebalance(current_portfolio=agent_portfolio, weights=weights)
 
+    @staticmethod
     def rebalance(
-        self, current_portfolio: Dict[str, int], weights: Dict[str, float]
+        current_portfolio: Dict[str, int], weights: Dict[str, float]
     ) -> Dict[str, float]:
         for symbol in current_portfolio:
             if symbol not in weights.keys():

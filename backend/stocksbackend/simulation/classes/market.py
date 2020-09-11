@@ -17,7 +17,7 @@ class Market:
         end_year: int,
         name: str = None,
         debug_subset: int = None,
-        increments: str = "1days",
+        increments: str = "1months",
     ):
         queryset = Price.objects.filter(
             date__year__gte=starting_year,

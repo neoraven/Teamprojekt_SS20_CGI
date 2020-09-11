@@ -36,6 +36,11 @@ class Agent:
         self.dragging_balance = 0
         self.market = market
         self.strategy = strategy
+        if hasattr(self.strategy, "increments"):
+            self.market.increments = self.strategy.increments
+            self.market.number, self.market.unit = self.market.parse_increments(
+                self.market.increments
+            )
         self.evaluator = evaluator
         self.preferences = preferences
         self.mask = None
