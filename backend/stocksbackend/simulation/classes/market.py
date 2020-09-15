@@ -1,4 +1,5 @@
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List, Optional
+from pandas._typing import Timestamp as PandasTimestamp
 
 import pandas as pd
 from dateutil.relativedelta import relativedelta
@@ -46,20 +47,55 @@ class Market:
         self.number, self.unit = self.parse_increments(increments=increments)
 
     @staticmethod
-    def parse_increments(increments) -> Tuple[int, str]:
+    def parse_increments(increments: str) -> Tuple[int, str]:
+        """Parses a time increment string of form `{number}{unit(s)}.
+
+        Args:
+            increments (str): The string to extract (number, unit) from. NO WHITESPACE ALLOWED!
+
+        Returns:
+            Tuple[int, str]: (amount, unit)
+
+        Example output:
+            "2weeks" --> (2, "weeks")
+        """
         number = int("".join([c for c in increments if c.isdigit()]))
         unit = "".join([c for c in increments if c.isalpha()])
         return number, unit
 
     @property
-    def available_symbols(self):
+    def available_symbols(self) -> List[str]:
+        """List all the unique stock symbols available in the market.
+        Is a `property`, not a function!
+
+        Returns:
+            List[str]: The list of all unique stock symbols in the market.
+        """
         return list(self.prices.symbol.unique())
 
     @property
-    def current_date(self):
+    def current_date(self) -> PandasTimestamp:
+        """Returns the current date of the market's iteration (max. date).
+
+        Returns:
+            PandasTimestamp: The current date of the market's iteration, or a str if it hasn't started yet.
+        """
         return self.max_date or "Market has not yet started!"
 
-    def get_most_recent_price(self, symbol: str, for_date=None) -> float:
+    def get_most_recent_price(
+        self, symbol: str, for_date: Optional[PandasTimestamp] = None
+    ) -> float:
+        """Gets the most recent price of a given symbol, optionally for a specific date.
+        If there is no price for a stock at a given date, the most recent price before that date is returned.
+
+        Args:
+            symbol (str): The stock symbol to fetch the most recent price for.
+            for_date (Optional[PandasTimestamp], optional): If this is not None, fetches the price for that date instead.
+                If not set, fetches most recent date according to the market's `max_date`. Defaults to None.
+
+        Returns:
+            float: The stock symbol's most recent CLOSING price.
+        """
         for_date = for_date or self.max_date
         most_recent_date_mask = (self.prices.date <= for_date) & (
             self.prices.symbol == symbol
@@ -72,6 +108,16 @@ class Market:
         return price
 
     def pay_dividends(self, stock_portfolio: Dict[str, float]) -> float:
+        """Returns a sum of all dividend's according to a stock_portfolio
+        for the last given trading period (as determined by the market's increments).
+
+        Args:
+            stock_portfolio (Dict[str, float]): The portfolio to pay dividends for. Map of {symbol: amount}. 
+
+        Returns:
+            float: A sum of all dividends paid in the market's last interval for the given portfolio.
+                If no dividends were paid, `0.0` is returned.
+        """
         # print(f"Paying dividends for period: {self.last_date} > {self.max_date}")
         if not stock_portfolio:
             return 0.0
@@ -93,10 +139,10 @@ class Market:
         self.max_date = self.prices.date.min()
         return self
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.prices)
 
-    def __next__(self) -> pd.DataFrame:
+    def __next__(self) -> pd.DataFrame.mask:
 
         if self.max_date < self.prices.date.max():
             if self.last_date:
@@ -111,5 +157,5 @@ class Market:
         #  we are on the last date of the prices > exit the iteration
         raise StopIteration
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Market [{self.name}] (current market_date: {self.max_date})"

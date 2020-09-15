@@ -22,7 +22,7 @@ class BaseStrategy:
 
     def __init__(self, name: str = None, **kwargs):
         """Instantiates the BaseStrategy. Attaches a string-like name to the strategy.
-        Subclasses can have a variety of specified extra kwargs. 
+        Subclasses can have a variety of specified extra kwargs.
 
         Args:
             name (str, optional): Name of the strategy. Defaults to the name of the class.
@@ -38,7 +38,7 @@ class BaseStrategy:
                         of what he currently has in his portfolio
             - 0:        neutral weight
             - (0, 1]:   the agent should expend this much % of his current capital
-                        to buy as many stocks of that symbol he can buy.                 
+                        to buy as many stocks of that symbol he can buy.             
 
         Args:
             market_state (DataFrame): Current market state that contains all the prices up until a certain date
