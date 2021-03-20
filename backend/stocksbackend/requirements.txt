@@ -32,7 +32,7 @@ django-rest-auth==0.9.5
 django-scheduler==0.9.3
 django-six==1.0.4
 django-timezone-field==4.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 drf-yasg==1.17.1
 ecos==2.0.7.post1
 ffn==0.3.4
